@@ -7,16 +7,36 @@ namespace LeMinhHuy
 	/// </summary>
 	public class Player : MonoBehaviour
 	{
-		//Attacking or defending?
-		public Stance stance;   // { get; set; }
-		public Team team;
+		//Inspector
+		public float offensiveSpeed = 6f;
+		public float chaseSpeed;
+
+
+		//Properties
+		public bool hasBall { get; set; }
+		public Stance stance { get; set; }
+		public Team team { get; set; }
 
 		// public AI offensive;
 		// public AI defensive;
 
+
+		//Core
 		void Update()
 		{
+			switch (stance)
+			{
+				case Stance.Offensive:
 
+					break;
+
+				case Stance.Defensive:
+					break;
+
+				default:
+					Debug.LogWarning("Invalid stance reached!");
+					break;
+			}
 		}
 
 		void PlayOffence()
@@ -28,10 +48,10 @@ namespace LeMinhHuy
 		{
 
 		}
+
+		public void SetColor(Color col)
+		{
+			GetComponent<Renderer>().material.color = col;
+		}
 	}
-
-	// public class AI
-	// {
-
-	// }
 }

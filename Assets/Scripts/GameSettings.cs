@@ -2,11 +2,20 @@ using UnityEngine;
 
 namespace LeMinhHuy
 {
+	[CreateAssetMenu]
 	public class GameSettings : ScriptableObject
 	{
-		public float baseSpawnCost = 3;
-		public float baseEnergyRegenRate = 1;
-		public float baseDowntime = 4;
-		public float baseDownTimeRecoveryRate = 1;
+		public User playerOne;
+		public User playerTwo;
+
+		public float spawnCost = 3;
+		public float energyRegenRate = 1;
+		public float downtime = 4;
+		public float downtimeRecoveryRate = 1;
+
+		public float playerSuccessfulCaughtDowntime = 5f;
+
+		public Player genericPlayerPrefab;
+		
 	}
 }

@@ -1,16 +1,17 @@
+using System;
 using UnityEngine;
 
 namespace LeMinhHuy
 {
-	/// <summary>
-	/// Handles input etc from the user
-	/// </summary>
-	public class User : MonoBehaviour
+	public enum UserType
 	{
-
+		Player,     //User controlled
+		Computer    //AI controlled
 	}
-	public class UserInputHandler : MonoBehaviour
-	{
 
+	[Serializable]
+	public class User
+	{
+		public UserType type;
 	}
 }

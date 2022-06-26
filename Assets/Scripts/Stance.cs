@@ -1,12 +1,12 @@
 namespace LeMinhHuy
 {
 	/// <summary>
-	/// Current state
+	/// Currently attacking or defending?
 	/// </summary>
 	public enum Stance
 	{
-		Offensive,
-		Defensive,
+		Defensive = 0,
+		Offensive = 1,
 		Inactive,
 		None
 	}
