@@ -12,13 +12,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aebda492660bf4b308f0a3453641840e, type: 3}
   m_Name: GameSettings
   m_EditorClassIdentifier: 
-  playerOne:
-    type: 1
-  playerTwo:
-    type: 0
-  spawnCost: 3
-  energyRegenRate: 1
-  downtime: 4
-  downtimeRecoveryRate: 1
-  playerSuccessfulCaughtDowntime: 5
-  genericPlayerPrefab: {fileID: 0}
+  genericUnitPrefab: {fileID: 7234209940899866619, guid: d792225a8ae4745da88cabed22fb8e80,
+    type: 3}
+  isARMode: 0
+  roundsPerMatch: 5
+  startRoundTime: 140
+  startEnergy: 0
+  offenseParams:
+    energyRegenRate: 0.5
+    AIspawnRate: 0.4
+    energyCost: 2
+    spawnTime: 0.5
+    reactivationTime: 2.5
+    normalSpeed: 1.5
+    carryingSpeed: 0.75
+    ballSpeed: 1.5
+    returnSpeed: 2
+    detectionRange: 0.35
+  defenceParams:
+    energyRegenRate: 0.5
+    AIspawnRate: 0.6
+    energyCost: 3
+    spawnTime: 0.5
+    reactivationTime: 4
+    normalSpeed: 1
+    carryingSpeed: 0.75
+    ballSpeed: 1.5
+    returnSpeed: 2
+    detectionRange: 0.35

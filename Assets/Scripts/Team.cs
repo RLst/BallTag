@@ -2,28 +2,24 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.XR.ARFoundation;
 
 namespace LeMinhHuy
 {
-	[Serializable]
-	public struct Energy
-	{
-		public float current;
-		public float downtime;
-	}
-
 	[Serializable]
 	public class Team
 	{
 		//Inspector
 		// [field: SerializeField] public float currentEnergy { get; set; }
 		// [field: SerializeField] public float currentDowntime { get; set; }
+		const float RAYCAST_MAXDISTANCE = 100f;
 
 		//Inspector
 		public Color color;
 		public UserType userType;
 		public Stance stance;
-		public Energy energy;
+		public float energy;
+		public float recoveryTime;
 		public Vector3 attackDirection;
 
 		[Header("Team Objects")]
@@ -32,74 +28,153 @@ namespace LeMinhHuy
 		public Fence[] fences;
 
 		//Pool; eliminate garbage allocation
-		public Pool<Player> playerPool = new Pool<Player>();
+		int startingUnitsToPool = 5;
+		Pool<Unit> unitPool;
 
 		//Stats
 		public int roundsWon { get; set; }
-		public int catches { get; set; }
-		public int passes { get; set; }
-		public int outs { get; set; }    //Team members that got caught
+		public int roundDraw { get; set; }
+		public int roundLost { get; set; }
+		public int opponentsCaught { get; set; }
+		public int membersCaught { get; set; }    //Team members that got caught
+		public int ballPasses { get; set; }
+
+		//Properties
+		GameParameters gameParameters   //Lazy
+		{
+			get
+			{
+				if (_gameParameters is null)
+					_gameParameters = Umpire.current._gameParameters;
+				return _gameParameters;
+			}
+		}
 
 		//Members
-		GameSettings gs;
+		List<Unit> units = new List<Unit>();
+		GameParameters _gameParameters;
+		ARRaycastManager arRaycastManager;
+		private List<ARRaycastHit> arHitResults;
 
-		//Core
-		void Awake()
+		//Initialise the team and do awake/start stuff
+		public void Initialise()
 		{
-			//Cache game settings from umpire
-			gs = Umpire.current.gameSettings;
+			//Cache from monobehaviour umpire
+			arRaycastManager = Umpire.current.arRaycastManager;
+
+			//Register events
+			UserInput.current.onScreenPosInput.AddListener(TrySpawnUnitAtScreenPoint);
+
+			//Init pool
+			unitPool = new Pool<Unit>(SpawnUnit, OnGetUnit, OnRecycleUnit);
+
+			PreloadPool();
 		}
-
-		public void Initialise(User user)
+		void PreloadPool()
 		{
-			//Init starting team data
-			energy = new Energy
+			//Preload pool
+			for (int i = 0; i < startingUnitsToPool; i++)
 			{
-				current = 0,
-				downtime = 0,
-			};
-
-			//Preload object pool. Create players, setup, disable and put into pool
-			int initPlayersInPool = 5;
-			for (int i = 0; i < initPlayersInPool; i++)
-			{
-				var player = GameObject.Instantiate<Player>(gs.genericPlayerPrefab, field.parent.transform);
-				player.team = this;
-				playerPool.Release(player);
+				//Create and add to total list
+				var unit = unitPool.Get();
+				units.Add(unit);
+				//Recycle back into pool
+				unitPool.Recycle(unit);
 			}
 		}
 
-		void Update()
+		//Pooling callbacks
+		Unit SpawnUnit()
 		{
-			HandleDowntime();
+			var unit = GameObject.Instantiate<Unit>(gameParameters.genericUnitPrefab, field.parent.transform);
+			unit.team = this;
+			return unit;
+		}
+		void OnGetUnit(Unit unit)
+		{
+			unit.Show();
+
+			//Maybe set the unit in motion?
+			//Set it's AI
+		}
+		void OnRecycleUnit(Unit unit)
+		{
+			unit.Hide();
 		}
 
-		void HandleDowntime()
+		//Functions required:
+		//- Spawn a unit
+		//- Spawn from a user point input
+		//- despawn unit
+		// - deactivate unit
+
+		public void TrySpawnUnitAtScreenPoint(Vector2 screenPoint)
 		{
-			if (energy.downtime > 0)
+			//Reject user input if the team is computer controlled
+			if (userType == UserType.Computer)
+				return;
+
+			//Raycast to point
+			if (gameParameters.isARMode)
 			{
-				energy.downtime -= gs.downtimeRecoveryRate * Time.deltaTime;
+				//AR Raycast
+				if (arRaycastManager.Raycast(screenPoint, arHitResults, UnityEngine.XR.ARSubsystems.TrackableType.Planes))
+				{
+					SpawnUnitOnField(arHitResults[0].pose.position);
+				}
 			}
-		}
+			else
+			{
+				//Normal raycast
+				var ray = Camera.main.ScreenPointToRay(screenPoint);
+				if (Physics.Raycast(ray, out RaycastHit hit, RAYCAST_MAXDISTANCE))
+				{
+					SpawnUnitOnField(hit.point);
+				}
+			}
 
-		public void StartRound(Stance stance)
-		{
-			//Reset all stats
-			//Set stance
-			//Clear all players off the field
+			//Spawn unit at point
 		}
 
 		//Spawn player at specific location, facing toward the opposite team
-		public void SpawnPlayer(Vector3 location)
+		public void SpawnUnitOnField(Vector3 positionOnField)
 		{
-			var spawn = playerPool.Get();
-			spawn.transform.SetPositionAndRotation(location, Quaternion.LookRotation(attackDirection, Vector3.up));
+			//Make sure spawn point is on the field
+			if (!field.isPosWithinField(positionOnField))
+			{
+				Debug.LogWarning("Out of bounds!");
+				return;
+			}
+
+			//Get from pool and init
+			var spawn = unitPool.Get();
+			spawn.transform.SetPositionAndRotation(positionOnField, Quaternion.LookRotation(attackDirection, Vector3.up));
+		}
+		public bool TrySpawnUnitOnField(Vector3 positionOnField)
+		{
+			//Point must be on field
+			if (!field.isPosWithinField(positionOnField))
+			{
+				return false;
+			}
+
+			//Success
+			//Get from pool and init
+			var spawn = unitPool.Get();
+			spawn.transform.SetPositionAndRotation(positionOnField, Quaternion.LookRotation(attackDirection, Vector3.up));
+			return true;
 		}
 
 		//Despawn and put back into the object pool
-		public void DespawnPlayer(Player player)
+		public void DespawnUnit(Unit unit)
 		{
-			playerPool.Release(player);
+			unitPool.Recycle(unit);
+		}
+
+		public void DespawnAllUnits()
+		{
+			foreach (var unit in units)
+				unitPool.Recycle(unit);
 		}
 	}
 }

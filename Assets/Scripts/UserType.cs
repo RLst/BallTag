@@ -8,10 +8,4 @@ namespace LeMinhHuy
 		Player,     //User controlled
 		Computer    //AI controlled
 	}
-
-	[Serializable]
-	public class User
-	{
-		public UserType type;
-	}
 }

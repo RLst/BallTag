@@ -7,54 +7,106 @@ namespace LeMinhHuy
 	public class Pool<T> : IDisposable
 	{
 		readonly Stack<T> stack;
+		readonly Func<T> createFunction;
+		readonly Action<T> actionOnGet;
+		readonly Action<T> actionOnRelease;
+		readonly Action<T> actionOnDestroy;
 		readonly int maxSize;
+		public bool collectionCheck;
 
-		public int count => this.stack.Count;
-		// public int CountAll { get; private set; }
-		// public int CountInactive => this.stack.Count;
-		// public int CountActive => this.CountAll - this.CountInactive;
+		//Counters
+		public int countAll { get; private set; }
+		public int countInactive => this.stack.Count;
+		public int countActive => this.countAll - this.countInactive;
 
-		public Pool(int defaultSize = 10, int maxSize = 10000)
+		//Constructors
+		public Pool(
+			Func<T> createFunction,
+			Action<T> actionOnGet = null,
+			Action<T> actionOnRecycle = null,
+			Action<T> actionOnDestroy = null,
+			bool collectionCheck = true,
+			int defaultSize = 10,
+			int maxSize = 10000)
 		{
-			if (maxSize <= 0) throw new System.ArgumentException("Max size must be greater than 0", nameof(maxSize));
+			if (createFunction is null)
+				throw new ArgumentException("No create function passed in", nameof(createFunction));
+
+			if (maxSize <= 0)
+				throw new System.ArgumentException("Max size must be greater than 0", nameof(maxSize));
 
 			this.stack = new Stack<T>(defaultSize);
+
+			this.createFunction = createFunction;
+			this.actionOnGet = actionOnGet;
+			this.actionOnRelease = actionOnRecycle;
+			this.actionOnDestroy = actionOnDestroy;
+
+			this.collectionCheck = collectionCheck;
 			this.maxSize = maxSize;
 		}
 
+		//Get an object from the pool. Make one with supplied create function if there's none
 		public T Get()
 		{
-			T obj;
+			T element;
 			if (stack.Count == 0)
 			{
-				Debug.LogWarning("Nothing in the pool to get!");
-				//Add a run create function
-				return default;
+				//Create
+				element = createFunction();
+				++countAll;
 			}
 			else
 			{
-				obj = stack.Pop();
+				//Pull
+				element = stack.Pop();
 			}
 
-			return obj;
+			//Perform get action on object
+			var actionOnGet = this.actionOnGet;
+			if (actionOnGet is object)
+				actionOnGet(element);
+
+			return element;
 		}
 
-		public void Release(T element)
+		//Push object back into pool
+		public void Recycle(T element)
 		{
 			//Make sure the object hasn't already been released
-			if (stack.Count > 0 && stack.Contains(element))
-				throw new InvalidOperationException("Object that has already been released to the pool");
+			if (collectionCheck && stack.Count > 0 && stack.Contains(element))
+			{
+				Debug.LogWarning("Object that has already been released to the pool");
+				return;
+			}
 
-			//Only take in if there's enough room
-			if (stack.Count < maxSize)
+			//Perform release operations
+			Action<T> actionOnRelease = this.actionOnRelease;
+			if (actionOnRelease is object)
+				actionOnRelease(element);
+
+			//Destroy if there's way too much
+			if (countActive < maxSize)
 			{
 				stack.Push(element);
+			}
+			else
+			{
+				Action<T> actionOnDetroy = this.actionOnDestroy;
+				if (actionOnDestroy is object)
+					actionOnDestroy(element);
 			}
 		}
 
 		public void Clear()
 		{
+			if (actionOnDestroy is object)
+			{
+				foreach (T element in stack)
+					this.actionOnDestroy(element);
+			}
 			stack.Clear();
+			countAll = 0;
 		}
 
 		public void Dispose() => this.Clear();

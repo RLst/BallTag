@@ -20,15 +20,15 @@ namespace LeMinhHuy
 
 
 		//Start the match
-		public void Start(User playerOne, User playerTwo)
-		{
-			//Init team settings
-			teamOne.Initialise(playerOne);
-			teamTwo.Initialise(playerTwo);
+		// public void Start(User playerOne, User playerTwo)
+		// {
+		// 	//Init team settings
+		// 	teamOne.Initialise(playerOne);
+		// 	teamTwo.Initialise(playerTwo);
 
-			//Set attack directions
+		// 	//Set attack directions
 
-		}
+		// }
 
 		public void StartNextRound()
 		{

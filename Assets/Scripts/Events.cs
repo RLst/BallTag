@@ -4,5 +4,5 @@ using UnityEngine.Events;
 
 namespace LeMinhHuy.Events
 {
-	[Serializable] public class TapEvent : UnityEvent<Vector2> { }  //Passes through the tap location
+	[Serializable] public class PointInputEvent : UnityEvent<Vector2> { }  //Passes through the tap/click location
 }

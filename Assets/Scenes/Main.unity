@@ -1446,11 +1446,11 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.3
-  far clip plane: 1000
+  near clip plane: 0.03
+  far clip plane: 100
   field of view: 60
   orthographic: 1
-  orthographic size: 24.6
+  orthographic size: 25
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -2224,7 +2224,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1765845703}
-  m_RootOrder: 2
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &701153447
 MonoBehaviour:
@@ -2238,14 +2238,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d80859c544ff14fb7b817de17df497ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameSettings: {fileID: 11400000, guid: 555d847056c14456ab562177dfec82fd, type: 2}
+  _gameParameters: {fileID: 11400000, guid: 555d847056c14456ab562177dfec82fd, type: 2}
+  arSessionOrigin: {fileID: 0}
+  arRaycastManager: {fileID: 0}
   teamOne:
     color: {r: 1, g: 0.19713613, b: 0, a: 1}
     userType: 0
     stance: 1
-    energy:
-      current: 0
-      downtime: 0
+    energy: 0
+    recoveryTime: 0
     attackDirection: {x: 0, y: 0, z: -1}
     field: {fileID: 933228886}
     goal: {fileID: 1980489883}
@@ -2256,9 +2257,8 @@ MonoBehaviour:
     color: {r: 1, g: 0.71341777, b: 0, a: 1}
     userType: 1
     stance: 0
-    energy:
-      current: 0
-      downtime: 0
+    energy: 0
+    recoveryTime: 0
     attackDirection: {x: 0, y: 0, z: 1}
     field: {fileID: 1562559154}
     goal: {fileID: 560895622}
@@ -2295,7 +2295,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1765845703}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &808188785
 MonoBehaviour:
@@ -4701,6 +4701,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1377825547}
+  - component: {fileID: 1377825549}
   - component: {fileID: 1377825548}
   m_Layer: 0
   m_Name: UserInput
@@ -4721,7 +4722,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1765845703}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1377825548
 MonoBehaviour:
@@ -4735,6 +4736,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc97e96fcee31414bbcc6e1ee81548a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1377825549
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1377825546}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d186cfd01a01e04d8c748fb25f77046, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onScreenPosInput:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1439141185
 GameObject:
   m_ObjectHideFlags: 0
@@ -7061,9 +7077,9 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 701153446}
   - {fileID: 1377825547}
   - {fileID: 808188784}
-  - {fileID: 701153446}
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
