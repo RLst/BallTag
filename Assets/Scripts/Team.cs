@@ -13,6 +13,7 @@ namespace LeMinhHuy
 		[field: SerializeField] public float currentEnergy { get; set; }
 		[field: SerializeField] public float currentDowntime { get; set; }
 
+		public Field field;
 		public List<Player> players = new List<Player>();
 
 		void Update()

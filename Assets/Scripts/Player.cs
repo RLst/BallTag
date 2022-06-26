@@ -11,6 +11,9 @@ namespace LeMinhHuy
 		public Stance stance;   // { get; set; }
 		public Team team;
 
+		// public AI offensive;
+		// public AI defensive;
+
 		void Update()
 		{
 
@@ -26,4 +29,9 @@ namespace LeMinhHuy
 
 		}
 	}
+
+	// public class AI
+	// {
+
+	// }
 }

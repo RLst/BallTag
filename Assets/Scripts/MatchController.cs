@@ -21,6 +21,7 @@ namespace LeMinhHuy
 		{
 
 		}
+
 		void Pause()
 		{
 			Time.timeScale = 0;
@@ -39,11 +40,14 @@ namespace LeMinhHuy
 	{
 		public List<Team> teams = new List<Team>();
 
-
-
 		void Update()
 		{
 
+		}
+
+		public void AddNewPlayer()
+		{
+			
 		}
 	}
 }
