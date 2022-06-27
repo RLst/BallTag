@@ -45,7 +45,7 @@ namespace LeMinhHuy
 			get
 			{
 				if (_gameParameters is null)
-					_gameParameters = Umpire.current._gameParameters;
+					_gameParameters = GameController.current._gameParameters;
 				return _gameParameters;
 			}
 		}
@@ -60,7 +60,7 @@ namespace LeMinhHuy
 		public void Initialise()
 		{
 			//Cache from monobehaviour umpire
-			arRaycastManager = Umpire.current.arRaycastManager;
+			arRaycastManager = GameController.current.arRaycastManager;
 
 			//Register events
 			UserInput.current.onScreenPosInput.AddListener(TrySpawnUnitAtScreenPoint);

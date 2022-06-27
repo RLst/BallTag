@@ -5,14 +5,14 @@ namespace LeMinhHuy
 	/// <summary>
 	/// Handle menus etc
 	/// </summary>
-	[RequireComponent(typeof(Umpire))]
+	[RequireComponent(typeof(GameController))]
 	public class MenuController : MonoBehaviour
 	{
-		Umpire umpire;
+		GameController umpire;
 
 		void Awake()
 		{
-			umpire = GetComponent<Umpire>();
+			umpire = GetComponent<GameController>();
 		}
 
 		void Update()

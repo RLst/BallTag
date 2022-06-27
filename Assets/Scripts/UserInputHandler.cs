@@ -7,12 +7,12 @@ namespace LeMinhHuy
 	{
 		//Members
 		UserInput ui;
-		Umpire umpire;
+		GameController umpire;
 
 		void Awake()
 		{
 			ui = GetComponent<UserInput>();
-			umpire = Umpire.current;
+			umpire = GameController.current;
 		}
 
 		void OnEnable()

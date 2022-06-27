@@ -8,7 +8,7 @@ namespace LeMinhHuy
 	/// Basically the game manager; Registers details and starts the match
 	/// Is the only one that is a monobehaviour and is in the scene so it can pass in objects etc
 	/// </summary>
-	public class Umpire : Singleton<Umpire>     //Rename to GameManager or GameController?
+	public class GameController : Singleton<GameController>     //Rename to GameManager or GameController?
 	{
 		//Inspector
 		public GameParameters _gameParameters;
