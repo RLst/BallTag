@@ -30,7 +30,7 @@ namespace LeMinhHuy
 		public Fence[] fences;
 
 		//Pool; eliminate garbage allocation
-		int startingUnitsToPool = 5;
+		const int startingUnitsToPool = 5;
 		Pool<Unit> unitPool;
 		List<Unit> units = new List<Unit>();
 
@@ -59,9 +59,6 @@ namespace LeMinhHuy
 			this.game = GameController.current;
 			arRaycastManager = this.game.arRaycastManager;
 
-			//ONENABLE; Register events
-			UserInput.current.onScreenPosInput.AddListener(TrySpawnUnitAtScreenPoint);
-
 			//Set core team parameters
 			this.color = ts.color;
 			this.userType = ts.userType;
@@ -73,10 +70,22 @@ namespace LeMinhHuy
 				case Stance.Defensive:
 					this.strategy = game.parameters.defensiveStrategy;
 					break;
+				default:
+					throw new ArgumentException("Invalid stance!");
 			}
 
 			//Create first before
+			//NOTE: spawning will cost energy?
 			PrepareObjectPool();
+
+			Reset();
+		}
+
+		void Reset()
+		{
+			energy = 0;
+			recoveryTime = -1;
+			DespawnAllUnits();
 		}
 
 		//POOLING
@@ -86,26 +95,24 @@ namespace LeMinhHuy
 			//Preload pool
 			for (int i = 0; i < startingUnitsToPool; i++)
 			{
-				//Create and add to total list
+				//Create unit, add to full unit list, push into pool
 				var unit = unitPool.Get();
 				units.Add(unit);
-				//Recycle back into pool
-				unitPool.Recycle(unit);
+				// unitPool.Recycle(unit);
 			}
 		}
 
 		//POOLING CALLBACKS
 		Unit SpawnUnit()
 		{
-			var unit = GameObject.Instantiate<Unit>(game.genericUnitPrefab, field.parent.transform);
+			var unit = GameObject.Instantiate<Unit>(game.genericUnitPrefab, field.transform);
 			unit.Init(this);    //Sets color etc
 			return unit;
 		}
 		void OnGetUnit(Unit unit)
 		{
 			//Spend energy
-			energy -= strategy.spawnEnergyCost;
-
+			// energy -= strategy.spawnEnergyCost;
 			unit.Show();
 
 			//Maybe set the unit in motion?
@@ -116,35 +123,19 @@ namespace LeMinhHuy
 			unit.Hide();
 		}
 
-		//CORE
-		void Update()
-		{
-			HandleEnergy();
-			HandleDowntime();
-		}
-
-		void HandleDowntime()
-		{
-			if (recoveryTime > 0)
-				recoveryTime -= Time.deltaTime;
-		}
-		void HandleEnergy()
-		{
-			if (energy < game.parameters.maxEnergy)
-				energy += Time.deltaTime * strategy.energyRegenRate;
-		}
-
-
 		//SPAWN
 		public void TrySpawnUnitAtScreenPoint(Vector2 screenPoint)
 		{
+			//GUARDS
 			//Reject if there's not enough energy
 			if (energy < strategy.spawnEnergyCost)
 				return;
-
-			//Reject user input if the team is computer controlled
+			//Reject user input if CPU controlled team
 			if (userType == UserType.CPU)
+			{
+				Debug.Log("Spawn request rejected! CPU controlled team");
 				return;
+			}
 
 			//Raycast to point
 			if (game.parameters.isARMode)
@@ -161,7 +152,15 @@ namespace LeMinhHuy
 				var ray = Camera.main.ScreenPointToRay(screenPoint);
 				if (Physics.Raycast(ray, out RaycastHit hit, RAYCAST_MAXDISTANCE))
 				{
-					TrySpawnUnitOnField(hit.point);
+					//Must have clicked on this field
+					if (hit.collider == this.field.collider)
+					{
+						TrySpawnUnitOnField(hit.point);
+					}
+					else
+					{
+						Debug.LogWarning("Click on wrong field!");
+					}
 				}
 			}
 		}
@@ -169,46 +168,47 @@ namespace LeMinhHuy
 		//Spawn player at specific location, facing toward the opposite team
 		public bool TrySpawnUnitOnField(Vector3 positionOnField)
 		{
-			//Reject if there's not enough energy
+			//GUARDS
+			//Must have enough energy //NOTE: This may be double checked
 			if (energy < strategy.spawnEnergyCost)
 				return false;
-
 			//Point must be on field
 			if (!field.isPosWithinField(positionOnField))
-			{
 				return false;
-			}
 
-			//Success
-			//Get from pool and init
+			//Success; Get from pool and init
 			var spawn = unitPool.Get();
 			spawn.transform.SetPositionAndRotation(positionOnField, Quaternion.LookRotation(attackDirection, Vector3.up));
+			energy -= strategy.spawnEnergyCost;
 			return true;
 		}
-		public void SpawnUnitOnField(Vector3 positionOnField)
-		{
-			//Make sure spawn point is on the field
-			if (!field.isPosWithinField(positionOnField))
-			{
-				Debug.LogWarning("Out of bounds!");
-				return;
-			}
 
-			//Get from pool and init
-			var spawn = unitPool.Get();
-			spawn.transform.SetPositionAndRotation(positionOnField, Quaternion.LookRotation(attackDirection, Vector3.up));
-		}
 
 		//Despawn and put back into the object pool
 		public void DespawnUnit(Unit unit)
 		{
 			unitPool.Recycle(unit);
 		}
-
 		public void DespawnAllUnits()
 		{
-			foreach (var unit in units)
-				unitPool.Recycle(unit);
+			foreach (var u in units)
+				DespawnUnit(u);
+		}
+
+		//CORE
+		public void HandleDowntime()
+		{
+			if (recoveryTime > 0)
+				recoveryTime -= Time.deltaTime;
+		}
+		public void HandleEnergy()
+		{
+			// Debug.Log($"Energy: {energy}, MaxEnergy: {game.parameters.maxEnergy}");
+			if (energy < game.parameters.maxEnergy)
+			{
+				energy += Time.deltaTime * strategy.energyRegenRate;
+				onEnergyChange.Invoke(energy);
+			}
 		}
 	}
 }

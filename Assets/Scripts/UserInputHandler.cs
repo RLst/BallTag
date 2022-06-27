@@ -18,14 +18,14 @@ namespace LeMinhHuy
 		void OnEnable()
 		{
 			//Enable user input for these events
-			controller.onBeginMatch.AddListener(RegisterInputEvents);
+			// controller.onBeginMatch.AddListener(RegisterInputEvents);
 			controller.onBeginRound.AddListener(RegisterInputEvents);
 			controller.onUnPause.AddListener(RegisterInputEvents);
 
 			//Disable user input for these events
 			controller.onPause.AddListener(UnregisterInputEvents);
 			controller.onEndRound.AddListener(UnregisterInputEvents);
-			controller.onEndMatch.AddListener(UnregisterInputEvents);
+			// controller.onEndMatch.AddListener(UnregisterInputEvents);
 		}
 
 		public void RegisterInputEvents()

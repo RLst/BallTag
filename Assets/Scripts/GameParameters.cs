@@ -7,6 +7,7 @@ namespace LeMinhHuy
 	public class GameParameters : ScriptableObject
 	{
 		public bool isARMode = false;
+		public float fieldWidth = 20f;
 
 		//Round
 		public int roundsPerMatch = 5;

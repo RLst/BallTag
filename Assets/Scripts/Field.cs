@@ -11,13 +11,11 @@ namespace LeMinhHuy
 	public class Field : MonoBehaviour
 	{
 		//Members
-		BoxCollider col;
-		public GameObject parent; //This is root the players will be in instantiated onto
+		new public BoxCollider collider;
 
 		void Awake()
 		{
-			parent = transform.parent.gameObject;
-			col = GetComponent<BoxCollider>();
+			collider = GetComponent<BoxCollider>();
 		}
 
 		public bool isPosWithinField(Vector3 position, float checkSphereRadius = 0.2f)
@@ -26,7 +24,7 @@ namespace LeMinhHuy
 		//Get a random location on this field at specified height
 		public Vector3 GetRandomLocationOnField(float height)
 		{
-			var point = Extensions.GetRandomPointInsideCollider(col);
+			var point = Extensions.GetRandomPointInsideCollider(collider);
 			point.y = height;
 			return point;
 		}

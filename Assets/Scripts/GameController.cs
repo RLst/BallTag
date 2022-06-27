@@ -15,7 +15,7 @@ namespace LeMinhHuy
 		//Inspector
 		//MATCH PARAMS
 		[field: SerializeField] public int currentRound { get; private set; } = 0;
-		[field: SerializeField] public float currentRoundRemainingTime { get; private set; } = float.MinValue;
+		[field: SerializeField] public float currentRoundRemainingTime { get; private set; } = -1;
 
 		[Space]
 		public GameParameters parameters;
@@ -38,6 +38,10 @@ namespace LeMinhHuy
 		public UnityEvent onUnPause;
 		public UnityEvent onEndRound;
 		public UnityEvent onEndMatch;
+
+		//Official game running flag
+		public bool isPlaying = false;
+		public bool isPaused = false;
 
 
 		//INITS
@@ -62,8 +66,8 @@ namespace LeMinhHuy
 			{
 				// Debug.Log(teamOne.field.transform.position);
 				// Debug.Log(teamTwo.field.transform.position);
-				teamOne.attackDirection = (teamTwo.field.transform.position - teamOne.field.transform.position).normalized;
-				teamTwo.attackDirection = (teamOne.field.transform.position - teamTwo.field.transform.position).normalized;
+				teamOne.attackDirection = (teamOne.field.transform.position - teamTwo.field.transform.position).normalized;
+				teamTwo.attackDirection = (teamTwo.field.transform.position - teamOne.field.transform.position).normalized;
 			}
 		}
 
@@ -72,13 +76,10 @@ namespace LeMinhHuy
 			teamOne.Initialise(parameters.teamOneSettings);
 			teamTwo.Initialise(parameters.teamTwoSettings);
 
-			//Clear all teams
-			// teamOne.DespawnAllUnits();
-			// teamTwo.DespawnAllUnits();
-
 			currentRound = 0;
 			BeginRound();
 
+			isPlaying = true;
 
 			//Hook up user input events etc
 			onBeginMatch.Invoke();
@@ -113,11 +114,13 @@ namespace LeMinhHuy
 				}
 			}
 
+			Debug.Log("Begin Round");
 			onBeginRound.Invoke();
 		}
 
 		void EndRound()
 		{
+			Debug.Log("End Round");
 			onEndRound.Invoke();
 		}
 
@@ -125,6 +128,7 @@ namespace LeMinhHuy
 		public void EndMatch()
 		{
 			//Resolve match
+			isPlaying = false;
 
 			//ie. stop input
 			onEndMatch.Invoke();
@@ -133,6 +137,9 @@ namespace LeMinhHuy
 		//CORE
 		void Update()
 		{
+			if (isPlaying == false)
+				return;
+
 			//Handle round timer IF a round is currently going on
 			if (currentRoundRemainingTime > 0)
 			{
@@ -143,6 +150,14 @@ namespace LeMinhHuy
 					EndRound();
 				}
 			}
+
+			//Energy
+			teamOne.HandleEnergy();
+			teamTwo.HandleEnergy();
+
+			//Downtime
+			teamOne.HandleDowntime();
+			teamTwo.HandleDowntime();
 		}
 
 
@@ -150,11 +165,13 @@ namespace LeMinhHuy
 		public void Pause()
 		{
 			Time.timeScale = 0f;
+			isPaused = true;
 			onPause.Invoke();
 		}
 		public void UnPause()
 		{
 			Time.timeScale = 1f;
+			isPaused = false;
 			onUnPause.Invoke();
 		}
 	}
