@@ -10,12 +10,15 @@ namespace LeMinhHuy
 	public class Unit : MonoBehaviour
 	{
 		//Inspector
-
+		[SerializeField] GameObject indicatorDirection;
+		[SerializeField] GameObject indicatorCarry;
+		[SerializeField] GameObject indicatorDetectionZone;
+		[SerializeField] Renderer mainRenderer;
 
 		//Properties
 		[field: SerializeField] public bool hasBall { get; set; } = false;
 		//"If positive means this unit has been caught and is deactivated temporarily")]
-		[field: SerializeField] public float inactive { get; set; } = float.MinValue;
+		[field: SerializeField] public float inactive { get; set; } = -1;
 
 		//Events
 		public UnityEvent onTag;    //This unit tags an opponent out
@@ -29,6 +32,9 @@ namespace LeMinhHuy
 		//INITS
 		public void Init(Team team)
 		{
+			if (mainRenderer is null)
+				mainRenderer = GetComponentInChildren<Renderer>();
+
 			//Set team, stance, color
 			this.team = team;
 			SetColor(team.color);
@@ -83,19 +89,14 @@ namespace LeMinhHuy
 
 		public bool IsOpponent(Unit otherUnit) => !otherUnit.team.Equals(this.team);
 
-		public void SetColor(Color col)
-		{
-			GetComponent<Renderer>().material.color = col;
-		}
+		public void SetColor(Color col) => mainRenderer.material.color = col;
 
 		public void Hide()
 		{
+			// Debug.Log("Hiding " + name);
 			gameObject.SetActive(false);
 		}
 
-		public void Show()
-		{
-			gameObject.SetActive(true);
-		}
+		public void Show() => gameObject.SetActive(true);
 	}
 }

@@ -15,4 +15,9 @@ Team
 	Color	//Does not change
 	UserType	//Does not change
 	Stance //can change
-	Strategy 
+	Strategy
+
+GameController
+	BeginMatch()
+		Init all teams to settings
+		
