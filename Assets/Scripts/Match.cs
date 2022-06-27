@@ -13,32 +13,24 @@ namespace LeMinhHuy
 		public int totalRounds = 5;
 		public int currentRound = 0;
 
-
 		//Members
-		Team teamOne = new Team();
-		Team teamTwo = new Team();
+		Team teamOne;
+		Team teamTwo;
 
-
-		//Start the match
-		// public void Start(User playerOne, User playerTwo)
-		// {
-		// 	//Init team settings
-		// 	teamOne.Initialise(playerOne);
-		// 	teamTwo.Initialise(playerTwo);
-
-		// 	//Set attack directions
-
-		// }
+		public void Start(Team team1, Team team2)
+		{
+			teamOne = team1;
+			teamTwo = team2;
+		}
 
 		public void StartNextRound()
 		{
 			currentRound++;
 			if (currentRound > totalRounds)
 			{
-				EndMatch();
+				End();
 				return;
 			}
-
 		}
 
 		void SwapTeamStances()
@@ -49,7 +41,7 @@ namespace LeMinhHuy
 			teamTwo.stance = temp;
 		}
 
-		public void EndMatch()
+		public void End()
 		{
 			throw new NotImplementedException();
 		}

@@ -1,18 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class Fence : MonoBehaviour
+namespace LeMinhHuy
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+	public class Fence : MonoBehaviour
+	{
+		public void SetColor(Color col)
+		=> GetComponent<Renderer>().material.color = col;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+	}
 }

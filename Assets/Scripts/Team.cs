@@ -65,13 +65,12 @@ namespace LeMinhHuy
 			//Register events
 			UserInput.current.onScreenPosInput.AddListener(TrySpawnUnitAtScreenPoint);
 
-			//Init pool
-			unitPool = new Pool<Unit>(SpawnUnit, OnGetUnit, OnRecycleUnit);
-
-			PreloadPool();
+			PrepareObjectPool();
+			SetTeamColors();
 		}
-		void PreloadPool()
+		void PrepareObjectPool()
 		{
+			unitPool = new Pool<Unit>(SpawnUnit, OnGetUnit, OnRecycleUnit);
 			//Preload pool
 			for (int i = 0; i < startingUnitsToPool; i++)
 			{
@@ -82,12 +81,19 @@ namespace LeMinhHuy
 				unitPool.Recycle(unit);
 			}
 		}
+		void SetTeamColors()
+		{
+			goal.SetColor(this.color);
+			foreach (var f in fences)
+				f.SetColor(this.color);
+		}
 
 		//Pooling callbacks
 		Unit SpawnUnit()
 		{
 			var unit = GameObject.Instantiate<Unit>(gameParameters.genericUnitPrefab, field.parent.transform);
 			unit.team = this;
+			unit.SetColor(this.color);
 			return unit;
 		}
 		void OnGetUnit(Unit unit)

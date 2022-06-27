@@ -25,8 +25,7 @@ namespace LeMinhHuy
 		{
 			//Set team, stance, color
 			this.team = team;
-			GetComponent<Renderer>().material.color = this.color;
-
+			SetColor(this.color);
 		}
 
 

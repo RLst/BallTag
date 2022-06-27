@@ -8,7 +8,7 @@ namespace LeMinhHuy
 	/// Basically the game manager; Registers details and starts the match
 	/// Is the only one that is a monobehaviour and is in the scene so it can pass in objects etc
 	/// </summary>
-	public class Umpire : Singleton<Umpire>
+	public class Umpire : Singleton<Umpire>     //Rename to GameManager or GameController?
 	{
 		//Inspector
 		public GameParameters _gameParameters;
@@ -55,19 +55,6 @@ namespace LeMinhHuy
 
 			teamOne.Initialise();
 			teamTwo.Initialise();
-
-			// masterMatch.Start(gameSettings.playerOne, gameSettings.playerTwo);
-
-			// //Set player type for each team
-			// teams = new Team[2];
-
-			// //Team one
-			// teams[0].userType = gameSettings.playerOne.type;
-			// teams[0].StartRound(Stance.Offensive);
-
-			// //Team two
-			// teams[1].userType = gameSettings.playerTwo.type;
-			// teams[2].StartRound(Stance.Defensive);
 		}
 		public void StartNextRound()
 		{
@@ -94,5 +81,15 @@ namespace LeMinhHuy
 			if (teamTwo.recoveryTime > 0)
 				teamTwo.recoveryTime -= Time.deltaTime;
 		}
+
+		public void PauseGame()
+		{
+			Time.timeScale = 0f;
+		}
+		public void UnPauseGame()
+		{
+			Time.timeScale = 1f;
+		}
+
 	}
 }
