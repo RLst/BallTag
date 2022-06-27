@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace LeMinhHuy
@@ -5,15 +6,31 @@ namespace LeMinhHuy
 	[CreateAssetMenu]
 	public class GameParameters : ScriptableObject
 	{
-		public Unit genericUnitPrefab;
-
 		public bool isARMode = false;
 
+		//Round
 		public int roundsPerMatch = 5;
-		public float startRoundTime = 140f;
-		public float startEnergy;
+		public float startingRoundRemainingTime = 140f;
 
-		public UnitParameters offenseParams;
-		public UnitParameters defenceParams;
+		//Energy
+		public float maxEnergy;
+
+		[Header("Strategies")]
+		public Strategy offensiveStrategy;
+		public Strategy defensiveStrategy;
+
+		[Header("Match Settings")]
+		//These are the definite settings as chosen by the user has selected
+		//This might allow for a cutscene to play in the background CPU vs CPU
+		public TeamSettings teamOneSettings;
+		public TeamSettings teamTwoSettings;
+	}
+
+	[Serializable]
+	public class TeamSettings
+	{
+		public Color color;
+		public UserType userType;
+		public Stance stance;
 	}
 }

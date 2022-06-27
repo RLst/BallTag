@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace LeMinhHuy
 {
@@ -11,54 +12,76 @@ namespace LeMinhHuy
 		//Inspector
 
 
-
 		//Properties
-		public bool hasBall { get; set; } = false;
-		public Stance stance => team.stance;
-		public Color color => team.color;
+		[field: SerializeField] public bool hasBall { get; set; } = false;
+		//"If positive means this unit has been caught and is deactivated temporarily")]
+		[field: SerializeField] public float inactive { get; set; } = float.MinValue;
+
+		//Events
+		public UnityEvent onTag;    //This unit tags an opponent out
+		public UnityEvent onOut;      //This unit got tagged by an opponent
 
 		//Members
 		public Team team;
+		Unit target;
 
-		//Inits
+
+		//INITS
 		public void Init(Team team)
 		{
 			//Set team, stance, color
 			this.team = team;
-			SetColor(this.color);
+			SetColor(team.color);
 		}
 
-
-		//Core
+		//CORE
 		void Update()
 		{
 			//Temp
 			transform.Translate(transform.forward * Time.deltaTime);
 
-			switch (stance)
+			//Handle inactive
+			if (inactive > 0)
 			{
-				case Stance.Offensive:
 
-					break;
+			}
+			//Else play
+			else
+			{
+				switch (team.strategy.stance)
+				{
+					case Stance.Offensive:
+						PlayOffence();
+						break;
 
-				case Stance.Defensive:
-					break;
+					case Stance.Defensive:
+						PlayDefence();
+						break;
 
-				default:
-					Debug.LogWarning("Invalid stance reached!");
-					break;
+					default:
+						Debug.LogWarning("Invalid stance reached!");
+						break;
+				}
 			}
 		}
 
 		void PlayOffence()
 		{
-
+			//
 		}
-
 		void PlayDefence()
 		{
 
 		}
+
+		//Opponent tagged you out
+		public void OnTagged()
+		{
+			//Deactivate
+			//Downtime
+		}
+
+		public bool IsOpponent(Unit otherUnit) => !otherUnit.team.Equals(this.team);
 
 		public void SetColor(Color col)
 		{

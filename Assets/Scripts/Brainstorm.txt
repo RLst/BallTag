@@ -1,0 +1,18 @@
+Brainstorm
+
+Each team has a stance
+Each stance causes the units to behave and move differently
+
+I need to somehow combine the stance and behaviour together
+
+Strategy
+	Stance
+	params
+
+(Stance, params)
+
+Team
+	Color	//Does not change
+	UserType	//Does not change
+	Stance //can change
+	Strategy 

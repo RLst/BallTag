@@ -6,6 +6,6 @@ namespace LeMinhHuy
 	public enum UserType
 	{
 		Player,     //User controlled
-		Computer    //AI controlled
+		CPU    //AI controlled
 	}
 }

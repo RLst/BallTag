@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.XR.ARFoundation;
 
 namespace LeMinhHuy
@@ -11,7 +13,13 @@ namespace LeMinhHuy
 	public class GameController : Singleton<GameController>     //Rename to GameManager or GameController?
 	{
 		//Inspector
-		public GameParameters _gameParameters;
+		//MATCH PARAMS
+		[field: SerializeField] public int currentRound { get; private set; } = 0;
+		[field: SerializeField] public float currentRoundRemainingTime { get; private set; } = float.MinValue;
+
+		[Space]
+		public GameParameters parameters;
+		public Unit genericUnitPrefab;
 
 		[Header("AR")]
 		public ARSessionOrigin arSessionOrigin;
@@ -22,22 +30,32 @@ namespace LeMinhHuy
 		public Team teamOne;
 		public Team teamTwo;
 
-		//Members
-		Match masterMatch = new Match();    //There's one and only one match that get's recycled
+		//Events
+		[Header("Events")]
+		public UnityEvent onBeginMatch;
+		public UnityEvent onBeginRound;
+		public UnityEvent onPause;
+		public UnityEvent onUnPause;
+		public UnityEvent onEndRound;
+		public UnityEvent onEndMatch;
 
-		void OnValidate()
-		{
-			Start();
-		}
 
+		//INITS
+		void OnValidate() => CalculateAttackDirection();
 		void Awake()
 		{
-			Debug.Assert(_gameParameters != null, "No game parameters found!");
-			Debug.Assert(masterMatch != null, "No main match created!");
-			// Debug.Assert(arRaycastManager != null, "No ARRaycastManager found!");
-		}
+			Debug.Assert(parameters != null, "No game parameters found!");
 
-		void Start()
+			Debug.Assert(teamOne != null, "Team one not found!");
+			Debug.Assert(teamTwo != null, "Team two not found!");
+
+			if (parameters.isARMode)
+			{
+				Debug.Assert(arRaycastManager != null, "No ARRaycastManager found!");
+			}
+		}
+		void Start() => CalculateAttackDirection();
+		void CalculateAttackDirection()
 		{
 			//Calculate attack direction
 			if (teamOne.field is object && teamTwo.field is object)
@@ -49,47 +67,95 @@ namespace LeMinhHuy
 			}
 		}
 
-		void StartMatch()
+		public void BeginMatch()
 		{
-			masterMatch.Reset();
+			teamOne.Initialise(parameters.teamOneSettings);
+			teamTwo.Initialise(parameters.teamTwoSettings);
 
-			teamOne.Initialise();
-			teamTwo.Initialise();
+			//Clear all teams
+			// teamOne.DespawnAllUnits();
+			// teamTwo.DespawnAllUnits();
+
+			currentRound = 0;
+			BeginRound();
+
+
+			//Hook up user input events etc
+			onBeginMatch.Invoke();
 		}
-		public void StartNextRound()
+
+		public void BeginRound()
 		{
-			//Reset all stats
-			//Set user type
-			//Set stance
-			//Clear all players off the field
+			//Guard
+			if (currentRound >= parameters.roundsPerMatch)
+			{
+				EndRound();
+				return;
+			}
+
+			currentRound++;
+			currentRoundRemainingTime = parameters.startingRoundRemainingTime;
+
+			//Don't swap strategies for the first round
+			if (currentRound > 1)
+			{
+				switch (teamOne.strategy.stance)
+				{
+					case Stance.Offensive:
+						teamOne.strategy = parameters.defensiveStrategy;
+						teamTwo.strategy = parameters.offensiveStrategy;
+						break;
+
+					case Stance.Defensive:
+						teamOne.strategy = parameters.offensiveStrategy;
+						teamTwo.strategy = parameters.defensiveStrategy;
+						break;
+				}
+			}
+
+			onBeginRound.Invoke();
 		}
 
-		//Core
+		void EndRound()
+		{
+			onEndRound.Invoke();
+		}
+
+		//End the match immediately
+		public void EndMatch()
+		{
+			//Resolve match
+
+			//ie. stop input
+			onEndMatch.Invoke();
+		}
+
+		//CORE
 		void Update()
 		{
-			//temp
-			if (Input.GetKeyDown(KeyCode.S))
-				StartMatch();
+			//Handle round timer IF a round is currently going on
+			if (currentRoundRemainingTime > 0)
+			{
+				currentRoundRemainingTime -= Time.deltaTime;
 
-			HandleDowntime();
+				if (currentRoundRemainingTime <= 0)
+				{
+					EndRound();
+				}
+			}
 		}
 
-		void HandleDowntime()
-		{
-			if (teamOne.recoveryTime > 0)
-				teamOne.recoveryTime -= Time.deltaTime;
-			if (teamTwo.recoveryTime > 0)
-				teamTwo.recoveryTime -= Time.deltaTime;
-		}
 
-		public void PauseGame()
+		//Pause/Unpause game
+		public void Pause()
 		{
 			Time.timeScale = 0f;
+			onPause.Invoke();
 		}
-		public void UnPauseGame()
+		public void UnPause()
 		{
 			Time.timeScale = 1f;
+			onUnPause.Invoke();
 		}
-
 	}
 }
