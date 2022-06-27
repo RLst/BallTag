@@ -10,15 +10,12 @@ namespace LeMinhHuy
 	public class UserInput : Singleton<UserInput>
 	{
 		//Inspector
-		Vector2 startingOrbit;
-		Quaternion rotation;
-		float zoom;
-
-		//Properties
-		// public Vector2 position;
 
 		//Events
 		public PointInputEvent onScreenPosInput;
+
+		//Properties
+		// public Vector2 position;
 
 		//Core
 		void Update()

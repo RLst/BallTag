@@ -59,15 +59,15 @@ namespace LeMinhHuy
 			}
 		}
 		void Start() => CalculateAttackDirection();
-		void CalculateAttackDirection()
+		public void CalculateAttackDirection()
 		{
 			//Calculate attack direction
 			if (teamOne.field is object && teamTwo.field is object)
 			{
 				// Debug.Log(teamOne.field.transform.position);
 				// Debug.Log(teamTwo.field.transform.position);
-				teamOne.attackDirection = (teamOne.field.transform.position - teamTwo.field.transform.position).normalized;
-				teamTwo.attackDirection = (teamTwo.field.transform.position - teamOne.field.transform.position).normalized;
+				teamOne.attackDirection = (teamTwo.field.transform.position - teamOne.field.transform.position).normalized;
+				teamTwo.attackDirection = (teamOne.field.transform.position - teamTwo.field.transform.position).normalized;
 			}
 		}
 
@@ -75,6 +75,7 @@ namespace LeMinhHuy
 		{
 			teamOne.Initialise(parameters.teamOneSettings);
 			teamTwo.Initialise(parameters.teamTwoSettings);
+			CalculateAttackDirection();
 
 			currentRound = 0;
 			BeginRound();

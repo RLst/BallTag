@@ -16,8 +16,8 @@ namespace LeMinhHuy
 		const float RAYCAST_MAXDISTANCE = 100f;
 
 		//Inspector
-		public Color color;
-		public UserType userType;
+		public Color color = Color.blue;
+		public UserType userType = UserType.CPU;
 		public Strategy strategy;
 
 		public float energy;
@@ -75,7 +75,6 @@ namespace LeMinhHuy
 			}
 
 			//Create first before
-			//NOTE: spawning will cost energy?
 			PrepareObjectPool();
 
 			Reset();
@@ -91,14 +90,27 @@ namespace LeMinhHuy
 		//POOLING
 		void PrepareObjectPool()
 		{
-			unitPool = new Pool<Unit>(SpawnUnit, OnGetUnit, OnRecycleUnit);
-			//Preload pool
-			for (int i = 0; i < startingUnitsToPool; i++)
+			if (unitPool is null)
 			{
-				//Create unit, add to full unit list, push into pool
-				var unit = unitPool.Get();
-				units.Add(unit);
-				// unitPool.Recycle(unit);
+				//Create and preload a new obj pool if there wasn't one already
+				unitPool = new Pool<Unit>(SpawnUnit, OnGetUnit, OnRecycleUnit);
+
+				//Preload pool
+				for (int i = 0; i < startingUnitsToPool; i++)
+				{
+					//Create unit, add to full unit list, push into pool
+					var u = unitPool.Get();
+					units.Add(u);
+				}
+			}
+			else if (units.Count > 0 && unitPool.countAll > 0)
+			{
+				//If there's already a pool from a previous game then reset team parameters, colors etc
+				foreach (var u in units)
+				{
+					u.SetTeam(this);
+					u.Hide();
+				}
 			}
 		}
 
@@ -106,15 +118,12 @@ namespace LeMinhHuy
 		Unit SpawnUnit()
 		{
 			var unit = GameObject.Instantiate<Unit>(game.genericUnitPrefab, field.transform);
-			unit.Init(this);    //Sets color etc
+			unit.SetTeam(this);    //Sets color etc
 			return unit;
 		}
 		void OnGetUnit(Unit unit)
 		{
-			//Spend energy
-			// energy -= strategy.spawnEnergyCost;
 			unit.Show();
-
 			//Maybe set the unit in motion?
 			//Set it's AI
 		}
@@ -165,7 +174,7 @@ namespace LeMinhHuy
 			}
 		}
 
-		//Spawn player at specific location, facing toward the opposite team
+		//SPAWN player at specific location, facing toward the opposite team
 		public bool TrySpawnUnitOnField(Vector3 positionOnField)
 		{
 			//GUARDS
@@ -183,8 +192,7 @@ namespace LeMinhHuy
 			return true;
 		}
 
-
-		//Despawn and put back into the object pool
+		//DESPAWN and put back into the object pool
 		public void DespawnUnit(Unit unit)
 		{
 			unitPool.Recycle(unit);
@@ -193,6 +201,20 @@ namespace LeMinhHuy
 		{
 			foreach (var u in units)
 				DespawnUnit(u);
+		}
+
+		//DESTROY
+		public void DestroyAllUnits()
+		{
+			//Untested
+			unitPool.Clear();
+			//Removing gameobjects from list in reverse to prevent indexing errors
+			for (int i = units.Count; i >= 0; i--)
+			{
+				var deleteMe = units[i];
+				units.RemoveAt(i);
+				GameObject.Destroy(deleteMe);
+			}
 		}
 
 		//CORE

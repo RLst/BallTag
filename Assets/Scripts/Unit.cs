@@ -9,29 +9,34 @@ namespace LeMinhHuy
 	/// </summary>
 	public class Unit : MonoBehaviour
 	{
-		//Inspector
-		[SerializeField] GameObject indicatorDirection;
-		[SerializeField] GameObject indicatorCarry;
-		[SerializeField] GameObject indicatorDetectionZone;
-		[SerializeField] Renderer mainRenderer;
-
 		//Properties
 		[field: SerializeField] public bool hasBall { get; set; } = false;
 		//"If positive means this unit has been caught and is deactivated temporarily")]
 		[field: SerializeField] public float inactive { get; set; } = -1;
+
+		//Inspector
+		[Space]
+		[SerializeField] GameObject indicatorDirection;
+		[SerializeField] GameObject indicatorCarry;
+		[SerializeField] GameObject indicatorDetectionZone;
+
+		[Header("Graphics")]
+		[SerializeField] Renderer mainRenderer;
+		[SerializeField] Color inactiveColor = Color.green;
 
 		//Events
 		public UnityEvent onTag;    //This unit tags an opponent out
 		public UnityEvent onOut;      //This unit got tagged by an opponent
 
 		//Members
-		public Team team;
+		public Team  team;
 		Unit target;
 
 
 		//INITS
-		public void Init(Team team)
+		public void SetTeam(Team team)
 		{
+			//Make sure there's a renderer
 			if (mainRenderer is null)
 				mainRenderer = GetComponentInChildren<Renderer>();
 
@@ -44,12 +49,15 @@ namespace LeMinhHuy
 		void Update()
 		{
 			//Temp
-			transform.Translate(transform.forward * Time.deltaTime);
+			transform.Translate(team.attackDirection * Time.deltaTime);
 
 			//Handle inactive
 			if (inactive > 0)
 			{
+				//Countdown downtime timer
+				inactive -= Time.deltaTime;
 
+				//Move unit back to origin?
 			}
 			//Else play
 			else
@@ -88,7 +96,6 @@ namespace LeMinhHuy
 		}
 
 		public bool IsOpponent(Unit otherUnit) => !otherUnit.team.Equals(this.team);
-
 		public void SetColor(Color col) => mainRenderer.material.color = col;
 
 		public void Hide()

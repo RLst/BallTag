@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: GameParameters
   m_EditorClassIdentifier: 
   isARMode: 0
+  fieldWidth: 20
   roundsPerMatch: 5
   startingRoundRemainingTime: 140
   maxEnergy: 6
@@ -20,7 +21,7 @@ MonoBehaviour:
     stance: 1
     energyRegenRate: 0.5
     spawnEnergyCost: 2
-    recurringSpawnTime: 0.5
+    spawnTime: 0.5
     AISpawnPercentage: 0.4
     reactivationTime: 2.5
     baseSpeed: 5
@@ -33,7 +34,7 @@ MonoBehaviour:
     stance: 0
     energyRegenRate: 0.5
     spawnEnergyCost: 2
-    recurringSpawnTime: 0.5
+    spawnTime: 0.5
     AISpawnPercentage: 0.4
     reactivationTime: 4
     baseSpeed: 5
@@ -48,5 +49,5 @@ MonoBehaviour:
     stance: 1
   teamTwoSettings:
     color: {r: 1, g: 0.6779744, b: 0.13679248, a: 1}
-    userType: 1
+    userType: 0
     stance: 0
