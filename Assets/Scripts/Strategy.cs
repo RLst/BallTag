@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 namespace LeMinhHuy
 {
@@ -8,15 +9,23 @@ namespace LeMinhHuy
 		public Stance stance = Stance.Offensive;
 
 		//Energy
+		[Tooltip("The amount of energy that gets regenerated per second")]
 		public float energyRegenRate = 0.5f;
-		public float spawnEnergyCost = 2f;
-		public float spawnDowntime = 0.5f;      //Time between attempts at spawning
-		public float AISpawnPercentage = 0.4f;
+		[Tooltip("The amount of energy required to spawn a unit")]
+		public float spawnCost = 2f;
+		[Tooltip("Time it takes to spawn and fully activate a unit after clicking on the field")]
+		public float spawnTime = 0.5f;
 
-		//Downtime when unit has been caught or has caught
+		//AI
+		[Tooltip("The rate at which the AI attempts to spawn a unit")]
+		public float AISpawnRate = 1f;
+		[Tooltip("Chance of the AI being able to spawn")]
+		public float AISpawnChance = 0.4f;
+
+		[Tooltip("Downtime when the unit has tagged opponent or been caught by opponent")]
 		public float reactivationTime = 2.5f;
 
-		//Unit
+		//Unit speeds
 		public float baseSpeed = 5f;
 		public float normalSpeedMult = 1.5f;
 		public float carryingSpeedMult = 0.75f;

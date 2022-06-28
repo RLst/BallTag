@@ -2883,7 +2883,7 @@ MonoBehaviour:
       stance: 1
       energyRegenRate: 0.5
       spawnEnergyCost: 2
-      spawnTime: 0.5
+      spawnDowntime: 0.5
       AISpawnPercentage: 0.4
       reactivationTime: 2.5
       baseSpeed: 5
@@ -2893,7 +2893,7 @@ MonoBehaviour:
       returnSpeedMult: 2
       detectionRange: 0.35
     energy: 0
-    recoveryTime: -1
+    currentSpawnDowntime: 0
     attackDirection: {x: 0.00000008742278, y: 0, z: 1}
     field: {fileID: 933228886}
     goal: {fileID: 1980489883}
@@ -2933,7 +2933,7 @@ MonoBehaviour:
       stance: 0
       energyRegenRate: 0.5
       spawnEnergyCost: 2
-      spawnTime: 0.5
+      spawnDowntime: 0.5
       AISpawnPercentage: 0.4
       reactivationTime: 2.5
       baseSpeed: 5
@@ -2943,7 +2943,7 @@ MonoBehaviour:
       returnSpeedMult: 2
       detectionRange: 0.35
     energy: 0
-    recoveryTime: -1
+    currentSpawnDowntime: 0
     attackDirection: {x: -0.00000008742278, y: 0, z: -1}
     field: {fileID: 1562559154}
     goal: {fileID: 560895622}
@@ -8876,7 +8876,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1955930384}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 2, y: 0, z: 20}
+  m_LocalPosition: {x: 1.9999982, y: 0, z: 20}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 651849814}

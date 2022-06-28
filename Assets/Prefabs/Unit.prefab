@@ -41,7 +41,6 @@ GameObject:
   - component: {fileID: 509169338396377859}
   - component: {fileID: 509169338396377856}
   - component: {fileID: 509169338396377857}
-  - component: {fileID: 509169338396377858}
   m_Layer: 0
   m_Name: Visor
   m_TagString: Untagged
@@ -110,19 +109,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!135 &509169338396377858
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 509169338396377860}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &509169339145983522
 GameObject:
   m_ObjectHideFlags: 0
@@ -134,7 +120,6 @@ GameObject:
   - component: {fileID: 509169339145983550}
   - component: {fileID: 509169339145983551}
   - component: {fileID: 509169339145983520}
-  - component: {fileID: 509169339145983521}
   m_Layer: 0
   m_Name: Capsule
   m_TagString: Untagged
@@ -203,20 +188,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!136 &509169339145983521
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 509169339145983522}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &3207323515460899257
 GameObject:
   m_ObjectHideFlags: 0
@@ -229,7 +200,6 @@ GameObject:
   - component: {fileID: 3015675440339642861}
   - component: {fileID: 2997905207536270590}
   - component: {fileID: 8574421394280187716}
-  - component: {fileID: 5259444702002143385}
   m_Layer: 0
   m_Name: Direction Arrow
   m_TagString: Untagged
@@ -625,20 +595,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3207323515460899257}
   m_Mesh: {fileID: 0}
---- !u!64 &5259444702002143385
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3207323515460899257}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 0}
 --- !u!1 &7166912885723558846
 GameObject:
   m_ObjectHideFlags: 0
@@ -651,7 +607,6 @@ GameObject:
   - component: {fileID: 7166912885723558834}
   - component: {fileID: 7166912885723558845}
   - component: {fileID: 7166912885723558844}
-  - component: {fileID: 7166912885723558847}
   m_Layer: 0
   m_Name: Halo
   m_TagString: Untagged
@@ -1085,20 +1040,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7166912885723558846}
   m_Mesh: {fileID: 0}
---- !u!64 &7166912885723558847
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7166912885723558846}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 0}
 --- !u!1 &7166912886410497540
 GameObject:
   m_ObjectHideFlags: 0
@@ -1110,6 +1051,7 @@ GameObject:
   - component: {fileID: 7166912886410497541}
   - component: {fileID: 6839786742684477955}
   - component: {fileID: 4505413601045317807}
+  - component: {fileID: 2604431162596720398}
   m_Layer: 0
   m_Name: Unit
   m_TagString: Untagged
@@ -1149,11 +1091,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4dcb6714986b14557bf0c71bc7178db9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hasBall: 0
+  state: 5
   inactive: -1
+  hands: {fileID: 2684396777798763587}
   indicatorDirection: {fileID: 3207323515460899257}
   indicatorCarry: {fileID: 7166912885723558846}
-  indicatorDetectionZone: {fileID: 7166912887012323107}
+  detectionZone: {fileID: 5242711977329602962}
   mainRenderer: {fileID: 509169339145983520}
   inactiveColor: {r: 0, g: 1, b: 0, a: 1}
   onTag:
@@ -1169,9 +1112,10 @@ MonoBehaviour:
     strategy:
       stance: 1
       energyRegenRate: 0.5
-      spawnEnergyCost: 2
-      spawnDowntime: 0.5
-      AISpawnPercentage: 0.4
+      spawnCost: 2
+      spawnTime: 0.5
+      AISpawnRate: 1
+      AISpawnChance: 0.4
       reactivationTime: 2.5
       baseSpeed: 5
       normalSpeedMult: 1.5
@@ -1180,7 +1124,6 @@ MonoBehaviour:
       returnSpeedMult: 2
       detectionRange: 0.35
     energy: 0
-    currentSpawnDowntime: 0
     attackDirection: {x: 0, y: 0, z: 0}
     field: {fileID: 0}
     goal: {fileID: 0}
@@ -1197,7 +1140,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 7166912886410497540}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 0.5
+  m_Radius: 0.05
   m_Speed: 1
   m_Acceleration: 8
   avoidancePriority: 50
@@ -1210,6 +1153,20 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 1
+--- !u!136 &2604431162596720398
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7166912886410497540}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  m_Radius: 0.5
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!1 &7166912887012323107
 GameObject:
   m_ObjectHideFlags: 0
@@ -1222,6 +1179,7 @@ GameObject:
   - component: {fileID: 7166912887012323111}
   - component: {fileID: 7166912887012323110}
   - component: {fileID: 7166912887012323105}
+  - component: {fileID: 5242711977329602962}
   m_Layer: 0
   m_Name: Detection Zone
   m_TagString: Untagged
@@ -1298,9 +1256,21 @@ CapsuleCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7166912887012323107}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   m_Radius: 0.5000001
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
+--- !u!114 &5242711977329602962
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7166912887012323107}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dbeb724d40f264bb3865d79a4539d8f0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

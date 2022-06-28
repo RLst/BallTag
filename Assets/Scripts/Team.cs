@@ -65,7 +65,6 @@ namespace LeMinhHuy
 			despawns = 0;
 
 			energy = 0;
-			currentSpawnDowntime = -1;
 
 			DespawnAllUnits();
 		}
@@ -84,7 +83,7 @@ namespace LeMinhHuy
 		{
 			Awake();
 
-			setParameters(ts);
+			setParameters();
 
 			initTeamObjects();
 
@@ -93,7 +92,7 @@ namespace LeMinhHuy
 			Reset();
 
 			//Set team parameters
-			void setParameters(TeamSettings ts)
+			void setParameters()
 			{
 				this.name = ts.name;
 				this.color = ts.color;
@@ -198,7 +197,7 @@ namespace LeMinhHuy
 		{
 			//GUARDS
 			//Reject if there's not enough energy; Check early for slight optimization
-			if (energy < strategy.spawnEnergyCost)
+			if (energy < strategy.spawnCost)
 				return;
 			//Reject user input if CPU controlled team
 			if (userType == UserType.CPU)
@@ -241,7 +240,7 @@ namespace LeMinhHuy
 		{
 			//GUARDS
 			//Must have enough energy //NOTE: This may be double checked
-			if (energy < strategy.spawnEnergyCost)
+			if (energy < strategy.spawnCost)
 				return false;
 			//Point must be on field
 			if (!field.isPosWithinField(positionOnField))
@@ -250,7 +249,7 @@ namespace LeMinhHuy
 			//Success; Get from pool and init
 			var spawn = unitPool.Get();
 			spawn.transform.SetPositionAndRotation(positionOnField, Quaternion.LookRotation(attackDirection, Vector3.up));
-			SpendEnergy(strategy.spawnEnergyCost);
+			SpendEnergy(strategy.spawnCost);
 			return true;
 		}
 

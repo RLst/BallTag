@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.Events;
 
 namespace LeMinhHuy
@@ -7,10 +8,12 @@ namespace LeMinhHuy
 	/// <summary>
 	/// A player unit
 	/// </summary>
-	[RequireComponent(typeof(Collider))]
+	[SelectionBase]
+	[RequireComponent(typeof(CapsuleCollider), typeof(NavMeshAgent))]
 	public class Unit : MonoBehaviour
 	{
-		enum State
+		//AI
+		public enum State
 		{
 			Attacking,      //Heading towards opponent's goal
 			Defending,      //Heading towards opponent with ball
@@ -20,10 +23,12 @@ namespace LeMinhHuy
 			Inactive,       //Caught and waiting for reactivation
 			Despawned,      //Hit the end of the fence
 		}
+		Unit target;
+
 
 		//Properties
-		public bool hasBall = false;
-		//"If positive means this unit has been caught and is deactivated temporarily")]
+		public State state = State.Inactive;
+		[Tooltip("If positive means this unit has been caught and is deactivated temporarily")]
 		public float inactive = -1;
 
 		//Inspector
@@ -32,11 +37,10 @@ namespace LeMinhHuy
 		[SerializeField] Transform hands;
 		[SerializeField] GameObject indicatorDirection;
 		[SerializeField] GameObject indicatorCarry;
-		[SerializeField] GameObject indicatorDetectionZone;
+		[SerializeField] DetectionZone detectionZone;
 
 		[Header("Graphics")]
 		[SerializeField] Renderer mainRenderer;
-
 		[SerializeField] Color inactiveColor = Color.green;
 
 		//Events
@@ -46,14 +50,24 @@ namespace LeMinhHuy
 
 		//Members
 		public Team team;
-		Unit target;
 		Collider col;
-
+		NavMeshAgent agent;
 
 
 		//INITS
-		void Awake() => col = GetComponent<Collider>();
-		void Start() => col.isTrigger = true;
+		void Awake()
+		{
+			col = GetComponent<CapsuleCollider>();
+			agent = GetComponent<NavMeshAgent>();
+		}
+		void Start()
+		{
+			//Initial settings, hide indicators
+			col.isTrigger = true;
+			indicatorCarry.SetActive(false);
+			indicatorDirection.SetActive(false);
+			detectionZone.Hide();
+		}
 
 		public void Init(Team team)
 		{
@@ -100,40 +114,46 @@ namespace LeMinhHuy
 			}
 		}
 
+		//AI METHODS
 		void PlayOffence() { }
 		void PlayDefence() { }
-
 		public void ScoreGoal(int amount = 1) => team.ScoreGoal(amount);
-		public void MoveTowardOpponentField()
+		public void Advance()
 		{
 
 		}
 
-		//Opponent tagged you out
+		//ACTIONS
+		void Move()
+		{
+			// agent.
+		}
 		public void OnTagged()
 		{
 			//Deactivate
 			//Downtime
 		}
+		public void Spawn(float spawnTime)
+		{
+
+		}
+		public void Deactivate()
+		{
+			//Change color
+		}
+
 
 		void OnTriggerEnter(Collider other)
 		{
 			var ball = other.GetComponent<Ball>();
 			var unit = other.GetComponent<Unit>();
 
-			if (isDefending)
-			{
-				{
-
-				}
-			}
 		}
 
-		public void Deactivate()
+		void OnDetectionZoneEnter(Unit unit)
 		{
-			//Change color
-		}
 
+		}
 
 		public void Despawn() => team.DespawnUnit(this);
 		public bool isOpponent(Unit otherUnit) => !otherUnit.team.Equals(this.team);

@@ -32,7 +32,7 @@ namespace LeMinhHuy
 				if (!hit.team.Equals(this.team))
 				{
 					//And has a ball then score goal against us
-					if (hit.hasBall)
+					if (hit.state == Unit.State.Attacking)
 						hit.ScoreGoal();
 
 					//Otherwise/And despawn as usual

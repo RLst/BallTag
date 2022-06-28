@@ -155,10 +155,8 @@ namespace LeMinhHuy
 			//Energy
 			teamOne.HandleEnergy();
 			teamTwo.HandleEnergy();
-
-			//Downtime
-			teamOne.HandleDowntime();
-			teamTwo.HandleDowntime();
+			// foreach (var t in teams)
+			// 	t.HandleEnergy();
 		}
 
 
