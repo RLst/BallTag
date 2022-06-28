@@ -2946,6 +2946,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79439af02505246c9904de1e4beff8fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  renderer: {fileID: 0}
 --- !u!114 &560895623
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3323,6 +3324,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: baf8aab318ad1403a9839e89fbcf59cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  renderer: {fileID: 0}
 --- !u!114 &570729717
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3412,7 +3414,7 @@ GameObject:
   - component: {fileID: 701153446}
   - component: {fileID: 701153447}
   m_Layer: 0
-  m_Name: GameController
+  m_Name: <GameController>
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3444,8 +3446,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d80859c544ff14fb7b817de17df497ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <currentRound>k__BackingField: 0
-  <currentRoundRemainingTime>k__BackingField: -1
+  playDemoOnStart: 1
+  isPaused: 0
+  isPlaying: 0
   parameters: {fileID: 11400000, guid: 555d847056c14456ab562177dfec82fd, type: 2}
   genericUnitPrefab: {fileID: 6839786742684477955, guid: ab0cdc74d8f7847f68d024b9a7ea08df,
     type: 3}
@@ -3469,11 +3472,12 @@ MonoBehaviour:
       ballSpeedMult: 1.5
       returnSpeedMult: 2
       detectionRange: 0.35
+      minSpawnDistanceFromOwnGoal: 2
     energy: 0
     attackDirection: {x: 0.00000008742278, y: 0, z: 1}
     field: {fileID: 933228886}
-    goal: {fileID: 1980489883}
-    fences:
+    teamObjects:
+    - {fileID: 1980489883}
     - {fileID: 1955930385}
     - {fileID: 1608766598}
     onEnergyChange:
@@ -3519,11 +3523,12 @@ MonoBehaviour:
       ballSpeedMult: 1.5
       returnSpeedMult: 2
       detectionRange: 0.35
+      minSpawnDistanceFromOwnGoal: 2
     energy: 0
     attackDirection: {x: -0.00000008742278, y: 0, z: -1}
     field: {fileID: 1562559154}
-    goal: {fileID: 560895622}
-    fences:
+    teamObjects:
+    - {fileID: 560895622}
     - {fileID: 1542966532}
     - {fileID: 570729716}
     onEnergyChange:
@@ -3569,8 +3574,6 @@ MonoBehaviour:
   onEndMatch:
     m_PersistentCalls:
       m_Calls: []
-  isPlaying: 0
-  isPaused: 0
 --- !u!1 &760943490
 GameObject:
   m_ObjectHideFlags: 0
@@ -3873,7 +3876,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 1318.5348, y: 2154.8352}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &786572042
 MonoBehaviour:
@@ -6065,12 +6068,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 600, y: 1300}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
+  m_MatchWidthOrHeight: 0.495
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
@@ -8495,6 +8498,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: baf8aab318ad1403a9839e89fbcf59cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  renderer: {fileID: 0}
 --- !u!114 &1542966533
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10097,6 +10101,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: baf8aab318ad1403a9839e89fbcf59cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  renderer: {fileID: 0}
 --- !u!33 &1608766599
 MeshFilter:
   m_ObjectHideFlags: 10
@@ -10966,6 +10971,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: baf8aab318ad1403a9839e89fbcf59cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  renderer: {fileID: 0}
 --- !u!33 &1955930386
 MeshFilter:
   m_ObjectHideFlags: 10
@@ -11903,6 +11909,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79439af02505246c9904de1e4beff8fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  renderer: {fileID: 0}
 --- !u!114 &1980489884
 MonoBehaviour:
   m_ObjectHideFlags: 0

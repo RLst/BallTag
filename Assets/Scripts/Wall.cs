@@ -2,25 +2,8 @@
 
 namespace LeMinhHuy
 {
-	[RequireComponent(typeof(BoxCollider))]
-	public class Wall : MonoBehaviour
+	public class Wall : TeamObject
 	{
-		private Team team;
-		private BoxCollider col;
-
-		void Awake() => col = GetComponent<BoxCollider>();
-
-		void Start()
-		{
-			col.isTrigger = true;
-		}
-
-		public void SetTeam(Team team)
-		{
-			this.team = team;
-			SetColor(team.color);
-		}
-
 		void OnTriggerEnter(Collider other)
 		{
 			var hit = other.GetComponent<Unit>();
@@ -33,7 +16,5 @@ namespace LeMinhHuy
 				}
 			}
 		}
-
-		public void SetColor(Color col) => GetComponent<Renderer>().material.color = col;
 	}
 }

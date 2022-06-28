@@ -57,31 +57,47 @@ GameController
 			Reset stats
 			Despawn units
 
-//Start game sequence
+---------------
+Start game sequence
+-------------------
 • User starts new game
 • Controller
 	- inits both teams and passes through settings
 	- starts match and starts round
 
-Goals
-
+Goal
+	SetTeam
+		Sets team and strategy
+		Sets color
+	If opponent unit collides
+		if unit has ball then score a goal to the opposite team
+		else despawn unit
 
 Fences
-	- sets team and color
-Unit
-	- set team and color
-	- hide indicators
-
+	Sets team and color
+	If opponent team hits then despawn
 
 Team
 	inits and colors team objects ie. fences, goals
 	X inits and preloads Units
 	X units are shoved back into object pool right away?
-	-
-	Controls object pools for Units
-	Spawns
+
+	Each team handles their own units
+		Creates and controls object pools for Units
+		Spawns units using pool
+		Despawns units
+
+
+
+
 
 Unit
+	Each unit controls itself using AI logic
+
+
+	SetTeam
+		set team, strategy and color
+
 	Spawn
 		Conditions:
 			user clicks on field

@@ -12,7 +12,7 @@ namespace LeMinhHuy
 	/// </summary>
 	[SelectionBase]
 	[RequireComponent(typeof(CapsuleCollider), typeof(NavMeshAgent))]
-	public class Unit : MonoBehaviour
+	public class Unit : TeamObject
 	{
 		public enum State
 		{
@@ -41,13 +41,12 @@ namespace LeMinhHuy
 
 		[Space]
 		[Tooltip("Where the player will hold the ball")]
-		[SerializeField] Transform hands;
-		[SerializeField] GameObject indicatorDirection;
-		[SerializeField] GameObject indicatorCarry;
-		[SerializeField] DetectionZone detectionZone;
+		[SerializeField] Transform hands = null;
+		[SerializeField] GameObject indicatorDirection = null;
+		[SerializeField] GameObject indicatorCarry = null;
+		[SerializeField] DetectionZone detectionZone = null;
 
 		[Header("Graphics")]
-		[SerializeField] Renderer mainRenderer;
 		[SerializeField] Color inactiveColor = Color.green;
 
 		//Events
@@ -56,61 +55,66 @@ namespace LeMinhHuy
 		public UnityEvent onOut;      //This unit got tagged by an opponent
 
 		//Members
-		public Team team;
-		Collider col;
+		// public Team team;
+		// Collider col;
 		NavMeshAgent agent;
 		Transform origin;   //Initial spawn location so it knows where to return to
 
 		//UNITY
-		void Awake()
+		protected override void Init()
 		{
-			col = GetComponent<CapsuleCollider>();
+			// col = GetComponent<CapsuleCollider>();
 			agent = GetComponent<NavMeshAgent>();
-			if (mainRenderer is null) mainRenderer = GetComponentInChildren<Renderer>();
 		}
-		void OnEnable()
+
+		protected override void Start()
 		{
 			//Start AI tick engine
-			StartCoroutine(Tick());
-			// InvokeRepeating("Tick", tickRate, tickRate);
-		}
-		void Start()
-		{
+			//InvokeRepeating() is simpler because when this unt gets deactivated it will turn off as well
+			InvokeRepeating("Tick", 0f, tickRate);
+
 			//Initial settings, hide indicators, when first instantiated
 			col.isTrigger = true;
 			indicatorCarry.SetActive(false);
 			indicatorDirection.SetActive(false);
 			detectionZone.Hide();
 		}
-		void OnDisable()
-		{
-			StopCoroutine(Tick());
-		}
+
 		void Update()
 		{
+			handleInactiveUnits();
+
+			void handleInactiveUnits()
+			{
+				//Handle inactive
+				if (inactive > 0f)
+				{
+					//Countdown downtime timer
+					inactive -= Time.deltaTime;
+					if (inactive <= 0)
+						Activate();
+				}
+			}
+
 			//Temp
 			// transform.Translate(transform..forward * team.strategy.baseSpeed * team.strategy.normalSpeedMult * Time.deltaTime);
 
-			//Handle inactive
-			if (inactive > 0f)
-			{
-				//Countdown downtime timer
-				inactive -= Time.deltaTime;
-				if (inactive <= 0)
-					Activate();
-			}
-
-			if (Input.GetKeyDown(KeyCode.A)) Activate();
-			if (Input.GetKeyDown(KeyCode.D)) Deactivate();
-			if (Input.GetKeyDown(KeyCode.X)) Despawn();
+			// if (Input.GetKeyDown(KeyCode.A)) Activate();
+			// if (Input.GetKeyDown(KeyCode.D)) Deactivate();
+			// if (Input.GetKeyDown(KeyCode.X)) Despawn();
 		}
 
-
 		//AI tick cycle that runs as specified rate per second to reduce processing
-		IEnumerator Tick()
+		void Tick()
 		{
-			if (inactive > 0)
-				yield break;
+			Debug.Log("Tick()");
+
+			//Don't tick if inactive
+			if (inactive > 0f)
+				return;
+			//This tick will be run right at instantiate when a team has yet to be assigned
+			if (team is null)
+				return;
 
 			switch (team.strategy.stance)
 			{
@@ -126,36 +130,29 @@ namespace LeMinhHuy
 					Debug.LogWarning("Invalid stance reached!");
 					break;
 			}
-
-			yield return new WaitForSeconds(tickRate);
+			// yield return new WaitForSeconds(tickRate);
 		}
 
 
 		//AI METHODS
 		void PlayOffence() { }
 		void PlayDefence() { }
-		public void ScoreGoal(int amount = 1) => team.ScoreGoal(amount);
-		public void Advance() { }
+
 		//ACTIONS
-		void Move() { }
-		public void OnTagged() { }
+		void MoveTowardTarget() { }
+		void Advance() { }
+		void TagOut() { }
+		public void ScoreGoal(int amount = 1) => team.ScoreGoal(amount);
 
 
-		//SPAWN
-		public void SetTeamAndColor(Team team)
-		{
-			//Set team, stance, color
-			this.team = team;
-			SetColor(team.color);
-		}
-
+		#region Spawn
 		public void Spawn()
 		{
 			inactive = team.strategy.spawnTime;
 
-			//Clear to
-			mainRenderer.material.color = Color.clear;
-			mainRenderer.material.
+			//Color from clear/black to team color then Activate unit
+			renderer.material.color = Color.clear;
+			renderer.material.
 				DOColor(team.color, team.strategy.spawnTime).
 				OnComplete(Activate);
 		}
@@ -165,7 +162,7 @@ namespace LeMinhHuy
 			if (inactive > 0) return;
 
 			//Set back to team color
-			SetTeamAndColor(team);
+			SetTeam(team);
 			//Let units be able to collider with other units
 			agent.radius = radiusActive;
 			//make sure that it's active
@@ -186,23 +183,24 @@ namespace LeMinhHuy
 			team.DespawnUnit(this);
 		}
 
-		public void SetColor(Color col)
+		public override void SetColor(Color col)
 		{
-			mainRenderer.material.DOKill();
-			mainRenderer.material.color = col;
+			renderer.material.DOKill();
+			renderer.material.color = col;
 		}
+		#endregion
 
 
 		//COLLISIONS
+		void OnDetectionZoneEnter(Unit unit)
+		{
+		}
 		void OnTriggerEnter(Collider other)
 		{
 			var ball = other.GetComponent<Ball>();
 			var unit = other.GetComponent<Unit>();
+		}
 
-		}
-		void OnDetectionZoneEnter(Unit unit)
-		{
-		}
 
 
 		public bool isOpponent(Unit otherUnit) => !otherUnit.team.Equals(this.team);

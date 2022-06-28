@@ -22,7 +22,7 @@ namespace LeMinhHuy
 			=> Physics.CheckSphere(position, checkSphereRadius);
 
 		//Get a random location on this field at specified height
-		public Vector3 GetRandomLocationOnField(float height)
+		public Vector3 GetRandomLocationOnField(float height = 0.05f)
 		{
 			var point = Extensions.GetRandomPointInsideCollider(collider);
 			point.y = height;

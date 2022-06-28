@@ -10,17 +10,17 @@ namespace LeMinhHuy
 	{
 		const float FLOAT_SLIDER_ALPHA = 0.5f;
 
-		[SerializeField] TextMeshProUGUI timeLeft;
+		[SerializeField] TextMeshProUGUI timeLeft = null;
 
 		[Header("Team One")]
-		[SerializeField] TextMeshProUGUI teamOneDetails;
-		[SerializeField] Slider teamOneEnergyBarInt;
-		[SerializeField] Slider teamOneEnergyBarFloat;
+		[SerializeField] TextMeshProUGUI teamOneDetails = null;
+		[SerializeField] Slider teamOneEnergyBarInt = null;
+		[SerializeField] Slider teamOneEnergyBarFloat = null;
 
 		[Header("Team Two")]
-		[SerializeField] TextMeshProUGUI teamTwoDetails;
-		[SerializeField] Slider teamTwoEnergyBarInt;
-		[SerializeField] Slider teamTwoEnergyBarFloat;
+		[SerializeField] TextMeshProUGUI teamTwoDetails = null;
+		[SerializeField] Slider teamTwoEnergyBarInt = null;
+		[SerializeField] Slider teamTwoEnergyBarFloat = null;
 
 		//Members
 		GameController gc;

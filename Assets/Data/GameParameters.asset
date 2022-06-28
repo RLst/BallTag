@@ -14,15 +14,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isARMode: 0
   fieldWidth: 20
+  fieldLength: 40
   roundsPerMatch: 5
   startingRoundRemainingTime: 140
   maxEnergy: 6
   offensiveStrategy:
     stance: 1
     energyRegenRate: 0.5
-    spawnEnergyCost: 2
+    spawnCost: 2
     spawnTime: 0.5
-    AISpawnPercentage: 0.4
+    AISpawnRate: 1
+    AISpawnChance: 0.4
     reactivationTime: 2.5
     baseSpeed: 5
     normalSpeedMult: 1.5
@@ -30,12 +32,14 @@ MonoBehaviour:
     ballSpeedMult: 1.5
     returnSpeedMult: 2
     detectionRange: 0.35
+    minSpawnDistanceFromOwnGoal: 2
   defensiveStrategy:
     stance: 0
     energyRegenRate: 0.5
-    spawnEnergyCost: 2
+    spawnCost: 2
     spawnTime: 0.5
-    AISpawnPercentage: 0.4
+    AISpawnRate: 1
+    AISpawnChance: 0.4
     reactivationTime: 4
     baseSpeed: 5
     normalSpeedMult: 1.5
@@ -43,6 +47,7 @@ MonoBehaviour:
     ballSpeedMult: 1.5
     returnSpeedMult: 2
     detectionRange: 0.35
+    minSpawnDistanceFromOwnGoal: 2
   teamOneSettings:
     name: VietHoa
     color: {r: 1, g: 0.74013734, b: 0.30588233, a: 1}
@@ -51,5 +56,5 @@ MonoBehaviour:
   teamTwoSettings:
     name: VietCong
     color: {r: 1, g: 0.26992142, b: 0.1372549, a: 1}
-    userType: 0
+    userType: 1
     stance: 1

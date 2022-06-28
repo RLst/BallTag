@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -13,9 +14,13 @@ namespace LeMinhHuy
 	public class GameController : Singleton<GameController>     //Rename to GameManager or GameController?
 	{
 		//Inspector
+		[SerializeField] bool playDemoOnStart = true;
+		[Space]
+		[SerializeField] bool isPaused = false;
+		[SerializeField] bool isPlaying = false;
 		//MATCH PARAMS
-		[field: SerializeField] public int currentRound { get; private set; } = 0;
-		[field: SerializeField] public float currentRoundRemainingTime { get; private set; } = -1;
+		public int currentRound { get; private set; } = 0;
+		public float currentRoundRemainingTime { get; private set; } = -1;
 
 		[Space]
 		public GameParameters parameters;
@@ -35,17 +40,13 @@ namespace LeMinhHuy
 		public UnityEvent onBeginMatch;
 		public UnityEvent onBeginRound;
 		public UnityEvent onPause;
-		public UnityEvent onUnPause;
+		public UnityEvent onUnpause;
 		public UnityEvent onEndRound;
 		public UnityEvent onEndMatch;
 
-		//Official game running flag
-		public bool isPlaying = false;
-		public bool isPaused = false;
-
 
 		//INITS
-		void OnValidate() => CalculateAttackDirection();
+		void OnValidate() => CalculateAttackDirectionForEachTeam();
 		void Awake()
 		{
 			Debug.Assert(parameters != null, "No game parameters found!");
@@ -58,8 +59,15 @@ namespace LeMinhHuy
 				Debug.Assert(arRaycastManager != null, "No ARRaycastManager found!");
 			}
 		}
-		void Start() => CalculateAttackDirection();
-		public void CalculateAttackDirection()
+		void Start()
+		{
+			CalculateAttackDirectionForEachTeam();
+			onBeginMatch.AddListener(() =>
+			{
+				StartCoroutine(TickTeams());
+			});
+		}
+		public void CalculateAttackDirectionForEachTeam()
 		{
 			//Calculate attack direction
 			if (teamOne.field is object && teamTwo.field is object)
@@ -71,11 +79,16 @@ namespace LeMinhHuy
 			}
 		}
 
+		#region Gameplay
 		public void BeginMatch()
 		{
-			teamOne.Initialise(parameters.teamOneSettings);
-			teamTwo.Initialise(parameters.teamTwoSettings);
-			CalculateAttackDirection();
+			//Teams need to know their opponents
+			teamOne.opponent = teamTwo;
+			teamTwo.opponent = teamOne;
+
+			teamOne.Initialize(parameters.teamOneSettings);
+			teamTwo.Initialize(parameters.teamTwoSettings);
+			CalculateAttackDirectionForEachTeam();
 
 			currentRound = 0;
 			BeginRound();
@@ -83,6 +96,7 @@ namespace LeMinhHuy
 			isPlaying = true;
 
 			//Hook up user input events etc
+			Debug.Log("Begin Match");
 			onBeginMatch.Invoke();
 		}
 
@@ -119,11 +133,13 @@ namespace LeMinhHuy
 			onBeginRound.Invoke();
 		}
 
-		void EndRound()
+		public void EndRound()
 		{
 			Debug.Log("End Round");
 			onEndRound.Invoke();
 		}
+
+		void BeginPenaltyRound() { }
 
 		//End the match immediately
 		public void EndMatch()
@@ -134,6 +150,7 @@ namespace LeMinhHuy
 			//ie. stop input
 			onEndMatch.Invoke();
 		}
+		#endregion
 
 		//CORE
 		void Update()
@@ -152,26 +169,36 @@ namespace LeMinhHuy
 				}
 			}
 
-			//Energy
-			teamOne.HandleEnergy();
-			teamTwo.HandleEnergy();
-			// foreach (var t in teams)
-			// 	t.HandleEnergy();
+			//Update teams
+			teamOne.Update();
+			teamTwo.Update();
 		}
 
+		//AI
+		WaitForSeconds waitOneSecond = new WaitForSeconds(1f);  //will always be one second
+		IEnumerator TickTeams()
+		{
+			while (true)
+			{
+				Debug.Log("TickTeams()");
+				teamOne.Tick();
+				teamTwo.Tick();
+				yield return new WaitForSeconds(1f);
+			}
+		}
 
-		//Pause/Unpause game
+		//PAUSE
 		public void Pause()
 		{
 			Time.timeScale = 0f;
 			isPaused = true;
 			onPause.Invoke();
 		}
-		public void UnPause()
+		public void Unpause()
 		{
 			Time.timeScale = 1f;
 			isPaused = false;
-			onUnPause.Invoke();
+			onUnpause.Invoke();
 		}
 	}
 }

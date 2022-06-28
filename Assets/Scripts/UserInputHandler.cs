@@ -19,7 +19,7 @@ namespace LeMinhHuy
 		{
 			//Enable user input for these events
 			gCon.onBeginRound.AddListener(RegisterInputEvents);
-			gCon.onUnPause.AddListener(RegisterInputEvents);
+			gCon.onUnpause.AddListener(RegisterInputEvents);
 
 			//Disable user input for these events
 			gCon.onPause.AddListener(UnregisterInputEvents);
@@ -30,7 +30,7 @@ namespace LeMinhHuy
 		{
 			//Enable user input for these events
 			gCon.onBeginRound.RemoveListener(RegisterInputEvents);
-			gCon.onUnPause.RemoveListener(RegisterInputEvents);
+			gCon.onUnpause.RemoveListener(RegisterInputEvents);
 
 			//Disable user input for these events
 			gCon.onPause.RemoveListener(UnregisterInputEvents);
@@ -43,12 +43,12 @@ namespace LeMinhHuy
 			if (gCon.teamOne.userType == UserType.Player)
 			{
 				Debug.Log("TeamOne Input Registered", this);
-				uIn.onScreenPosInput.AddListener(gCon.teamOne.TrySpawnUnitAtScreenPoint);
+				uIn.onScreenPosInput.AddListener(gCon.teamOne.Void_SpawnUnitAtScreenPoint);
 			}
 			if (gCon.teamTwo.userType == UserType.Player)
 			{
 				Debug.Log("TeamTwo Input Registered", this);
-				uIn.onScreenPosInput.AddListener(gCon.teamTwo.TrySpawnUnitAtScreenPoint);
+				uIn.onScreenPosInput.AddListener(gCon.teamTwo.Void_SpawnUnitAtScreenPoint);
 			}
 		}
 
@@ -58,12 +58,12 @@ namespace LeMinhHuy
 			if (gCon.teamOne.userType == UserType.Player)
 			{
 				Debug.Log("TeamOne Input Unregistered", this);
-				uIn.onScreenPosInput.RemoveListener(gCon.teamOne.TrySpawnUnitAtScreenPoint);
+				uIn.onScreenPosInput.RemoveListener(gCon.teamOne.Void_SpawnUnitAtScreenPoint);
 			}
 			if (gCon.teamTwo.userType == UserType.Player)
 			{
 				Debug.Log("TeamTwo Input Unregistered", this);
-				uIn.onScreenPosInput.RemoveListener(gCon.teamTwo.TrySpawnUnitAtScreenPoint);
+				uIn.onScreenPosInput.RemoveListener(gCon.teamTwo.Void_SpawnUnitAtScreenPoint);
 			}
 		}
 	}

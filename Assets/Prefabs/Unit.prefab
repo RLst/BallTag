@@ -1091,6 +1091,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4dcb6714986b14557bf0c71bc7178db9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  renderer: {fileID: 509169339145983520}
   inactive: -1
   ticksPerSecond: 15
   state: 5
@@ -1100,7 +1101,6 @@ MonoBehaviour:
   indicatorDirection: {fileID: 3207323515460899257}
   indicatorCarry: {fileID: 7166912885723558846}
   detectionZone: {fileID: 5242711977329602962}
-  mainRenderer: {fileID: 509169339145983520}
   inactiveColor: {r: 0.3301887, g: 0.3301887, b: 0.3301887, a: 1}
   onTag:
     m_PersistentCalls:
@@ -1108,32 +1108,6 @@ MonoBehaviour:
   onOut:
     m_PersistentCalls:
       m_Calls: []
-  team:
-    name: Team Name
-    color: {r: 0, g: 0, b: 0, a: 0}
-    userType: 0
-    strategy:
-      stance: 1
-      energyRegenRate: 0.5
-      spawnCost: 2
-      spawnTime: 0.5
-      AISpawnRate: 1
-      AISpawnChance: 0.4
-      reactivationTime: 2.5
-      baseSpeed: 5
-      normalSpeedMult: 1.5
-      carryingSpeedMult: 0.75
-      ballSpeedMult: 1.5
-      returnSpeedMult: 2
-      detectionRange: 0.35
-    energy: 0
-    attackDirection: {x: 0, y: 0, z: 0}
-    field: {fileID: 0}
-    goal: {fileID: 0}
-    fences: []
-    onEnergyChange:
-      m_PersistentCalls:
-        m_Calls: []
 --- !u!195 &4505413601045317807
 NavMeshAgent:
   m_ObjectHideFlags: 0

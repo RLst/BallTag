@@ -3,24 +3,15 @@ using UnityEngine;
 
 namespace LeMinhHuy
 {
-	public class Goal : MonoBehaviour
+	[RequireComponent(typeof(BoxCollider))]
+	public class Goal : TeamObject
 	{
-		public Vector3 target => col.center;    //The center of the goal for units to aim for
-		private Team team;
-		private BoxCollider col;
-
-
-		void Awake() => col = GetComponent<BoxCollider>();
-
-		void Start()
+		//The center of the goal for units to aim for
+		public Vector3 target => boxCol.center;
+		BoxCollider boxCol;
+		protected override void Init()
 		{
-			col.isTrigger = true;
-		}
-
-		public void SetTeam(Team team)
-		{
-			this.team = team;
-			SetColor(team.color);
+			boxCol = (BoxCollider)col;
 		}
 
 		void OnTriggerEnter(Collider other)
@@ -42,6 +33,5 @@ namespace LeMinhHuy
 			}
 		}
 
-		public void SetColor(Color col) => GetComponent<Renderer>().material.color = col;
 	}
 }

@@ -25,27 +25,32 @@ namespace LeMinhHuy
 		public float energy;
 		public Vector3 attackDirection;
 
-		[Header("Team Objects")]
+		[Space]
 		public Field field;
-		public Goal goal;
-		public Wall[] fences;
+		[SerializeField] TeamObject[] teamObjects = null;
 
 		//Pool; eliminate garbage allocation
 		const int startingUnitsToPool = 5;
 		Pool<Unit> unitPool;
 		List<Unit> units = new List<Unit>();
 
-		List<ARRaycastHit> arHitResults;
+		List<ARRaycastHit> arHitResults = null;
 
 		//Events
+		[Space]
 		public FloatEvent onEnergyChange;
-		private UnityEvent onScoreGoal;
+		UnityEvent onScoreGoal = null;
+
+		//Properties
+		int? activeUnits => unitPool?.countActive;
 
 		//Members
 		GameController game;
 		ARRaycastManager arRaycastManager;
+		internal Team opponent;
 
-		//Stats
+		#region Stats
+		//Maybe make these into a struct
 		public int goals { get; private set; }
 		public int roundsWon { get; set; }
 		public int roundDraw { get; set; }
@@ -75,7 +80,7 @@ namespace LeMinhHuy
 			goals += amount;
 			onScoreGoal.Invoke();
 		}
-
+		#endregion
 
 
 		//INITS
@@ -85,7 +90,7 @@ namespace LeMinhHuy
 			arRaycastManager = this.game.arRaycastManager;
 		}
 
-		public void Initialise(TeamSettings ts)
+		public void Initialize(TeamSettings settings)
 		{
 			Awake();
 
@@ -100,10 +105,10 @@ namespace LeMinhHuy
 			//Set team parameters
 			void setParameters()
 			{
-				this.name = ts.name;
-				this.color = ts.color;
-				this.userType = ts.userType;
-				switch (ts.stance)
+				this.name = settings.name;
+				this.color = settings.color;
+				this.userType = settings.userType;
+				switch (settings.stance)
 				{
 					case Stance.Offensive:
 						this.strategy = game.parameters.offensiveStrategy;
@@ -118,13 +123,12 @@ namespace LeMinhHuy
 			//Setup team objects and color
 			void initTeamObjects()
 			{
-				goal.SetTeam(this);
-				foreach (var f in fences)
-					f.SetTeam(this);
+				foreach (var to in teamObjects)
+					to.SetTeam(this);
 			}
 		}
 
-		//POOLING CALLBACKS
+		#region Pooling
 		void InitUnitPool()
 		{
 			if (unitPool is object)
@@ -140,7 +144,7 @@ namespace LeMinhHuy
 		void OnGetUnit(Unit unit)
 		{
 			energy -= strategy.spawnCost;
-			unit.SetTeamAndColor(this);    //Sets team, color, strategy
+			unit.SetTeam(this);    //Sets team, color, strategy
 			unit.Spawn();               //Set spawn time so it can do it's spawn sequence
 			unit.Activate();            //start unit
 			unit.SetActive(true);
@@ -151,42 +155,122 @@ namespace LeMinhHuy
 			unit.SetActive(false);
 			unit.inactive = -1;
 		}
+		#endregion
 
-		//ENERGY
-		public void HandleEnergy()
+		//CORE
+		public void Update()    //Since this is not a monobehaviour we're borrowing GC's Update
 		{
-			// Debug.Log($"Energy: {energy}, MaxEnergy: {game.parameters.maxEnergy}");
-			if (energy < game.parameters.maxEnergy)
-			{
-				energy += Time.deltaTime * strategy.energyRegenRate;
-				onEnergyChange.Invoke(energy);
+			handleEnergy();
 
-				if (energy > game.parameters.maxEnergy)
-					energy = game.parameters.maxEnergy;
+			void handleEnergy()
+			{
+				// Debug.Log($"Energy: {energy}, MaxEnergy: {game.parameters.maxEnergy}");
+				if (energy < game.parameters.maxEnergy)
+				{
+					energy += Time.deltaTime * strategy.energyRegenRate;
+					onEnergyChange.Invoke(energy);
+
+					if (energy > game.parameters.maxEnergy)
+						energy = game.parameters.maxEnergy;
+				}
+			}
+		}
+		internal void Tick()
+		{
+			HandleCPULogic();
+		}
+
+		#region AI
+		void HandleCPULogic()
+		{
+			//Don't do anything if this team is player controlled
+			if (userType == UserType.Player)
+				return;
+			//Need a strategy
+			if (strategy is null)
+				return;
+
+			switch (strategy.stance)
+			{
+				case Stance.Offensive:
+					{
+						//Spawn a unit every second at a random location on our home field
+						SpawnUnit(this.field.GetRandomLocationOnField());
+					}
+					break;
+
+				case Stance.Defensive:
+					{
+						//If opponent has active units
+						//Spawn at a random point on a ray going from our goal to a random opponent attacker
+						if (opponent.activeUnits.HasValue && opponent.activeUnits > 0)
+						{
+							//Find random attacker
+
+							//Find ray going from goal to random attacker
+
+							//Choose a random location that's not too close to our goal
+
+							//Spawn
+						}
+						//else spawn at a random location
+						else
+						{
+							SpawnUnit(this.field.GetRandomLocationOnField());
+						}
+					}
+					break;
 			}
 		}
 
-		//SPAWN
+		//INFO
+		bool TryGetRandomActiveUnit(out Unit randomActiveUnit)
+		{
+			//Exit if there aren't any active units to prevent freeze
+			if (unitPool.countActive == 0)
+			{
+				randomActiveUnit = null;
+				return false;
+			}
+
+			//Keep trying to find a random active attacker
+			do
+			{
+				randomActiveUnit = units[UnityEngine.Random.Range(0, units.Count)];
+			} while (randomActiveUnit is null);
+
+			return (randomActiveUnit is object);
+		}
+		#endregion
+
+		#region Spawning
 		internal void TrySpawnUnitOnRandomPositionOnField()
 		{
 			//Used when
 		}
 
-		internal void TrySpawnUnitDistanceFromOpponentUnit(Unit opponent, float distance)
+		internal void SpawnUnitDistanceFromOpponentUnit(Unit opponent, float distance)
 		{
 		}
 
-		public void TrySpawnUnitAtScreenPoint(Vector2 screenPoint)
+		/// <summary>
+		/// Spawns a unit at the specified click/touch point on screen
+		/// </summary>
+		/// <param name="screenPoint">A point on the screen to spawn</param>
+		/// <returns>Returns false if unit cannot be spawned or invalid spawn location</returns>
+		public void Void_SpawnUnitAtScreenPoint(Vector2 screenPoint)
+			=> SpawnUnitAtScreenPoint(screenPoint);
+		public bool SpawnUnitAtScreenPoint(Vector2 screenPoint)
 		{
 			//GUARDS
 			//Reject if there's not enough energy; Check early for slight optimization
 			if (energy < strategy.spawnCost)
-				return;
+				return false;
 			//Reject user input if CPU controlled team
 			if (userType == UserType.CPU)
 			{
 				Debug.Log("Spawn request rejected! CPU controlled team");
-				return;
+				return false;
 			}
 
 			//Raycast to point
@@ -195,7 +279,7 @@ namespace LeMinhHuy
 				//AR Raycast
 				if (arRaycastManager.Raycast(screenPoint, arHitResults, UnityEngine.XR.ARSubsystems.TrackableType.Planes))
 				{
-					TrySpawnUnit(arHitResults[0].pose.position);
+					return SpawnUnit(arHitResults[0].pose.position);
 				}
 			}
 			else
@@ -207,19 +291,18 @@ namespace LeMinhHuy
 					//Must have clicked on this field
 					if (hit.collider == this.field.collider)
 					{
-						TrySpawnUnit(hit.point);
+						return SpawnUnit(hit.point);
 					}
-					else
-					{
-						//Probably clicked on your opponent's field
-						// Debug.LogWarning("Click on wrong field!");
-					}
+
+					//Probably clicked on your opponent's field
+					// Debug.LogWarning("Click on wrong field!");
 				}
 			}
+			return false;
 		}
 
 		//SPAWN player at specific location, facing toward the opposite team
-		public bool TrySpawnUnit(Vector3 positionOnField)
+		public bool SpawnUnit(Vector3 positionOnField)
 		{
 			//GUARDS
 			//Must have enough energy //NOTE: This may be double checked
@@ -263,5 +346,6 @@ namespace LeMinhHuy
 				GameObject.Destroy(deleteMe);
 			}
 		}
+		#endregion
 	}
 }
