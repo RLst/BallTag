@@ -10,16 +10,30 @@ namespace LeMinhHuy
 	[RequireComponent(typeof(BoxCollider))]
 	public class Field : MonoBehaviour
 	{
+		const float CHECK_CAST_LENGTH = 10f;
 		//Members
 		new public BoxCollider collider;
+		RaycastHit[] hitResults;
 
 		void Awake()
 		{
 			collider = GetComponent<BoxCollider>();
+			hitResults = new RaycastHit[10];
 		}
 
-		public bool isPosWithinField(Vector3 position, float checkSphereRadius = 0.2f)
-			=> Physics.CheckSphere(position, checkSphereRadius);
+		public bool isPointWithinField(Vector3 position, float sphereCastRadius = 0.2f)
+		{
+			var posHigh = position + Vector3.up * 5f;
+			Debug.DrawRay(posHigh, Vector3.down * CHECK_CAST_LENGTH, Color.red, 5f);
+			if (Physics.SphereCastNonAlloc(posHigh, sphereCastRadius, Vector3.down, hitResults, CHECK_CAST_LENGTH) > 0)
+			{
+				// Debug.Log("Hit");
+				foreach (var hr in hitResults)
+					if (hr.collider == this.collider)
+						return true;
+			}
+			return false;
+		}
 
 		//Get a random location on this field at specified height
 		public Vector3 GetRandomLocationOnField(float height = 0.05f)
