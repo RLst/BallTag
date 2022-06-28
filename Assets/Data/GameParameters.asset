@@ -36,15 +36,15 @@ MonoBehaviour:
   defensiveStrategy:
     stance: 0
     energyRegenRate: 0.5
-    spawnCost: 2
+    spawnCost: 3
     spawnTime: 0.5
     AISpawnRate: 1
-    AISpawnChance: 0.4
+    AISpawnChance: 0.6
     reactivationTime: 4
     baseSpeed: 5
     normalSpeedMult: 1.5
-    carryingSpeedMult: 0.75
-    ballSpeedMult: 1.5
+    carryingSpeedMult: 0
+    ballSpeedMult: 0
     returnSpeedMult: 2
     detectionRange: 0.35
     minSpawnDistanceFromOwnGoal: 2

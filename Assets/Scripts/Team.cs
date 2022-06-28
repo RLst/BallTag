@@ -194,8 +194,9 @@ namespace LeMinhHuy
 			{
 				case Stance.Offensive:
 					{
-						//Spawn a unit every second at a random location on our home field
-						SpawnUnit(this.field.GetRandomLocationOnField());
+						//Try spawning a unit every second at a random location on our home field
+						if (UnityEngine.Random.value > strategy.AISpawnChance)
+							SpawnUnit(this.field.GetRandomLocationOnField());
 					}
 					break;
 
@@ -213,10 +214,11 @@ namespace LeMinhHuy
 
 							//Spawn
 						}
-						//else spawn at a random location
+						//else spawn at a random location based on specific chance
 						else
 						{
-							SpawnUnit(this.field.GetRandomLocationOnField());
+							if (UnityEngine.Random.value > strategy.AISpawnChance)
+								SpawnUnit(this.field.GetRandomLocationOnField());
 						}
 					}
 					break;
