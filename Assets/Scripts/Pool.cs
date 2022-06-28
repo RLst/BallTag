@@ -4,6 +4,10 @@ using UnityEngine;
 
 namespace LeMinhHuy
 {
+	/// <summary>
+	/// Basic object pooling with collection checks
+	/// to prevent double recyling and improved callbacks and counters
+	/// </summary>
 	public class Pool<T> : IDisposable
 	{
 		readonly Stack<T> stack;
@@ -15,9 +19,9 @@ namespace LeMinhHuy
 		public bool collectionCheck;
 
 		//Counters
-		public int countAll { get; private set; }
-		public int countInactive => this.stack.Count;
-		public int countActive => this.countAll - this.countInactive;
+		public int countAll { get; private set; }   //All units
+		public int countInactive => this.stack.Count;   //Units that have being recyled
+		public int countActive => this.countAll - this.countInactive;   //Units that are currently in use
 
 		//Constructors
 		public Pool(
@@ -76,7 +80,7 @@ namespace LeMinhHuy
 			//Make sure the object hasn't already been released
 			if (collectionCheck && stack.Count > 0 && stack.Contains(element))
 			{
-				Debug.LogWarning("Object that has already been released to the pool");
+				Debug.LogWarning("Object has already been recycled ");
 				return;
 			}
 

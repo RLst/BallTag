@@ -15,7 +15,7 @@ namespace LeMinhHuy
 			col.isTrigger = true;
 		}
 
-		public void SetTeam(Team team)
+		public void Init(Team team)
 		{
 			this.team = team;
 			SetColor(team.color);

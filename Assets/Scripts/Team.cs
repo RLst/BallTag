@@ -16,12 +16,12 @@ namespace LeMinhHuy
 		const float RAYCAST_MAXDISTANCE = 100f;
 
 		//Inspector
+		public string name = "Team Name";
 		public Color color = Color.blue;
 		public UserType userType = UserType.CPU;
 		public Strategy strategy;
 
 		public float energy;
-		public float recoveryTime;
 		public Vector3 attackDirection;
 
 		[Header("Team Objects")]
@@ -39,56 +39,89 @@ namespace LeMinhHuy
 		//Events
 		public FloatEvent onEnergyChange;
 
-		//Stats
-		public int roundsWon { get; set; }
-		public int roundDraw { get; set; }
-		public int roundLost { get; set; }
-		public int opponentsCaught { get; set; }
-		public int membersCaught { get; set; }    //Team members that got caught
-		public int ballPasses { get; set; }
-
 		//Members
 		GameController game;
 		ARRaycastManager arRaycastManager;
 
-
-		//Initialise the team and do awake/start stuff
-		public void Initialise(TeamSettings ts)
-		{
-			//AWAKE; Cache from monobehaviour umpire
-			this.game = GameController.current;
-			arRaycastManager = this.game.arRaycastManager;
-
-			//Set core team parameters
-			this.color = ts.color;
-			this.userType = ts.userType;
-			switch (ts.stance)
-			{
-				case Stance.Offensive:
-					this.strategy = game.parameters.offensiveStrategy;
-					break;
-				case Stance.Defensive:
-					this.strategy = game.parameters.defensiveStrategy;
-					break;
-				default:
-					throw new ArgumentException("Invalid stance!");
-			}
-
-			//Create first before
-			PrepareObjectPool();
-
-			Reset();
-		}
-
+		//Stats
+		public int goals { get; private set; }
+		public int roundsWon { get; set; }
+		public int roundDraw { get; set; }
+		public int roundLost { get; set; }
+		public int tags { get; set; }   //Opponents caught
+		public int outs { get; set; }    //Team members that got caught
+		public int ballPasses { get; set; }
+		public int despawns { get; set; }
 		void Reset()
 		{
+			//Stats
+			goals = 0;
+			roundsWon = 0;
+			roundDraw = 0;
+			roundLost = 0;
+			tags = 0;
+			outs = 0;
+			ballPasses = 0;
+			despawns = 0;
+
 			energy = 0;
-			recoveryTime = -1;
+			currentSpawnDowntime = -1;
+
 			DespawnAllUnits();
 		}
+		public void ScoreGoal(int amount = 1) => goals += amount;
+
+
+
+		//INITS
+		void Awake()
+		{
+			this.game = GameController.current;
+			arRaycastManager = this.game.arRaycastManager;
+		}
+
+		public void Initialise(TeamSettings ts)
+		{
+			Awake();
+
+			setParameters(ts);
+
+			initTeamObjects();
+
+			PrepareUnitPool();
+
+			Reset();
+
+			//Set team parameters
+			void setParameters(TeamSettings ts)
+			{
+				this.name = ts.name;
+				this.color = ts.color;
+				this.userType = ts.userType;
+				switch (ts.stance)
+				{
+					case Stance.Offensive:
+						this.strategy = game.parameters.offensiveStrategy;
+						break;
+					case Stance.Defensive:
+						this.strategy = game.parameters.defensiveStrategy;
+						break;
+					default:
+						throw new ArgumentException("Invalid stance!");
+				}
+			}
+			//Setup team objects and color
+			void initTeamObjects()
+			{
+				goal.Init(this);
+				foreach (var f in fences)
+					f.Init(this);
+			}
+		}
+
 
 		//POOLING
-		void PrepareObjectPool()
+		void PrepareUnitPool()
 		{
 			if (unitPool is null)
 			{
@@ -108,17 +141,16 @@ namespace LeMinhHuy
 				//If there's already a pool from a previous game then reset team parameters, colors etc
 				foreach (var u in units)
 				{
-					u.SetTeam(this);
+					u.Init(this);
 					u.Hide();
 				}
 			}
 		}
-
 		//POOLING CALLBACKS
 		Unit SpawnUnit()
 		{
 			var unit = GameObject.Instantiate<Unit>(game.genericUnitPrefab, field.transform);
-			unit.SetTeam(this);    //Sets color etc
+			unit.Init(this);    //Sets color etc
 			return unit;
 		}
 		void OnGetUnit(Unit unit)
@@ -132,11 +164,40 @@ namespace LeMinhHuy
 			unit.Hide();
 		}
 
+		//ENERGY
+		void SpendEnergy(float cost)
+		{
+			energy -= cost;
+		}
+		public void HandleEnergy()
+		{
+			// Debug.Log($"Energy: {energy}, MaxEnergy: {game.parameters.maxEnergy}");
+			if (energy < game.parameters.maxEnergy)
+			{
+				energy += Time.deltaTime * strategy.energyRegenRate;
+				onEnergyChange.Invoke(energy);
+
+				if (energy > game.parameters.maxEnergy)
+					energy = game.parameters.maxEnergy;
+			}
+		}
+
 		//SPAWN
+		internal void TrySpawnUnitOnRandomPositionOnField()
+		{
+			//Used when
+
+		}
+
+		internal void TrySpawnUnitDistanceFromOpponentUnit(Unit opponent, float distance)
+		{
+
+		}
+
 		public void TrySpawnUnitAtScreenPoint(Vector2 screenPoint)
 		{
 			//GUARDS
-			//Reject if there's not enough energy
+			//Reject if there's not enough energy; Check early for slight optimization
 			if (energy < strategy.spawnEnergyCost)
 				return;
 			//Reject user input if CPU controlled team
@@ -152,7 +213,7 @@ namespace LeMinhHuy
 				//AR Raycast
 				if (arRaycastManager.Raycast(screenPoint, arHitResults, UnityEngine.XR.ARSubsystems.TrackableType.Planes))
 				{
-					TrySpawnUnitOnField(arHitResults[0].pose.position);
+					TrySpawnUnit(arHitResults[0].pose.position);
 				}
 			}
 			else
@@ -164,18 +225,19 @@ namespace LeMinhHuy
 					//Must have clicked on this field
 					if (hit.collider == this.field.collider)
 					{
-						TrySpawnUnitOnField(hit.point);
+						TrySpawnUnit(hit.point);
 					}
 					else
 					{
-						Debug.LogWarning("Click on wrong field!");
+						//Probably clicked on your opponent's field
+						// Debug.LogWarning("Click on wrong field!");
 					}
 				}
 			}
 		}
 
 		//SPAWN player at specific location, facing toward the opposite team
-		public bool TrySpawnUnitOnField(Vector3 positionOnField)
+		public bool TrySpawnUnit(Vector3 positionOnField)
 		{
 			//GUARDS
 			//Must have enough energy //NOTE: This may be double checked
@@ -188,7 +250,7 @@ namespace LeMinhHuy
 			//Success; Get from pool and init
 			var spawn = unitPool.Get();
 			spawn.transform.SetPositionAndRotation(positionOnField, Quaternion.LookRotation(attackDirection, Vector3.up));
-			energy -= strategy.spawnEnergyCost;
+			SpendEnergy(strategy.spawnEnergyCost);
 			return true;
 		}
 
@@ -196,6 +258,7 @@ namespace LeMinhHuy
 		public void DespawnUnit(Unit unit)
 		{
 			unitPool.Recycle(unit);
+			despawns++;
 		}
 		public void DespawnAllUnits()
 		{
@@ -214,22 +277,6 @@ namespace LeMinhHuy
 				var deleteMe = units[i];
 				units.RemoveAt(i);
 				GameObject.Destroy(deleteMe);
-			}
-		}
-
-		//CORE
-		public void HandleDowntime()
-		{
-			if (recoveryTime > 0)
-				recoveryTime -= Time.deltaTime;
-		}
-		public void HandleEnergy()
-		{
-			// Debug.Log($"Energy: {energy}, MaxEnergy: {game.parameters.maxEnergy}");
-			if (energy < game.parameters.maxEnergy)
-			{
-				energy += Time.deltaTime * strategy.energyRegenRate;
-				onEnergyChange.Invoke(energy);
 			}
 		}
 	}

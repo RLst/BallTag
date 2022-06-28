@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 namespace LeMinhHuy
@@ -8,6 +7,7 @@ namespace LeMinhHuy
 	{
 		public bool isARMode = false;
 		public float fieldWidth = 20f;
+		public float fieldLength = 40f;
 
 		//Round
 		public int roundsPerMatch = 5;
@@ -25,13 +25,5 @@ namespace LeMinhHuy
 		//This might allow for a cutscene to play in the background CPU vs CPU
 		public TeamSettings teamOneSettings;
 		public TeamSettings teamTwoSettings;
-	}
-
-	[Serializable]
-	public class TeamSettings
-	{
-		public Color color;
-		public UserType userType;
-		public Stance stance;
 	}
 }

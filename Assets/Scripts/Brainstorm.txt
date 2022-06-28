@@ -20,4 +20,11 @@ Team
 GameController
 	BeginMatch()
 		Init all teams to settings
-		
+
+		Teams
+			Get goal
+			Get fences
+			Spawn units
+			Set team and colors
+			Reset stats
+			Despawn units
