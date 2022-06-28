@@ -1,5 +1,33 @@
 Brainstorm
+==========
 
+----------------------
+MENU
+-----------------------
+3 Scenes
+	MainMenu
+	Main, Maybe MainMenu can be put into Main and made to Dontdestroyonload
+	AR
+
+Main Menu
+	Title: Ball Battle
+	Tap to play
+	Sound On/Of
+	AR on/off
+	About:
+		Candidate: Tony le, 0401969981, rlst.github.io
+		This project for Gameloft only!
+
+Play Settings
+	TeamOne
+		Player/CPU
+	Player vs CPU
+	Player vs Player
+
+
+
+
+--------------
 Each team has a stance
 Each stance causes the units to behave and move differently
 
