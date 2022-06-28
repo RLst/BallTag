@@ -25,7 +25,10 @@ namespace LeMinhHuy
 
 		[Space]
 		public GameParameters parameters;
-		public Unit genericUnitPrefab;
+
+		[Header("Prefabs")]
+		public Unit unitPrefab = null;
+		[SerializeField] Ball ballPrefab = null;
 
 		[Header("AR")]
 		public ARSessionOrigin arSessionOrigin;
@@ -36,6 +39,8 @@ namespace LeMinhHuy
 		public Team teamOne;
 		public Team teamTwo;
 
+		[Space]
+
 		//Events
 		[Header("Events")]
 		public UnityEvent onBeginMatch;
@@ -44,6 +49,9 @@ namespace LeMinhHuy
 		public UnityEvent onUnpause;
 		public UnityEvent onEndRound;
 		public UnityEvent onEndMatch;
+
+		//Members
+		Ball ball;
 
 
 		//INITS
@@ -83,6 +91,11 @@ namespace LeMinhHuy
 		#region Gameplay
 		public void BeginMatch()
 		{
+			isPlaying = true;
+
+			//Set scores
+			currentRound = 0;
+
 			//Teams need to know their opponents
 			teamOne.opponent = teamTwo;
 			teamTwo.opponent = teamOne;
@@ -91,10 +104,11 @@ namespace LeMinhHuy
 			teamTwo.Initialize(parameters.teamTwoSettings);
 			CalculateAttackDirectionForEachTeam();
 
-			currentRound = 0;
-			BeginRound();
+			//Create ball
+			if (ball is null)
+				ball = Instantiate<Ball>(ballPrefab, this.transform);
 
-			isPlaying = true;
+			BeginRound();
 
 			//Hook up user input events etc
 			Debug.Log("Begin Match");
@@ -110,24 +124,38 @@ namespace LeMinhHuy
 				return;
 			}
 
+			//Set match params
 			currentRound++;
 			currentRoundRemainingTime = parameters.startingRoundRemainingTime;
 
-			//Don't swap strategies for the first round
-			if (currentRound > 1)
+			//Setup
+			ball.gameObject.SetActive(true);
+
+			switch (teamOne.strategy.stance)
 			{
-				switch (teamOne.strategy.stance)
-				{
-					case Stance.Offensive:
+				case Stance.Offensive:
+					{
+						//Launch ball
+						ball.transform.SetPositionAndRotation(teamOne.field.GetRandomLocationOnField(3f), Quaternion.identity);
+
+						//Switch stances (except for the first round)
+						if (currentRound == 1) break;
 						teamOne.strategy = parameters.defensiveStrategy;
 						teamTwo.strategy = parameters.offensiveStrategy;
-						break;
+					}
+					break;
 
-					case Stance.Defensive:
+				case Stance.Defensive:
+					{
+						//Launch ball
+						ball.transform.SetPositionAndRotation(teamTwo.field.GetRandomLocationOnField(3f), Quaternion.identity);
+
+						//Switch stances (except for the first round)
+						if (currentRound == 1) break;
 						teamOne.strategy = parameters.offensiveStrategy;
 						teamTwo.strategy = parameters.defensiveStrategy;
-						break;
-				}
+					}
+					break;
 			}
 
 			Debug.Log("Begin Round");
@@ -136,6 +164,8 @@ namespace LeMinhHuy
 
 		public void EndRound()
 		{
+			ball.gameObject.SetActive(false);
+
 			Debug.Log("End Round");
 			onEndRound.Invoke();
 		}
@@ -147,6 +177,8 @@ namespace LeMinhHuy
 		{
 			//Resolve match
 			isPlaying = false;
+
+			ball.gameObject.SetActive(false);
 
 			//ie. stop input
 			onEndMatch.Invoke();
@@ -177,6 +209,7 @@ namespace LeMinhHuy
 
 		//AI
 		WaitForSeconds waitOneSecond = new WaitForSeconds(1f);  //will always be one second
+
 		IEnumerator TickTeams()
 		{
 			while (true)

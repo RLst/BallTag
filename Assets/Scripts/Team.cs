@@ -140,7 +140,7 @@ namespace LeMinhHuy
 		}
 		Unit CreateUnit()   //THIS IS NOT SPAWNING! It's for preloading
 		{
-			var u = GameObject.Instantiate<Unit>(gc.genericUnitPrefab, field.transform);
+			var u = GameObject.Instantiate<Unit>(gc.unitPrefab, field.transform);
 			units.Add(u);
 			return u;
 		}
