@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.XR.ARFoundation;
 using LeMinhHuy.Events;
 using UnityEngine.Events;
+using System.Linq;
 
 namespace LeMinhHuy
 {
@@ -28,6 +29,7 @@ namespace LeMinhHuy
 		[Space]
 		public Field field;
 		[SerializeField] TeamObject[] teamObjects = null;
+		public Goal goal => teamObjects.First(x => x is Goal) as Goal;
 
 		//Pool; eliminate garbage allocation
 		const int startingUnitsToPool = 5;
@@ -45,7 +47,7 @@ namespace LeMinhHuy
 		int? activeUnits => unitPool?.countActive;
 
 		//Members
-		GameController game;
+		GameController gc;
 		ARRaycastManager arRaycastManager;
 		internal Team opponent;
 
@@ -86,8 +88,8 @@ namespace LeMinhHuy
 		//INITS
 		void Awake()
 		{
-			this.game = GameController.current;
-			arRaycastManager = this.game.arRaycastManager;
+			this.gc = GameController.current;
+			arRaycastManager = this.gc.arRaycastManager;
 		}
 
 		public void Initialize(TeamSettings settings)
@@ -111,10 +113,10 @@ namespace LeMinhHuy
 				switch (settings.stance)
 				{
 					case Stance.Offensive:
-						this.strategy = game.parameters.offensiveStrategy;
+						this.strategy = gc.parameters.offensiveStrategy;
 						break;
 					case Stance.Defensive:
-						this.strategy = game.parameters.defensiveStrategy;
+						this.strategy = gc.parameters.defensiveStrategy;
 						break;
 					default:
 						throw new ArgumentException("Invalid stance!");
@@ -138,8 +140,9 @@ namespace LeMinhHuy
 		}
 		Unit CreateUnit()   //THIS IS NOT SPAWNING! It's for preloading
 		{
-			var unit = GameObject.Instantiate<Unit>(game.genericUnitPrefab, field.transform);
-			return unit;
+			var u = GameObject.Instantiate<Unit>(gc.genericUnitPrefab, field.transform);
+			units.Add(u);
+			return u;
 		}
 		void OnGetUnit(Unit unit)
 		{
@@ -165,13 +168,13 @@ namespace LeMinhHuy
 			void handleEnergy()
 			{
 				// Debug.Log($"Energy: {energy}, MaxEnergy: {game.parameters.maxEnergy}");
-				if (energy < game.parameters.maxEnergy)
+				if (energy < gc.parameters.maxEnergy)
 				{
 					energy += Time.deltaTime * strategy.energyRegenRate;
 					onEnergyChange.Invoke(energy);
 
-					if (energy > game.parameters.maxEnergy)
-						energy = game.parameters.maxEnergy;
+					if (energy > gc.parameters.maxEnergy)
+						energy = gc.parameters.maxEnergy;
 				}
 			}
 		}
@@ -204,15 +207,23 @@ namespace LeMinhHuy
 					{
 						//If opponent has active units
 						//Spawn at a random point on a ray going from our goal to a random opponent attacker
-						if (opponent.activeUnits.HasValue && opponent.activeUnits > 0)
+						if (opponent.activeUnits.HasValue && opponent.activeUnits > 0 && opponent.TryGetRandomActiveUnit(out Unit attacker))
 						{
-							//Find random attacker
+							//Find random attacker ^
 
 							//Find ray going from goal to random attacker
+							// Debug.Log("Goal: " + goal.name, goal);
+							var ray = new Ray(goal.target.position, attacker.transform.position - goal.target.position);
+							Debug.DrawRay(ray.origin, ray.direction * 10f, Color.red, 10f);
 
-							//Choose a random location that's not too close to our goal
+							//Choose a random location that's not too close to our goal and between the attacker
+							var randomSpawnPoint = ray.GetPoint(UnityEngine.Random.Range(strategy.minSpawnDistanceFromOwnGoal, Vector3.Distance(goal.target.position, attacker.transform.position)));
+
+							//Clamp within our field
+							randomSpawnPoint = this.field.collider.ClosestPoint(randomSpawnPoint);
 
 							//Spawn
+							SpawnUnit(randomSpawnPoint);
 						}
 						//else spawn at a random location based on specific chance
 						else
@@ -229,7 +240,7 @@ namespace LeMinhHuy
 		bool TryGetRandomActiveUnit(out Unit randomActiveUnit)
 		{
 			//Exit if there aren't any active units to prevent freeze
-			if (unitPool.countActive == 0)
+			if (unitPool.countActive == 0 || units.Count == 0)
 			{
 				randomActiveUnit = null;
 				return false;
@@ -276,7 +287,7 @@ namespace LeMinhHuy
 			}
 
 			//Raycast to point
-			if (game.parameters.isARMode)
+			if (gc.isARMode)
 			{
 				//AR Raycast
 				if (arRaycastManager.Raycast(screenPoint, arHitResults, UnityEngine.XR.ARSubsystems.TrackableType.Planes))
@@ -304,20 +315,20 @@ namespace LeMinhHuy
 		}
 
 		//SPAWN player at specific location, facing toward the opposite team
-		public bool SpawnUnit(Vector3 positionOnField)
+		public bool SpawnUnit(Vector3 point)
 		{
 			//GUARDS
 			//Must have enough energy //NOTE: This may be double checked
 			if (energy < strategy.spawnCost)
 				return false;
 			//Point must be on field
-			if (!field.isPosWithinField(positionOnField))
+			if (!field.isPointWithinField(point))
 				return false;
 
 			//Access granted!
 			//Get and position unit
 			var spawn = unitPool.Get();
-			spawn.transform.SetPositionAndRotation(positionOnField, Quaternion.LookRotation(attackDirection, Vector3.up));
+			spawn.transform.SetPositionAndRotation(point, Quaternion.LookRotation(attackDirection, Vector3.up));
 
 			return true;
 		}

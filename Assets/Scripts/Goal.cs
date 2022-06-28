@@ -3,15 +3,14 @@ using UnityEngine;
 
 namespace LeMinhHuy
 {
-	[RequireComponent(typeof(BoxCollider))]
 	public class Goal : TeamObject
 	{
 		//The center of the goal for units to aim for
-		public Vector3 target => boxCol.center;
-		BoxCollider boxCol;
+		public Transform target;
+
 		protected override void Init()
 		{
-			boxCol = (BoxCollider)col;
+			Debug.Assert(target is object, "Must assign a target to goal");
 		}
 
 		void OnTriggerEnter(Collider other)

@@ -107,7 +107,7 @@ namespace LeMinhHuy
 		//AI tick cycle that runs as specified rate per second to reduce processing
 		void Tick()
 		{
-			Debug.Log("Tick()");
+			// Debug.Log("Tick()");
 
 			//Don't tick if inactive
 			if (inactive > 0f)

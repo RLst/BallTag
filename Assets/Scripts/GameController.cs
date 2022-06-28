@@ -16,8 +16,9 @@ namespace LeMinhHuy
 		//Inspector
 		[SerializeField] bool playDemoOnStart = true;
 		[Space]
-		[SerializeField] bool isPaused = false;
+		public bool isARMode = false;
 		[SerializeField] bool isPlaying = false;
+		[SerializeField] bool isPaused = false;
 		//MATCH PARAMS
 		public int currentRound { get; private set; } = 0;
 		public float currentRoundRemainingTime { get; private set; } = -1;
@@ -54,7 +55,7 @@ namespace LeMinhHuy
 			Debug.Assert(teamOne != null, "Team one not found!");
 			Debug.Assert(teamTwo != null, "Team two not found!");
 
-			if (parameters.isARMode)
+			if (isARMode)
 			{
 				Debug.Assert(arRaycastManager != null, "No ARRaycastManager found!");
 			}
@@ -180,7 +181,7 @@ namespace LeMinhHuy
 		{
 			while (true)
 			{
-				Debug.Log("TickTeams()");
+				// Debug.Log("TickTeams()");
 				teamOne.Tick();
 				teamTwo.Tick();
 				yield return new WaitForSeconds(1f);

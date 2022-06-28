@@ -32,5 +32,8 @@ namespace LeMinhHuy
 		public float ballSpeedMult = 1.5f;
 		public float returnSpeedMult = 2f;
 		public float detectionRange = 0.35f;
+
+		//Other
+		public float minSpawnDistanceFromOwnGoal = 2f;
 	}
 }

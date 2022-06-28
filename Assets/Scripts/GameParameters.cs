@@ -5,7 +5,6 @@ namespace LeMinhHuy
 	[CreateAssetMenu]
 	public class GameParameters : ScriptableObject
 	{
-		public bool isARMode = false;
 		public float fieldWidth = 20f;
 		public float fieldLength = 40f;
 

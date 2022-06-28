@@ -23,11 +23,11 @@ namespace LeMinhHuy
 
 		public void ToggleARMode()
 		{
-			gp.isARMode = !gp.isARMode;
+			gc.isARMode = !gc.isARMode;
 
 			var currentScene = SceneManager.GetActiveScene();
 
-			if (gp.isARMode)
+			if (gc.isARMode)
 			{
 				if (currentScene.name == ARSceneName)
 					return;

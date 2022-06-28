@@ -12,7 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aebda492660bf4b308f0a3453641840e, type: 3}
   m_Name: GameParameters
   m_EditorClassIdentifier: 
-  isARMode: 0
   fieldWidth: 20
   fieldLength: 40
   roundsPerMatch: 5
@@ -35,9 +34,9 @@ MonoBehaviour:
     minSpawnDistanceFromOwnGoal: 2
   defensiveStrategy:
     stance: 0
-    energyRegenRate: 0.5
+    energyRegenRate: 6
     spawnCost: 3
-    spawnTime: 0.5
+    spawnTime: 0.01
     AISpawnRate: 1
     AISpawnChance: 0.6
     reactivationTime: 4
@@ -57,4 +56,4 @@ MonoBehaviour:
     name: VietCong
     color: {r: 1, g: 0.26992142, b: 0.1372549, a: 1}
     userType: 1
-    stance: 1
+    stance: 0
