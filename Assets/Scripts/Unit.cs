@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Events;
@@ -12,7 +13,6 @@ namespace LeMinhHuy
 	[RequireComponent(typeof(CapsuleCollider), typeof(NavMeshAgent))]
 	public class Unit : MonoBehaviour
 	{
-		//AI
 		public enum State
 		{
 			Attacking,      //Heading towards opponent's goal
@@ -23,15 +23,19 @@ namespace LeMinhHuy
 			Inactive,       //Caught and waiting for reactivation
 			Despawned,      //Hit the end of the fence
 		}
-		Unit target;
 
-
-		//Properties
-		public State state = State.Inactive;
+		//Inspector
 		[Tooltip("If positive means this unit has been caught and is deactivated temporarily")]
 		public float inactive = -1;
 
-		//Inspector
+		//AI
+		[Header("AI")]
+		[Tooltip("AI ticks per second")]
+		[SerializeField] float ticksPerSecond = 15f;     //Reduce CPU usage, save battery etc
+		public State state = State.Inactive;
+		float tickRate => 1f / ticksPerSecond;
+		Unit chaseTarget;
+
 		[Space]
 		[Tooltip("Where the player will hold the ball")]
 		[SerializeField] Transform hands;
@@ -67,6 +71,10 @@ namespace LeMinhHuy
 			indicatorCarry.SetActive(false);
 			indicatorDirection.SetActive(false);
 			detectionZone.Hide();
+
+			//Start AI tick engine
+			StartCoroutine(Tick());
+			// InvokeRepeating("Tick", tickRate, tickRate);
 		}
 
 		public void Init(Team team)
@@ -84,7 +92,7 @@ namespace LeMinhHuy
 		void Update()
 		{
 			//Temp
-			transform.Translate(transform.forward * team.strategy.baseSpeed * team.strategy.normalSpeedMult * Time.deltaTime);
+			// transform.Translate(transform..forward * team.strategy.baseSpeed * team.strategy.normalSpeedMult * Time.deltaTime);
 
 			//Handle inactive
 			if (inactive > 0)
@@ -94,25 +102,32 @@ namespace LeMinhHuy
 
 				//Move unit back to origin?
 			}
-			//Else play
-			else
-			{
-				switch (team.strategy.stance)
-				{
-					case Stance.Offensive:
-						PlayOffence();
-						break;
-
-					case Stance.Defensive:
-						PlayDefence();
-						break;
-
-					default:
-						Debug.LogWarning("Invalid stance reached!");
-						break;
-				}
-			}
 		}
+
+		//AI tick cycle that runs as specified rate per second to reduce processing
+		IEnumerator Tick()
+		{
+			if (inactive > 0)
+				yield break;
+
+			switch (team.strategy.stance)
+			{
+				case Stance.Offensive:
+					PlayOffence();
+					break;
+
+				case Stance.Defensive:
+					PlayDefence();
+					break;
+
+				default:
+					Debug.LogWarning("Invalid stance reached!");
+					break;
+			}
+
+			yield return new WaitForSeconds(tickRate);
+		}
+
 
 		//AI METHODS
 		void PlayOffence() { }
