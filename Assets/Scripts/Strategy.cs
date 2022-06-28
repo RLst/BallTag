@@ -10,7 +10,7 @@ namespace LeMinhHuy
 		//Energy
 		public float energyRegenRate = 0.5f;
 		public float spawnEnergyCost = 2f;
-		public float spawnTime = 0.5f;      //Time between attempts at spawning
+		public float spawnDowntime = 0.5f;      //Time between attempts at spawning
 		public float AISpawnPercentage = 0.4f;
 
 		//Downtime when unit has been caught or has caught

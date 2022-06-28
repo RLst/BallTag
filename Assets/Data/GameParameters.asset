@@ -44,10 +44,12 @@ MonoBehaviour:
     returnSpeedMult: 2
     detectionRange: 0.35
   teamOneSettings:
-    color: {r: 1, g: 0.3066038, b: 0.3066038, a: 1}
-    userType: 0
-    stance: 1
-  teamTwoSettings:
-    color: {r: 1, g: 0.6779744, b: 0.13679248, a: 1}
+    name: VietHoa
+    color: {r: 1, g: 0.74013734, b: 0.30588233, a: 1}
     userType: 0
     stance: 0
+  teamTwoSettings:
+    name: VietCong
+    color: {r: 1, g: 0.26992142, b: 0.1372549, a: 1}
+    userType: 0
+    stance: 1

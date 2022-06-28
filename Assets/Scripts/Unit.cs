@@ -7,34 +7,55 @@ namespace LeMinhHuy
 	/// <summary>
 	/// A player unit
 	/// </summary>
+	[RequireComponent(typeof(Collider))]
 	public class Unit : MonoBehaviour
 	{
+		enum State
+		{
+			Attacking,      //Heading towards opponent's goal
+			Defending,      //Heading towards opponent with ball
+			ChasingBall,    //Heading towards the ball
+			Advancing,      //Advancing in the direction of the opponents
+			Waiting,        //Waiting for attackers
+			Inactive,       //Caught and waiting for reactivation
+			Despawned,      //Hit the end of the fence
+		}
+
 		//Properties
-		[field: SerializeField] public bool hasBall { get; set; } = false;
+		public bool hasBall = false;
 		//"If positive means this unit has been caught and is deactivated temporarily")]
-		[field: SerializeField] public float inactive { get; set; } = -1;
+		public float inactive = -1;
 
 		//Inspector
 		[Space]
+		[Tooltip("Where the player will hold the ball")]
+		[SerializeField] Transform hands;
 		[SerializeField] GameObject indicatorDirection;
 		[SerializeField] GameObject indicatorCarry;
 		[SerializeField] GameObject indicatorDetectionZone;
 
 		[Header("Graphics")]
 		[SerializeField] Renderer mainRenderer;
+
 		[SerializeField] Color inactiveColor = Color.green;
 
 		//Events
+		[Header("Events")]
 		public UnityEvent onTag;    //This unit tags an opponent out
 		public UnityEvent onOut;      //This unit got tagged by an opponent
 
 		//Members
-		public Team  team;
+		public Team team;
 		Unit target;
+		Collider col;
+
 
 
 		//INITS
-		public void SetTeam(Team team)
+		void Awake() => col = GetComponent<Collider>();
+		void Start() => col.isTrigger = true;
+
+		public void Init(Team team)
 		{
 			//Make sure there's a renderer
 			if (mainRenderer is null)
@@ -49,7 +70,7 @@ namespace LeMinhHuy
 		void Update()
 		{
 			//Temp
-			transform.Translate(team.attackDirection * Time.deltaTime);
+			transform.Translate(transform.forward * team.strategy.baseSpeed * team.strategy.normalSpeedMult * Time.deltaTime);
 
 			//Handle inactive
 			if (inactive > 0)
@@ -79,11 +100,11 @@ namespace LeMinhHuy
 			}
 		}
 
-		void PlayOffence()
-		{
-			//
-		}
-		void PlayDefence()
+		void PlayOffence() { }
+		void PlayDefence() { }
+
+		public void ScoreGoal(int amount = 1) => team.ScoreGoal(amount);
+		public void MoveTowardOpponentField()
 		{
 
 		}
@@ -95,15 +116,29 @@ namespace LeMinhHuy
 			//Downtime
 		}
 
-		public bool IsOpponent(Unit otherUnit) => !otherUnit.team.Equals(this.team);
-		public void SetColor(Color col) => mainRenderer.material.color = col;
-
-		public void Hide()
+		void OnTriggerEnter(Collider other)
 		{
-			// Debug.Log("Hiding " + name);
-			gameObject.SetActive(false);
+			var ball = other.GetComponent<Ball>();
+			var unit = other.GetComponent<Unit>();
+
+			if (isDefending)
+			{
+				{
+
+				}
+			}
 		}
 
+		public void Deactivate()
+		{
+			//Change color
+		}
+
+
+		public void Despawn() => team.DespawnUnit(this);
+		public bool isOpponent(Unit otherUnit) => !otherUnit.team.Equals(this.team);
+		public void Hide() => gameObject.SetActive(false);
 		public void Show() => gameObject.SetActive(true);
+		public void SetColor(Color col) => mainRenderer.material.color = col;
 	}
 }

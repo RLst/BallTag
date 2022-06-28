@@ -1,5 +1,35 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &55180638786359946
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2684396777798763587}
+  m_Layer: 0
+  m_Name: Hands
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2684396777798763587
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 55180638786359946}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1, z: -1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 7166912886410497541}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &509169338396377860
 GameObject:
   m_ObjectHideFlags: 0
@@ -219,7 +249,7 @@ Transform:
   m_LocalScale: {x: 0.5, y: 1, z: 0.7}
   m_Children: []
   m_Father: {fileID: 7166912886410497541}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3015675440339642861
 MonoBehaviour:
@@ -641,7 +671,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 7166912886410497541}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7166912885723558834
 MonoBehaviour:
@@ -1079,6 +1109,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7166912886410497541}
   - component: {fileID: 6839786742684477955}
+  - component: {fileID: 4505413601045317807}
   m_Layer: 0
   m_Name: Unit
   m_TagString: Untagged
@@ -1099,6 +1130,7 @@ Transform:
   m_Children:
   - {fileID: 509169339145983550}
   - {fileID: 509169338396377859}
+  - {fileID: 2684396777798763587}
   - {fileID: 2421800712022774168}
   - {fileID: 7166912885723558835}
   - {fileID: 7166912887012323104}
@@ -1117,12 +1149,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4dcb6714986b14557bf0c71bc7178db9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hasBall: 0
+  inactive: -1
   indicatorDirection: {fileID: 3207323515460899257}
   indicatorCarry: {fileID: 7166912885723558846}
   indicatorDetectionZone: {fileID: 7166912887012323107}
   mainRenderer: {fileID: 509169339145983520}
-  <hasBall>k__BackingField: 0
-  <inactive>k__BackingField: -1
+  inactiveColor: {r: 0, g: 1, b: 0, a: 1}
   onTag:
     m_PersistentCalls:
       m_Calls: []
@@ -1130,13 +1163,14 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   team:
+    name: Team Name
     color: {r: 0, g: 0, b: 0, a: 0}
     userType: 0
     strategy:
       stance: 1
       energyRegenRate: 0.5
       spawnEnergyCost: 2
-      spawnTime: 0.5
+      spawnDowntime: 0.5
       AISpawnPercentage: 0.4
       reactivationTime: 2.5
       baseSpeed: 5
@@ -1146,7 +1180,7 @@ MonoBehaviour:
       returnSpeedMult: 2
       detectionRange: 0.35
     energy: 0
-    recoveryTime: 0
+    currentSpawnDowntime: 0
     attackDirection: {x: 0, y: 0, z: 0}
     field: {fileID: 0}
     goal: {fileID: 0}
@@ -1154,6 +1188,28 @@ MonoBehaviour:
     onEnergyChange:
       m_PersistentCalls:
         m_Calls: []
+--- !u!195 &4505413601045317807
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7166912886410497540}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 1
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 0
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 1
 --- !u!1 &7166912887012323107
 GameObject:
   m_ObjectHideFlags: 0
@@ -1185,7 +1241,7 @@ Transform:
   m_LocalScale: {x: 3, y: 0.1, z: 3}
   m_Children: []
   m_Father: {fileID: 7166912886410497541}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &7166912887012323111
 MeshFilter:
