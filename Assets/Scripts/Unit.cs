@@ -61,7 +61,7 @@ namespace LeMinhHuy
 		NavMeshAgent agent;
 		Transform origin;   //Initial spawn location so it knows where to return to
 
-		//INITS
+		//UNITY
 		void Awake()
 		{
 			col = GetComponent<CapsuleCollider>();
@@ -86,20 +86,25 @@ namespace LeMinhHuy
 		{
 			StopCoroutine(Tick());
 		}
-
-		//CORE
 		void Update()
 		{
 			//Temp
 			// transform.Translate(transform..forward * team.strategy.baseSpeed * team.strategy.normalSpeedMult * Time.deltaTime);
 
 			//Handle inactive
-			if (inactive > 0)
+			if (inactive > 0f)
 			{
 				//Countdown downtime timer
 				inactive -= Time.deltaTime;
+				if (inactive <= 0)
+					Activate();
 			}
+
+			if (Input.GetKeyDown(KeyCode.A)) Activate();
+			if (Input.GetKeyDown(KeyCode.D)) Deactivate();
+			if (Input.GetKeyDown(KeyCode.X)) Despawn();
 		}
+
 
 		//AI tick cycle that runs as specified rate per second to reduce processing
 		IEnumerator Tick()
@@ -130,61 +135,65 @@ namespace LeMinhHuy
 		void PlayOffence() { }
 		void PlayDefence() { }
 		public void ScoreGoal(int amount = 1) => team.ScoreGoal(amount);
-		public void Advance()
-		{
-
-		}
-
+		public void Advance() { }
 		//ACTIONS
-		void Move()
-		{
-			// agent.
-		}
-		public void OnTagged()
-		{
-			//Deactivate
-			//Downtime
-		}
+		void Move() { }
+		public void OnTagged() { }
+
 
 		//SPAWN
 		public void SetTeamAndColor(Team team)
 		{
-
 			//Set team, stance, color
 			this.team = team;
 			SetColor(team.color);
 		}
+
 		public void Spawn()
 		{
 			inactive = team.strategy.spawnTime;
 
 			//Clear to
 			mainRenderer.material.color = Color.clear;
-			mainRenderer.material.DOColor(team.color, team.strategy.spawnTime);
-		}
-		public void Despawn()
-		{
-			team.DespawnUnit(this);
+			mainRenderer.material.
+				DOColor(team.color, team.strategy.spawnTime).
+				OnComplete(Activate);
 		}
 
 		public void Activate()
 		{
 			if (inactive > 0) return;
+
+			//Set back to team color
 			SetTeamAndColor(team);
+			//Let units be able to collider with other units
 			agent.radius = radiusActive;
-			gameObject.SetActive(true); //make sure that it's active
+			//make sure that it's active
+			gameObject.SetActive(true);
 		}
+
 		public void Deactivate()
 		{
 			//Deactivate but also start reactivation process
 			inactive = team.strategy.reactivationTime;
-
 			//Fade from team color to inactive color
 			SetColor(inactiveColor);
-			mainRenderer.material.DOColor(team.color, team.strategy.reactivationTime);
+			// mainRenderer.material.DOColor(team.color, team.strategy.reactivationTime);
 		}
 
-		//Collisions
+		public void Despawn()
+		{
+			team.DespawnUnit(this);
+		}
+
+		public void SetColor(Color col)
+		{
+			mainRenderer.material.DOKill();
+			mainRenderer.material.color = col;
+		}
+
+
+		//COLLISIONS
 		void OnTriggerEnter(Collider other)
 		{
 			var ball = other.GetComponent<Ball>();
@@ -195,8 +204,8 @@ namespace LeMinhHuy
 		{
 		}
 
+
 		public bool isOpponent(Unit otherUnit) => !otherUnit.team.Equals(this.team);
-		public void SetColor(Color col) => mainRenderer.material.color = col;
 		public void SetActive(bool v) => gameObject.SetActive(v);
 	}
 }

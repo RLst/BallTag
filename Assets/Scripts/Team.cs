@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.ARFoundation;
 using LeMinhHuy.Events;
+using UnityEngine.Events;
 
 namespace LeMinhHuy
 {
@@ -38,6 +39,7 @@ namespace LeMinhHuy
 
 		//Events
 		public FloatEvent onEnergyChange;
+		private UnityEvent onScoreGoal;
 
 		//Members
 		GameController game;
@@ -68,7 +70,11 @@ namespace LeMinhHuy
 
 			DespawnAllUnits();
 		}
-		public void ScoreGoal(int amount = 1) => goals += amount;
+		public void ScoreGoal(int amount = 1)
+		{
+			goals += amount;
+			onScoreGoal.Invoke();
+		}
 
 
 
@@ -232,10 +238,11 @@ namespace LeMinhHuy
 		}
 
 		//DESPAWN and put back into the object pool
-		public void DespawnUnit(Unit unit)
+		public void DespawnUnit(Unit u)
 		{
-			unitPool.Recycle(unit);
+			unitPool.Recycle(u);
 			despawns++;
+			//onDespawnUnit.Invoke(u);
 		}
 		public void DespawnAllUnits()
 		{
