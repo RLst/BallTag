@@ -5,6 +5,6 @@ namespace LeMinhHuy
 {
 	public class Ball : MonoBehaviour
 	{
-
+		
 	}
 }

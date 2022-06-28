@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Events;
+using DG.Tweening;
 
 namespace LeMinhHuy
 {
@@ -32,8 +33,10 @@ namespace LeMinhHuy
 		[Header("AI")]
 		[Tooltip("AI ticks per second")]
 		[SerializeField] float ticksPerSecond = 15f;     //Reduce CPU usage, save battery etc
-		public State state = State.Inactive;
 		float tickRate => 1f / ticksPerSecond;
+		public State state = State.Inactive;
+		[SerializeField] float radiusActive = 0.5f;
+		[SerializeField] float radiusInactive = 0.1f;
 		Unit chaseTarget;
 
 		[Space]
@@ -56,36 +59,32 @@ namespace LeMinhHuy
 		public Team team;
 		Collider col;
 		NavMeshAgent agent;
-
+		Transform origin;   //Initial spawn location so it knows where to return to
 
 		//INITS
 		void Awake()
 		{
 			col = GetComponent<CapsuleCollider>();
 			agent = GetComponent<NavMeshAgent>();
+			if (mainRenderer is null) mainRenderer = GetComponentInChildren<Renderer>();
 		}
-		void Start()
+		void OnEnable()
 		{
-			//Initial settings, hide indicators
-			col.isTrigger = true;
-			indicatorCarry.SetActive(false);
-			indicatorDirection.SetActive(false);
-			detectionZone.Hide();
-
 			//Start AI tick engine
 			StartCoroutine(Tick());
 			// InvokeRepeating("Tick", tickRate, tickRate);
 		}
-
-		public void Init(Team team)
+		void Start()
 		{
-			//Make sure there's a renderer
-			if (mainRenderer is null)
-				mainRenderer = GetComponentInChildren<Renderer>();
-
-			//Set team, stance, color
-			this.team = team;
-			SetColor(team.color);
+			//Initial settings, hide indicators, when first instantiated
+			col.isTrigger = true;
+			indicatorCarry.SetActive(false);
+			indicatorDirection.SetActive(false);
+			detectionZone.Hide();
+		}
+		void OnDisable()
+		{
+			StopCoroutine(Tick());
 		}
 
 		//CORE
@@ -99,8 +98,6 @@ namespace LeMinhHuy
 			{
 				//Countdown downtime timer
 				inactive -= Time.deltaTime;
-
-				//Move unit back to origin?
 			}
 		}
 
@@ -148,32 +145,58 @@ namespace LeMinhHuy
 			//Deactivate
 			//Downtime
 		}
-		public void Spawn(float spawnTime)
+
+		//SPAWN
+		public void SetTeamAndColor(Team team)
 		{
 
+			//Set team, stance, color
+			this.team = team;
+			SetColor(team.color);
+		}
+		public void Spawn()
+		{
+			inactive = team.strategy.spawnTime;
+
+			//Clear to
+			mainRenderer.material.color = Color.clear;
+			mainRenderer.material.DOColor(team.color, team.strategy.spawnTime);
+		}
+		public void Despawn()
+		{
+			team.DespawnUnit(this);
+		}
+
+		public void Activate()
+		{
+			if (inactive > 0) return;
+			SetTeamAndColor(team);
+			agent.radius = radiusActive;
+			gameObject.SetActive(true); //make sure that it's active
 		}
 		public void Deactivate()
 		{
-			//Change color
+			//Deactivate but also start reactivation process
+			inactive = team.strategy.reactivationTime;
+
+			//Fade from team color to inactive color
+			SetColor(inactiveColor);
+			mainRenderer.material.DOColor(team.color, team.strategy.reactivationTime);
 		}
 
-
+		//Collisions
 		void OnTriggerEnter(Collider other)
 		{
 			var ball = other.GetComponent<Ball>();
 			var unit = other.GetComponent<Unit>();
 
 		}
-
 		void OnDetectionZoneEnter(Unit unit)
 		{
-
 		}
 
-		public void Despawn() => team.DespawnUnit(this);
 		public bool isOpponent(Unit otherUnit) => !otherUnit.team.Equals(this.team);
-		public void Hide() => gameObject.SetActive(false);
-		public void Show() => gameObject.SetActive(true);
 		public void SetColor(Color col) => mainRenderer.material.color = col;
+		public void SetActive(bool v) => gameObject.SetActive(v);
 	}
 }

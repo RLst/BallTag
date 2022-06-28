@@ -28,3 +28,58 @@ GameController
 			Set team and colors
 			Reset stats
 			Despawn units
+
+//Start game sequence
+• User starts new game
+• Controller
+	- inits both teams and passes through settings
+	- starts match and starts round
+• Team
+	- inits and colors team objects ie. fences, goals
+	X inits and preloads Units
+	X units are shoved back into object pool right away?
+	-
+• Goals, Fences
+	- sets team and color
+• Unit
+	- set team and color
+	- hide indicators
+
+
+//Unit
+Spawn
+	Conditions:
+		user clicks on field
+		CPU requests unit to spawn successfully
+		there is enough energy
+		location is the correct field
+	spawn unit at location using object pool (screw preloading)
+		if object pool is empty then it will use CreateUnit() to create,
+	OnGetUnit() will be run on the unit no matter what
+
+OnGetUnit(Unit)
+	set team
+	set spawn time
+	Activate()
+
+Activate()
+	Condition:
+		inactive < 0
+	set team, strategy, color
+	set agent radius to normal?
+
+Deactivate()
+	Conditions:
+		unit gets caught by opponent while holding the ball
+		unit catches an opponent
+	set inactive to params.reactivationTime
+	set color to grayscale
+	set agent radius to 0.1 so that units can pass through?
+
+Despawn
+	Conditions:
+		unit hits the opponent's fence
+	Gets shoved back into the object pool
+		Hide; set active false
+
+OnRecycleUnit(Unit)

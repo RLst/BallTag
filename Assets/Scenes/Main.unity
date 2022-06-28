@@ -239,7 +239,7 @@ MonoBehaviour:
   teamOneDetails: {fileID: 521601663}
   teamOneEnergyBarInt: {fileID: 2045261165}
   teamOneEnergyBarFloat: {fileID: 2071233600}
-  teamTwoDetails: {fileID: 521601663}
+  teamTwoDetails: {fileID: 234574710}
   teamTwoEnergyBarInt: {fileID: 844067040}
   teamTwoEnergyBarFloat: {fileID: 361819117}
 --- !u!1 &234574708
@@ -2268,11 +2268,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 560895616}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -20}
+  m_LocalPosition: {x: 0, y: 0, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 651849814}
-  m_RootOrder: 1
+  m_Father: {fileID: 1562559153}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &560895622
 MonoBehaviour:
@@ -2628,11 +2628,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 570729710}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -2, y: 0, z: -20}
+  m_LocalPosition: {x: -2, y: 0, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 651849814}
-  m_RootOrder: 3
+  m_Father: {fileID: 1562559153}
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &570729716
 MonoBehaviour:
@@ -2682,7 +2682,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: -0.384, y: 0, z: 0.22700001}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 40.733276, y: 37.466797}
+  m_AnchoredPosition: {x: 40.733154, y: 37.466797}
   m_SizeDelta: {x: 150, y: 150}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &573862519
@@ -2739,8 +2739,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1461956747}
-        m_MethodName: set_enabled
+      - m_Target: {fileID: 1461956744}
+        m_MethodName: SetActive
         m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2815,13 +2815,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1562559153}
-  - {fileID: 560895621}
-  - {fileID: 1542966531}
-  - {fileID: 570729715}
   - {fileID: 933228883}
-  - {fileID: 1980489881}
-  - {fileID: 1955930389}
-  - {fileID: 1608766602}
   m_Father: {fileID: 1242963292}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
@@ -2876,15 +2870,16 @@ MonoBehaviour:
   arSessionOrigin: {fileID: 0}
   arRaycastManager: {fileID: 0}
   teamOne:
-    name: Team Name
+    name: AI One
     color: {r: 1, g: 0.19713613, b: 0, a: 1}
     userType: 1
     strategy:
       stance: 1
       energyRegenRate: 0.5
-      spawnEnergyCost: 2
-      spawnDowntime: 0.5
-      AISpawnPercentage: 0.4
+      spawnCost: 2
+      spawnTime: 0.5
+      AISpawnRate: 1
+      AISpawnChance: 0.4
       reactivationTime: 2.5
       baseSpeed: 5
       normalSpeedMult: 1.5
@@ -2893,7 +2888,6 @@ MonoBehaviour:
       returnSpeedMult: 2
       detectionRange: 0.35
     energy: 0
-    currentSpawnDowntime: 0
     attackDirection: {x: 0.00000008742278, y: 0, z: 1}
     field: {fileID: 933228886}
     goal: {fileID: 1980489883}
@@ -2926,15 +2920,16 @@ MonoBehaviour:
             m_BoolArgument: 0
           m_CallState: 2
   teamTwo:
-    name: Team Name
+    name: AI Two
     color: {r: 1, g: 0.71341777, b: 0, a: 1}
     userType: 1
     strategy:
       stance: 0
       energyRegenRate: 0.5
-      spawnEnergyCost: 2
-      spawnDowntime: 0.5
-      AISpawnPercentage: 0.4
+      spawnCost: 2
+      spawnTime: 0.5
+      AISpawnRate: 1
+      AISpawnChance: 0.4
       reactivationTime: 2.5
       baseSpeed: 5
       normalSpeedMult: 1.5
@@ -2943,7 +2938,6 @@ MonoBehaviour:
       returnSpeedMult: 2
       detectionRange: 0.35
     energy: 0
-    currentSpawnDowntime: 0
     attackDirection: {x: -0.00000008742278, y: 0, z: -1}
     field: {fileID: 1562559154}
     goal: {fileID: 560895622}
@@ -4703,9 +4697,12 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 10}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 1980489881}
+  - {fileID: 1955930389}
+  - {fileID: 1608766602}
   m_Father: {fileID: 651849814}
-  m_RootOrder: 4
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!64 &933228884
 MeshCollider:
@@ -6116,11 +6113,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1542966526}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 2, y: 0, z: -20}
+  m_LocalPosition: {x: 2, y: 0, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 651849814}
-  m_RootOrder: 2
+  m_Father: {fileID: 1562559153}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1542966532
 MonoBehaviour:
@@ -7666,7 +7663,10 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 560895621}
+  - {fileID: 1542966531}
+  - {fileID: 570729715}
   m_Father: {fileID: 651849814}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -8024,11 +8024,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1608766597}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -2, y: 0, z: 20}
+  m_LocalPosition: {x: -2, y: 0, z: 10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 651849814}
-  m_RootOrder: 7
+  m_Father: {fileID: 933228883}
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &1608766603
 BoxCollider:
@@ -8876,11 +8876,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1955930384}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.9999982, y: 0, z: 20}
+  m_LocalPosition: {x: 2, y: 0, z: 10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 651849814}
-  m_RootOrder: 6
+  m_Father: {fileID: 933228883}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &1955930390
 BoxCollider:
@@ -9457,11 +9457,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1980489877}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 20}
+  m_LocalPosition: {x: 0, y: 0, z: 10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 651849814}
-  m_RootOrder: 5
+  m_Father: {fileID: 933228883}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &1980489882
 BoxCollider:

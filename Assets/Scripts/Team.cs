@@ -52,7 +52,7 @@ namespace LeMinhHuy
 		public int outs { get; set; }    //Team members that got caught
 		public int ballPasses { get; set; }
 		public int despawns { get; set; }
-		void Reset()
+		void ResetStats()
 		{
 			//Stats
 			goals = 0;
@@ -87,9 +87,9 @@ namespace LeMinhHuy
 
 			initTeamObjects();
 
-			PrepareUnitPool();
+			InitUnitPool();
 
-			Reset();
+			ResetStats();
 
 			//Set team parameters
 			void setParameters()
@@ -112,62 +112,41 @@ namespace LeMinhHuy
 			//Setup team objects and color
 			void initTeamObjects()
 			{
-				goal.Init(this);
+				goal.SetTeam(this);
 				foreach (var f in fences)
-					f.Init(this);
+					f.SetTeam(this);
 			}
 		}
 
-
-		//POOLING
-		void PrepareUnitPool()
-		{
-			if (unitPool is null)
-			{
-				//Create and preload a new obj pool if there wasn't one already
-				unitPool = new Pool<Unit>(SpawnUnit, OnGetUnit, OnRecycleUnit);
-
-				//Preload pool
-				for (int i = 0; i < startingUnitsToPool; i++)
-				{
-					//Create unit, add to full unit list, push into pool
-					var u = unitPool.Get();
-					units.Add(u);
-				}
-			}
-			else if (units.Count > 0 && unitPool.countAll > 0)
-			{
-				//If there's already a pool from a previous game then reset team parameters, colors etc
-				foreach (var u in units)
-				{
-					u.Init(this);
-					u.Hide();
-				}
-			}
-		}
 		//POOLING CALLBACKS
-		Unit SpawnUnit()
+		void InitUnitPool()
+		{
+			if (unitPool is object)
+				return; //Pool has already been initiated
+
+			unitPool = new Pool<Unit>(CreateUnit, OnGetUnit, OnRecycleUnit);
+		}
+		Unit CreateUnit()   //THIS IS NOT SPAWNING! It's for preloading
 		{
 			var unit = GameObject.Instantiate<Unit>(game.genericUnitPrefab, field.transform);
-			unit.Init(this);    //Sets color etc
 			return unit;
 		}
 		void OnGetUnit(Unit unit)
 		{
-			unit.Show();
-			//Maybe set the unit in motion?
-			//Set it's AI
+			energy -= strategy.spawnCost;
+			unit.SetTeamAndColor(this);    //Sets team, color, strategy
+			unit.Spawn();               //Set spawn time so it can do it's spawn sequence
+			unit.Activate();            //start unit
+			unit.SetActive(true);
 		}
 		void OnRecycleUnit(Unit unit)
 		{
-			unit.Hide();
+			//Hide unit, set inactive and reset it's values
+			unit.SetActive(false);
+			unit.inactive = -1;
 		}
 
 		//ENERGY
-		void SpendEnergy(float cost)
-		{
-			energy -= cost;
-		}
 		public void HandleEnergy()
 		{
 			// Debug.Log($"Energy: {energy}, MaxEnergy: {game.parameters.maxEnergy}");
@@ -185,12 +164,10 @@ namespace LeMinhHuy
 		internal void TrySpawnUnitOnRandomPositionOnField()
 		{
 			//Used when
-
 		}
 
 		internal void TrySpawnUnitDistanceFromOpponentUnit(Unit opponent, float distance)
 		{
-
 		}
 
 		public void TrySpawnUnitAtScreenPoint(Vector2 screenPoint)
@@ -246,10 +223,11 @@ namespace LeMinhHuy
 			if (!field.isPosWithinField(positionOnField))
 				return false;
 
-			//Success; Get from pool and init
+			//Access granted!
+			//Get and position unit
 			var spawn = unitPool.Get();
 			spawn.transform.SetPositionAndRotation(positionOnField, Quaternion.LookRotation(attackDirection, Vector3.up));
-			SpendEnergy(strategy.spawnCost);
+
 			return true;
 		}
 
