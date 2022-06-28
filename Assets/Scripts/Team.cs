@@ -28,7 +28,7 @@ namespace LeMinhHuy
 		[Header("Team Objects")]
 		public Field field;
 		public Goal goal;
-		public Fence[] fences;
+		public Wall[] fences;
 
 		//Pool; eliminate garbage allocation
 		const int startingUnitsToPool = 5;
