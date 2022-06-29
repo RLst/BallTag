@@ -9,14 +9,17 @@ namespace LeMinhHuy
 		[SerializeField] new protected Renderer renderer;
 
 		//Properties
-		public Team team { get; protected set; }
 		public virtual Collider col { get; protected set; }
+		public Team team { get; protected set; }
+		protected GameController game { get; set; }
 
 
 		protected virtual void Awake()
 		{
 			col = GetComponent<Collider>();
+			game = GameController.current;
 			if (renderer is null) GetComponentInChildren<Renderer>(includeInactive: true);
+
 			Init();
 		}
 		protected virtual void Start() => col.isTrigger = true;

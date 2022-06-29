@@ -12,13 +12,13 @@ namespace LeMinhHuy
 		[SerializeField] string ARSceneName = "AR";
 
 		GameController gc;
-		GameParameters gp;
+		GameSettings gp;
 
 		void Awake()
 		{
 			DontDestroyOnLoad(this);
 			gc = FindObjectOfType<GameController>();
-			gp = gc.parameters;
+			gp = gc.settings;
 		}
 
 		public void ToggleARMode()
