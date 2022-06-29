@@ -10,7 +10,7 @@ namespace LeMinhHuy
 			var hit = other.GetComponent<Ball>();
 			if (hit is Ball)
 			{
-				SendMessageUpwards("OnBallCaught", hit as Ball);
+				SendMessageUpwards("OnBallEnter", hit as Ball);
 			}
 		}
 	}

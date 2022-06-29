@@ -22,7 +22,6 @@ MonoBehaviour:
     energyRegenRate: 0.5
     spawnCost: 2
     spawnTime: 0.5
-    AISpawnRate: 1
     AISpawnChance: 0.4
     reactivationTime: 2.5
     baseSpeed: 5
@@ -34,16 +33,15 @@ MonoBehaviour:
     minSpawnDistanceFromOwnGoal: 2
   defensiveStrategy:
     stance: 0
-    energyRegenRate: 6
+    energyRegenRate: 0.5
     spawnCost: 3
-    spawnTime: 0.01
-    AISpawnRate: 1
+    spawnTime: 0.5
     AISpawnChance: 0.6
     reactivationTime: 4
     baseSpeed: 5
     normalSpeedMult: 1.5
-    carryingSpeedMult: 0
-    ballSpeedMult: 0
+    carryingSpeedMult: 0.25
+    ballSpeedMult: 0.25
     returnSpeedMult: 2
     detectionRange: 0.35
     minSpawnDistanceFromOwnGoal: 2
@@ -51,7 +49,7 @@ MonoBehaviour:
     name: VietHoa
     color: {r: 1, g: 0.74013734, b: 0.30588233, a: 1}
     userType: 0
-    stance: 0
+    stance: 1
   teamTwoSettings:
     name: VietCong
     color: {r: 1, g: 0.26992142, b: 0.1372549, a: 1}

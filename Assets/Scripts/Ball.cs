@@ -14,5 +14,14 @@ namespace LeMinhHuy
 			col = GetComponent<Collider>();
 			rb = GetComponent<Rigidbody>();
 		}
+
+		// void OnTriggerEnter(Collider other)
+		// {
+		// 	var hit = other.GetComponent<Unit>();
+		// 	if (hit is object)
+		// 	{
+		// 		SendMessageUpwards("OnBallEnter", this);
+		// 	}
+		// }
 	}
 }

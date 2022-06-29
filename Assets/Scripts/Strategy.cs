@@ -17,8 +17,8 @@ namespace LeMinhHuy
 		public float spawnTime = 0.5f;
 
 		//AI
-		[Tooltip("The rate at which the AI attempts to spawn a unit")]
-		public float AISpawnRate = 1f;
+		// [Tooltip("The rate at which the AI attempts to spawn a unit")]
+		// public float AISpawnRate = 1f;
 		[Tooltip("Chance of the AI being able to spawn")]
 		public float AISpawnChance = 0.4f;
 

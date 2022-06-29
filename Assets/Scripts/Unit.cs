@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Events;
 using DG.Tweening;
+using LeMinhHuy.Events;
 
 namespace LeMinhHuy
 {
@@ -16,11 +17,12 @@ namespace LeMinhHuy
 	{
 		public enum State
 		{
+			Starting,       //Set this as the default. This unit will figure out what to do
 			Attacking,      //Heading towards opponent's goal
 			Defending,      //Heading towards opponent with ball
-			ChasingBall,    //Heading towards the ball
+			Chasing,        //Heading towards the ball
 			Advancing,      //Advancing in the direction of the opponents
-			Waiting,        //Waiting for attackers
+			Standby,        //Waiting for attackers
 			Inactive,       //Caught and waiting for reactivation
 			Despawned,      //Hit the end of the fence
 		}
@@ -34,14 +36,13 @@ namespace LeMinhHuy
 		[Tooltip("AI ticks per second")]
 		[SerializeField] float ticksPerSecond = 15f;     //Reduce CPU usage, save battery etc
 		float tickRate => 1f / ticksPerSecond;
-		public State state = State.Inactive;
-		[SerializeField] float radiusActive = 0.5f;
-		[SerializeField] float radiusInactive = 0.1f;
-		Unit chaseTarget;
+		public State state = State.Starting;
+		[SerializeField] float radiusNormal = 0.65f;
+		[SerializeField] float radiusPassthrough = 0.01f;
 
 		[Space]
 		[Tooltip("Where the player will hold the ball")]
-		[SerializeField] Transform hands = null;
+		[SerializeField] Transform ballHold = null;
 		[SerializeField] GameObject indicatorDirection = null;
 		[SerializeField] GameObject indicatorCarry = null;
 		[SerializeField] DetectionZone detectionZone = null;
@@ -53,10 +54,9 @@ namespace LeMinhHuy
 		[Header("Events")]
 		public UnityEvent onTag;    //This unit tags an opponent out
 		public UnityEvent onOut;      //This unit got tagged by an opponent
+		public StateEvent onChangedState;      //This unit got tagged by an opponent
 
 		//Members
-		// public Team team;
-		// Collider col;
 		NavMeshAgent agent;
 		Transform origin;   //Initial spawn location so it knows where to return to
 
@@ -95,20 +95,18 @@ namespace LeMinhHuy
 						Activate();
 				}
 			}
-
-			//Temp
-			// transform.Translate(transform..forward * team.strategy.baseSpeed * team.strategy.normalSpeedMult * Time.deltaTime);
-
-			// if (Input.GetKeyDown(KeyCode.A)) Activate();
-			// if (Input.GetKeyDown(KeyCode.D)) Deactivate();
-			// if (Input.GetKeyDown(KeyCode.X)) Despawn();
 		}
 
+
+		public void ScoreGoal(int amount = 1) => team.ScoreGoal(amount);
+		public bool isOpponent(Unit otherUnit) => !otherUnit.team.Equals(this.team);
+		public void SetActive(bool v) => gameObject.SetActive(v);
+
+
+		#region  AI
 		//AI tick cycle that runs as specified rate per second to reduce processing
 		void Tick()
 		{
-			// Debug.Log("Tick()");
-
 			//Don't tick if inactive
 			if (inactive > 0f)
 				return;
@@ -132,55 +130,66 @@ namespace LeMinhHuy
 			}
 			// yield return new WaitForSeconds(tickRate);
 		}
+		void SetState(State newState)
+		{
+			if (this.state == newState)
+				return;
+
+			this.state = newState;
+
+			onChangedState.Invoke(newState);
+		}
 
 
-		//AI METHODS
 		void PlayOffence() { }
-		void PlayDefence() { }
-
-		//ACTIONS
-		void MoveTowardTarget() { }
+		void Chase() { }
+		void Attack() { }
 		void Advance() { }
-		void TagOut() { }
-		public void ScoreGoal(int amount = 1) => team.ScoreGoal(amount);
+
+
+		void PlayDefence() { }
+		void Standby() { }
+		void Defend() { }
+		#endregion
 
 
 		#region Spawn
+		//Spawning units are dark, can be passed through, have a slight delay before they move and visible
 		public void Spawn()
 		{
+			SetColor(inactiveColor);
+			agent.radius = radiusPassthrough;
 			inactive = team.strategy.spawnTime;
-
-			//Color from clear/black to team color then Activate unit
-			renderer.material.color = Color.clear;
-			renderer.material.
-				DOColor(team.color, team.strategy.spawnTime).
-				OnComplete(Activate);
+			SetActive(true);
+			// renderer.material.
+			// 	DOColor(team.color, team.strategy.spawnTime).
+			// 	OnComplete(Activate);
 		}
 
+		//Active units are team colored, can't be walked through, visible
 		public void Activate()
 		{
-			if (inactive > 0) return;
-
-			//Set back to team color
 			SetTeam(team);
-			//Let units be able to collider with other units
-			agent.radius = radiusActive;
-			//make sure that it's active
-			gameObject.SetActive(true);
+			agent.radius = radiusNormal;
+			SetActive(true);
 		}
 
+		//Inactive units are dark/translucent, can be passed through, visible
+		//Delay before they can move again And/or move back to their origin if defending
 		public void Deactivate()
 		{
-			//Deactivate but also start reactivation process
-			inactive = team.strategy.reactivationTime;
-			//Fade from team color to inactive color
 			SetColor(inactiveColor);
-			// mainRenderer.material.DOColor(team.color, team.strategy.reactivationTime);
+			agent.radius = radiusPassthrough;
+			inactive = team.strategy.reactivationTime;
+			SetActive(true);
 		}
 
+		//Despawned units are invisible
+		//Put back into the pool
 		public void Despawn()
 		{
 			team.DespawnUnit(this);
+			SetActive(false);
 		}
 
 		public override void SetColor(Color col)
@@ -200,10 +209,19 @@ namespace LeMinhHuy
 			var ball = other.GetComponent<Ball>();
 			var unit = other.GetComponent<Unit>();
 		}
+		void OnBallEnter(Ball ball)
+		{
+			if (state == State.Chasing)
+			{
+				SetState(State.Attacking);
+			}
+		}
 
 
 
-		public bool isOpponent(Unit otherUnit) => !otherUnit.team.Equals(this.team);
-		public void SetActive(bool v) => gameObject.SetActive(v);
 	}
 }
+
+// if (Input.GetKeyDown(KeyCode.A)) Activate();
+// if (Input.GetKeyDown(KeyCode.D)) Deactivate();
+// if (Input.GetKeyDown(KeyCode.X)) Despawn();

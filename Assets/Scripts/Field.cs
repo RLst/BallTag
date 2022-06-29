@@ -24,7 +24,7 @@ namespace LeMinhHuy
 		public bool isPointWithinField(Vector3 position, float sphereCastRadius = 0.2f)
 		{
 			var posHigh = position + Vector3.up * 5f;
-			Debug.DrawRay(posHigh, Vector3.down * CHECK_CAST_LENGTH, Color.red, 5f);
+			Debug.DrawRay(posHigh, Vector3.down * CHECK_CAST_LENGTH, Color.green, 5f);
 			if (Physics.SphereCastNonAlloc(posHigh, sphereCastRadius, Vector3.down, hitResults, CHECK_CAST_LENGTH) > 0)
 			{
 				// Debug.Log("Hit");

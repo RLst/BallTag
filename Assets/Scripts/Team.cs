@@ -41,7 +41,8 @@ namespace LeMinhHuy
 		//Events
 		[Space]
 		public FloatEvent onEnergyChange;
-		UnityEvent onScoreGoal = null;
+		public UnityEvent onScoreGoal;
+		// public UnitEvent on
 
 		//Properties
 		int? activeUnits => unitPool?.countActive;
@@ -149,7 +150,6 @@ namespace LeMinhHuy
 			energy -= strategy.spawnCost;
 			unit.SetTeam(this);    //Sets team, color, strategy
 			unit.Spawn();               //Set spawn time so it can do it's spawn sequence
-			unit.Activate();            //start unit
 			unit.SetActive(true);
 		}
 		void OnRecycleUnit(Unit unit)
@@ -338,7 +338,7 @@ namespace LeMinhHuy
 		{
 			unitPool.Recycle(u);
 			despawns++;
-			//onDespawnUnit.Invoke(u);
+			// onDespawnUnit.Invoke(u);
 		}
 		public void DespawnAllUnits()
 		{
@@ -346,7 +346,7 @@ namespace LeMinhHuy
 				DespawnUnit(u);
 		}
 
-		//DESTROY
+		//DESTROY; might be redundant
 		public void DestroyAllUnits()
 		{
 			//Untested

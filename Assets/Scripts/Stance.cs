@@ -7,7 +7,6 @@ namespace LeMinhHuy
 	{
 		Defensive = 0,
 		Offensive = 1,
-		Inactive,
 		None
 	}
 }
