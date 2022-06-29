@@ -605,11 +605,11 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3291582808447569242}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 1, y: 1, z: 1.5}
+  m_Center: {x: 0, y: 0, z: -0.25}
 --- !u!114 &5913234903385024280
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1123,9 +1123,9 @@ MonoBehaviour:
   inactive: -1
   ticksPerSecond: 15
   state: 5
-  radiusActive: 0.6
-  radiusInactive: 0.01
-  hands: {fileID: 0}
+  radiusNormal: 0.65
+  radiusPassthrough: 0.01
+  ballHold: {fileID: 0}
   indicatorDirection: {fileID: 3207323515460899257}
   indicatorCarry: {fileID: 7166912885723558846}
   detectionZone: {fileID: 5242711977329602962}
@@ -1134,6 +1134,9 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   onOut:
+    m_PersistentCalls:
+      m_Calls: []
+  onChangedState:
     m_PersistentCalls:
       m_Calls: []
 --- !u!195 &4505413601045317807
@@ -1279,10 +1282,10 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Enabled: 1
-  m_Radius: 0.5000001
-  m_Height: 2
+  m_Radius: 0.5
+  m_Height: 75
   m_Direction: 1
-  m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &5242711977329602962
 MonoBehaviour:
   m_ObjectHideFlags: 0
