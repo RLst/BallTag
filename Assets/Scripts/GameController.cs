@@ -92,6 +92,12 @@ namespace LeMinhHuy
 		}
 
 		#region Gameplay
+		/// <summary>
+		/// Prep teams
+		/// Set team's opponent
+		/// Create the ball
+		/// Start the first round
+		/// </summary>
 		public void BeginMatch()
 		{
 			isPlaying = true;
@@ -118,6 +124,12 @@ namespace LeMinhHuy
 			onBeginMatch.Invoke();
 		}
 
+		/// <summary>
+		/// Starts a new/next round
+		/// Drops ball somewhere random over in attacker's field
+		/// Set/Swap each team's strategy
+		/// Set round number and time left
+		/// </summary>
 		public void BeginRound()
 		{
 			//Guard
@@ -165,30 +177,11 @@ namespace LeMinhHuy
 			onBeginRound.Invoke();
 		}
 
-		public void EndRound()
-		{
-			ball.gameObject.SetActive(false);
-
-			Debug.Log("End Round");
-			onEndRound.Invoke();
-		}
-
-		void BeginPenaltyRound() { }
-
-		//End the match immediately
-		public void EndMatch()
-		{
-			//Resolve match
-			isPlaying = false;
-
-			ball.gameObject.SetActive(false);
-
-			//ie. stop input
-			onEndMatch.Invoke();
-		}
-		#endregion
-
-		//CORE
+		/// <summary>
+		/// Count down time left
+		/// End round if out of time
+		/// Let teams borrow MonoBehaviour.Update()
+		/// </summary>
 		void Update()
 		{
 			if (isPlaying == false)
@@ -207,6 +200,54 @@ namespace LeMinhHuy
 			teamOne.Update();
 			teamTwo.Update();
 		}
+
+		/// <summary>
+		/// Invoke when out of round time OR a goal is scored
+		/// CIf no more rounds left then end match
+		/// Rest a bit so player can continue
+		/// </summary>
+		public void EndRound()
+		{
+			ball.gameObject.SetActive(false);
+
+			Debug.Log("End Round");
+			onEndRound.Invoke();
+		}
+
+		/// <summary>
+		/// Invoke when the match is a draw
+		/// Generate maze, clear area around goals, rebake field navmesh, place ball at random, place a unit at team goal, let run attacker AI logic
+		/// </summary>
+		void BeginPenaltyRound() { }
+
+		//End the match immediately. If early then you lose
+		//Show match end screen
+		//Start playing ending animations and cutscenes
+		public void EndMatch()
+		{
+			//Resolve match
+			isPlaying = false;
+
+			//Hide ball
+			ball.gameObject.SetActive(false);
+
+			//ie. stop input
+			onEndMatch.Invoke();
+		}
+
+		/// <summary>
+		/// Hide/despawn all units, balls or mazes
+		/// </summary>
+		public void Clear()
+		{
+			if (ball is object)
+				ball.gameObject.SetActive(false);
+			teamOne.DespawnAllUnits();
+			teamTwo.DespawnAllUnits();
+			//Clear maze
+		}
+		#endregion
+
 
 		//AI
 		IEnumerator TickTeams()
