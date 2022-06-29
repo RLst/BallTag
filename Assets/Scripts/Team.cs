@@ -36,7 +36,17 @@ namespace LeMinhHuy
 		Pool<Unit> unitPool;
 		List<Unit> units = new List<Unit>();
 
-		List<ARRaycastHit> arHitResults = null;
+		//Properties
+		internal bool hasBall
+		{
+			get
+			{
+				foreach (var u in units)
+					if (u.hasBall)
+						return true;
+				return false;
+			}
+		}
 
 		//Events
 		[Space]
@@ -50,6 +60,7 @@ namespace LeMinhHuy
 		//Members
 		GameController gc;
 		ARRaycastManager arRaycastManager;
+		List<ARRaycastHit> arHitResults = null;
 		internal Team opponent;
 
 		#region Stats

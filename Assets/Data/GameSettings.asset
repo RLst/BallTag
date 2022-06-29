@@ -26,7 +26,7 @@ MonoBehaviour:
     reactivationTime: 2.5
     baseSpeed: 5
     normalSpeedMult: 1.5
-    carryingSpeedMult: 0.75
+    dribbleSpeedMult: 0.75
     ballSpeedMult: 1.5
     returnSpeedMult: 2
     detectionRange: 0.35
@@ -40,18 +40,18 @@ MonoBehaviour:
     reactivationTime: 4
     baseSpeed: 5
     normalSpeedMult: 1.5
-    carryingSpeedMult: 0.25
+    dribbleSpeedMult: 0.75
     ballSpeedMult: 0.25
     returnSpeedMult: 2
     detectionRange: 0.35
     minSpawnDistanceFromOwnGoal: 2
   teamOneSettings:
-    name: VietHoa
+    name: Southerners
     color: {r: 1, g: 0.74013734, b: 0.30588233, a: 1}
     userType: 0
     stance: 1
   teamTwoSettings:
-    name: VietCong
+    name: Northerners
     color: {r: 1, g: 0.26992142, b: 0.1372549, a: 1}
     userType: 1
     stance: 0

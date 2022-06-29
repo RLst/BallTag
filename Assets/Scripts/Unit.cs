@@ -23,7 +23,7 @@ namespace LeMinhHuy
 			Chasing,        //Heading towards the ball
 			Advancing,      //Advancing in the direction of the opponents
 			Standby,        //Waiting for attackers
-			Inactive,       //Caught and waiting for reactivation
+			Inactive,       //Caught and waiting for reactivation / moving back to origin
 			Despawned,      //Hit the end of the fence
 		}
 
@@ -42,7 +42,7 @@ namespace LeMinhHuy
 
 		[Space]
 		[Tooltip("Where the player will hold the ball")]
-		[SerializeField] Transform ballHold = null;
+		[SerializeField] Transform hands = null;
 		[SerializeField] GameObject indicatorDirection = null;
 		[SerializeField] GameObject indicatorCarry = null;
 		[SerializeField] DetectionZone detectionZone = null;
@@ -56,25 +56,32 @@ namespace LeMinhHuy
 		public UnityEvent onOut;      //This unit got tagged by an opponent
 		public StateEvent onChangedState;      //This unit got tagged by an opponent
 
+		//State
+		public bool hasBall { get; private set; }
+
 		//Members
 		NavMeshAgent agent;
+		Rigidbody rb;
 		Transform origin;   //Initial spawn location so it knows where to return to
+		Ball ball;     //Required to chase after the ball
 
 		//UNITY
 		protected override void Init()
 		{
-			// col = GetComponent<CapsuleCollider>();
 			agent = GetComponent<NavMeshAgent>();
+			rb = GetComponent<Rigidbody>();
+			ball = GameObject.FindGameObjectWithTag("Ball").GetComponent<Ball>();
+			Debug.Assert(hands is object, "Unit has no hands");
 		}
 
 		protected override void Start()
 		{
-			//Start AI tick engine
-			//InvokeRepeating() is simpler because when this unt gets deactivated it will turn off as well
+			//Start AI tick engine; InvokeRepeating() is simpler because when this unt gets deactivated it will turn off as well
 			InvokeRepeating("Tick", 0f, tickRate);
 
 			//Initial settings, hide indicators, when first instantiated
-			col.isTrigger = true;
+			col.isTrigger = true;       //The agent collider will provide collision like behaviour?
+			rb.isKinematic = true;
 			indicatorCarry.SetActive(false);
 			indicatorDirection.SetActive(false);
 			detectionZone.Hide();
@@ -141,10 +148,66 @@ namespace LeMinhHuy
 		}
 
 
-		void PlayOffence() { }
-		void Chase() { }
-		void Attack() { }
-		void Advance() { }
+		void PlayOffence()
+		{
+			switch (state)
+			{
+				case State.Starting:
+					//First thing unit should do is try chasing
+					SetState(State.Chasing);
+					break;
+
+				case State.Chasing:
+					//If our team no in possession then chase after ball
+					if (!team.hasBall)
+					{
+						Chase();
+					}
+					//Otherwise advance towards opponent
+					else
+					{
+						SetState(State.Advancing);
+					}
+					break;
+
+				case State.Attacking:
+					//You have the ball so head towards the goal
+					Attack();
+					break;
+
+				case State.Advancing:
+					//Head towards the opponent in a straight line
+					Advance();
+					break;
+			}
+		}
+		void Chase()
+		{
+			agent.SetDestination(ball.transform.position);
+			agent.speed = team.strategy.normalSpeed;
+		}
+		void SeizeBall()
+		{
+			//Grab ball and turn it off so it can't drift
+			hasBall = true;
+			ball.transform.SetParent(hands);
+			ball.SetActivatePhysics(active: false);
+		}
+		void Attack()
+		{
+			agent.SetDestination(team.opponent.goal.target.transform.position);
+			agent.speed = team.strategy.dribbleSpeed;
+		}
+		void Advance()
+		{
+			agent.SetDestination(team.attackDirection * 10f);
+			agent.speed = team.strategy.normalSpeed;
+		}
+		void PassBall(Unit u)
+		{
+			//Move towards player using ball's agent?
+
+		}
 
 
 		void PlayDefence() { }
@@ -171,6 +234,7 @@ namespace LeMinhHuy
 		{
 			SetTeam(team);
 			agent.radius = radiusNormal;
+			SetState(State.Starting);
 			SetActive(true);
 		}
 
@@ -209,16 +273,15 @@ namespace LeMinhHuy
 			var ball = other.GetComponent<Ball>();
 			var unit = other.GetComponent<Unit>();
 		}
-		void OnBallEnter(Ball ball)
+		void OnBallTouch(Ball ball)
 		{
+			//Grab ball if chasing
 			if (state == State.Chasing)
 			{
+				SeizeBall();
 				SetState(State.Attacking);
 			}
 		}
-
-
-
 	}
 }
 
