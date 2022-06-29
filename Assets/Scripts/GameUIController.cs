@@ -8,10 +8,7 @@ namespace LeMinhHuy
 	[RequireComponent(typeof(Canvas))]
 	public class GameUIController : MonoBehaviour
 	{
-		const float FLOAT_SLIDER_ALPHA = 0.5f;
-
 		[SerializeField] TextMeshProUGUI timeLeft = null;
-
 		[Header("Team One")]
 		[SerializeField] TextMeshProUGUI teamOneDetails = null;
 		[SerializeField] Slider teamOneEnergyBarInt = null;
@@ -21,6 +18,7 @@ namespace LeMinhHuy
 		[SerializeField] TextMeshProUGUI teamTwoDetails = null;
 		[SerializeField] Slider teamTwoEnergyBarInt = null;
 		[SerializeField] Slider teamTwoEnergyBarFloat = null;
+		[SerializeField] float floatGaugeAlpha = 0.5f;
 
 		//Members
 		GameController gc;
@@ -58,18 +56,20 @@ namespace LeMinhHuy
 			teamTwoDetails.text = $"{gc.teamTwo.name}: {gc.teamTwo.strategy.stance.ToString()}";
 
 			//Energy bars
+			//Team 1
 			ColorBlock temp = teamOneEnergyBarFloat.colors;
-			temp.disabledColor = Color.Lerp(gc.teamOne.color, Color.white, 0.6f);
-			// temp.disabledColor = new Color(gc.teamOne.color.r, gc.teamOne.color.g, gc.teamOne.color.b, FLOAT_SLIDER_ALPHA);
+			// temp.disabledColor = Color.Lerp(gc.teamOne.color, Color.white, 0.6f);
+			temp.disabledColor = new Color(gc.teamOne.color.r, gc.teamOne.color.g, gc.teamOne.color.b, floatGaugeAlpha);
 			teamOneEnergyBarFloat.colors = temp;
 
 			temp = teamOneEnergyBarInt.colors;
 			temp.disabledColor = gc.teamOne.color;
 			teamOneEnergyBarInt.colors = temp;
 
+			//Team 2
 			temp = teamTwoEnergyBarFloat.colors;
 			// temp.disabledColor = Color.Lerp(gc.teamTwo.color, Color.white, 0.6f);
-			temp.disabledColor = new Color(gc.teamOne.color.r, gc.teamOne.color.g, gc.teamOne.color.b, FLOAT_SLIDER_ALPHA);
+			temp.disabledColor = new Color(gc.teamTwo.color.r, gc.teamTwo.color.g, gc.teamTwo.color.b, floatGaugeAlpha);
 			teamTwoEnergyBarFloat.colors = temp;
 
 			temp = teamTwoEnergyBarInt.colors;

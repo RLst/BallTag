@@ -369,6 +369,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timeLeft: {fileID: 1701148004}
+  floatGaugeAlpha: 0.5
   teamOneDetails: {fileID: 521601663}
   teamOneEnergyBarInt: {fileID: 2045261165}
   teamOneEnergyBarFloat: {fileID: 2071233600}
@@ -2965,6 +2966,9 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+    onScoreGoal:
+      m_PersistentCalls:
+        m_Calls: []
   teamTwo:
     name: AI Two
     color: {r: 1, g: 0.71341777, b: 0, a: 1}
@@ -3015,6 +3019,9 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+    onScoreGoal:
+      m_PersistentCalls:
+        m_Calls: []
   onBeginMatch:
     m_PersistentCalls:
       m_Calls: []
