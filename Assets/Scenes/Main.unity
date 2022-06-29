@@ -679,7 +679,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh34600
+  m_Name: pb_Mesh23644
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -934,7 +934,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh34420
+  m_Name: pb_Mesh23338
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -1097,7 +1097,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh34436
+  m_Name: pb_Mesh23354
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -1640,7 +1640,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh34624
+  m_Name: pb_Mesh23668
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -3482,7 +3482,7 @@ MonoBehaviour:
   isARMode: 0
   isPlaying: 0
   isPaused: 0
-  parameters: {fileID: 11400000, guid: 555d847056c14456ab562177dfec82fd, type: 2}
+  settings: {fileID: 11400000, guid: 555d847056c14456ab562177dfec82fd, type: 2}
   unitPrefab: {fileID: 6839786742684477955, guid: ab0cdc74d8f7847f68d024b9a7ea08df,
     type: 3}
   ballPrefab: {fileID: 6366027962173291315, guid: ec3e8f3ed27e2244caaedaf589590a03,
@@ -3529,8 +3529,8 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
-        - m_Target: {fileID: 2045261165}
-          m_MethodName: set_value
+        - m_Target: {fileID: 2045261166}
+          m_MethodName: SetValueFloored
           m_Mode: 0
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -3580,8 +3580,8 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
-        - m_Target: {fileID: 844067040}
-          m_MethodName: set_value
+        - m_Target: {fileID: 844067041}
+          m_MethodName: SetValueFloored
           m_Mode: 0
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -4095,6 +4095,7 @@ GameObject:
   m_Component:
   - component: {fileID: 844067039}
   - component: {fileID: 844067040}
+  - component: {fileID: 844067041}
   m_Layer: 5
   m_Name: IntergerGauge
   m_TagString: Untagged
@@ -4172,6 +4173,18 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &844067041
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 844067038}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b43221909a767b43939d05809beb967, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &893875455
 GameObject:
   m_ObjectHideFlags: 0
@@ -12033,6 +12046,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2045261164}
   - component: {fileID: 2045261165}
+  - component: {fileID: 2045261166}
   m_Layer: 5
   m_Name: IntergerGauge
   m_TagString: Untagged
@@ -12110,6 +12124,18 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &2045261166
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2045261163}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b43221909a767b43939d05809beb967, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2065436563
 GameObject:
   m_ObjectHideFlags: 0

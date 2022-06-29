@@ -24,7 +24,7 @@ namespace LeMinhHuy
 		public float currentRoundRemainingTime { get; private set; } = -1;
 
 		[Space]
-		public GameParameters parameters;
+		public GameSettings settings;
 
 		[Header("Prefabs")]
 		public Unit unitPrefab = null;
@@ -52,13 +52,14 @@ namespace LeMinhHuy
 
 		//Members
 		Ball ball;
+		WaitForSeconds waitOneSecond;
 
 
 		//INITS
 		void OnValidate() => CalculateAttackDirectionForEachTeam();
 		void Awake()
 		{
-			Debug.Assert(parameters != null, "No game parameters found!");
+			Debug.Assert(settings != null, "No game parameters found!");
 
 			Debug.Assert(teamOne != null, "Team one not found!");
 			Debug.Assert(teamTwo != null, "Team two not found!");
@@ -70,6 +71,8 @@ namespace LeMinhHuy
 		}
 		void Start()
 		{
+			waitOneSecond = new WaitForSeconds(1f);
+
 			CalculateAttackDirectionForEachTeam();
 			onBeginMatch.AddListener(() =>
 			{
@@ -100,8 +103,8 @@ namespace LeMinhHuy
 			teamOne.opponent = teamTwo;
 			teamTwo.opponent = teamOne;
 
-			teamOne.Initialize(parameters.teamOneSettings);
-			teamTwo.Initialize(parameters.teamTwoSettings);
+			teamOne.Initialize(settings.teamOneSettings);
+			teamTwo.Initialize(settings.teamTwoSettings);
 			CalculateAttackDirectionForEachTeam();
 
 			//Create ball
@@ -118,7 +121,7 @@ namespace LeMinhHuy
 		public void BeginRound()
 		{
 			//Guard
-			if (currentRound >= parameters.roundsPerMatch)
+			if (currentRound >= settings.roundsPerMatch)
 			{
 				EndRound();
 				return;
@@ -126,7 +129,7 @@ namespace LeMinhHuy
 
 			//Set match params
 			currentRound++;
-			currentRoundRemainingTime = parameters.startingRoundRemainingTime;
+			currentRoundRemainingTime = settings.startingRoundRemainingTime;
 
 			//Setup
 			ball.gameObject.SetActive(true);
@@ -140,8 +143,8 @@ namespace LeMinhHuy
 
 						//Switch stances (except for the first round)
 						if (currentRound == 1) break;
-						teamOne.strategy = parameters.defensiveStrategy;
-						teamTwo.strategy = parameters.offensiveStrategy;
+						teamOne.strategy = settings.defensiveStrategy;
+						teamTwo.strategy = settings.offensiveStrategy;
 					}
 					break;
 
@@ -152,8 +155,8 @@ namespace LeMinhHuy
 
 						//Switch stances (except for the first round)
 						if (currentRound == 1) break;
-						teamOne.strategy = parameters.offensiveStrategy;
-						teamTwo.strategy = parameters.defensiveStrategy;
+						teamOne.strategy = settings.offensiveStrategy;
+						teamTwo.strategy = settings.defensiveStrategy;
 					}
 					break;
 			}
@@ -197,9 +200,7 @@ namespace LeMinhHuy
 				currentRoundRemainingTime -= Time.deltaTime;
 
 				if (currentRoundRemainingTime <= 0)
-				{
 					EndRound();
-				}
 			}
 
 			//Update teams
@@ -208,8 +209,6 @@ namespace LeMinhHuy
 		}
 
 		//AI
-		WaitForSeconds waitOneSecond = new WaitForSeconds(1f);  //will always be one second
-
 		IEnumerator TickTeams()
 		{
 			while (true)
@@ -217,7 +216,7 @@ namespace LeMinhHuy
 				// Debug.Log("TickTeams()");
 				teamOne.Tick();
 				teamTwo.Tick();
-				yield return new WaitForSeconds(1f);
+				yield return waitOneSecond;
 			}
 		}
 

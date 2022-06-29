@@ -113,10 +113,10 @@ namespace LeMinhHuy
 				switch (settings.stance)
 				{
 					case Stance.Offensive:
-						this.strategy = gc.parameters.offensiveStrategy;
+						this.strategy = gc.settings.offensiveStrategy;
 						break;
 					case Stance.Defensive:
-						this.strategy = gc.parameters.defensiveStrategy;
+						this.strategy = gc.settings.defensiveStrategy;
 						break;
 					default:
 						throw new ArgumentException("Invalid stance!");
@@ -168,13 +168,13 @@ namespace LeMinhHuy
 			void handleEnergy()
 			{
 				// Debug.Log($"Energy: {energy}, MaxEnergy: {game.parameters.maxEnergy}");
-				if (energy < gc.parameters.maxEnergy)
+				if (energy < gc.settings.maxEnergy)
 				{
 					energy += Time.deltaTime * strategy.energyRegenRate;
 					onEnergyChange.Invoke(energy);
 
-					if (energy > gc.parameters.maxEnergy)
-						energy = gc.parameters.maxEnergy;
+					if (energy > gc.settings.maxEnergy)
+						energy = gc.settings.maxEnergy;
 				}
 			}
 		}
