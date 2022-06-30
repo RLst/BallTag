@@ -20,19 +20,25 @@ namespace LeMinhHuy
 		private MeshRenderer mr;
 		private CapsuleCollider col;
 		GameSettings settings;
+		Vector3 origScale;
 
 		void Awake()
 		{
 			mr = GetComponent<MeshRenderer>();
 			col = GetComponent<CapsuleCollider>();
 			settings = GameController.current.settings;
+			origScale = transform.localScale;
 		}
 		void Start()
 		{
 			Debug.Assert(owner is object, "Detector has no owner");
 
 			col.isTrigger = true;
+		}
 
+		void OnEnable()
+		{
+			this.transform.localScale = origScale;
 			//Set detector to the correct size
 			var scanWidth = settings.fieldWidth * owner.team.strategy.detectionRange;
 			this.transform.DOScaleX(scanWidth, 1f);
