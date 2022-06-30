@@ -15,9 +15,11 @@ namespace LeMinhHuy
 		Collider col;
 		Rigidbody rb;
 		Unit receiver;
+		Renderer r;
 
 		void Awake()
 		{
+			r = GetComponent<Renderer>();
 			col = GetComponent<Collider>();
 			rb = GetComponent<Rigidbody>();
 		}
@@ -25,6 +27,8 @@ namespace LeMinhHuy
 		{
 			SetActivatePhysics(true);
 		}
+		public void Hide() => r.enabled = false;
+		public void Show() => r.enabled = true;
 
 		/// <summary>
 		/// Deactivating physics will lock the ball in position ie. for carrying
@@ -43,7 +47,7 @@ namespace LeMinhHuy
 		/// <param name="receiver">Receiving unit on the same team</param>
 		public void Pass(Unit receiver)
 		{
-			print("Passing ball to " + receiver.name);
+			// print("Passing ball to " + receiver.name);
 			this.receiver = receiver;
 
 			//Calculate time required to move at the desired speed based on distance
@@ -55,7 +59,7 @@ namespace LeMinhHuy
 
 			//Calculate bounces based on distance
 			int bounces = Mathf.RoundToInt(distance / distancePerBounce);
-			print("Bounces: " + bounces);
+			// print("Bounces: " + bounces);
 
 			//Move towards receiving unit then make unit grab ball
 			transform.DOJump(receiver.transform.position, passHeight, bounces, time)
