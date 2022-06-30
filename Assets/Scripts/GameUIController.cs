@@ -123,7 +123,7 @@ namespace LeMinhHuy
 			}
 			else
 			{
-				teamTwoResults.text = $"{game.teamOne.name} {teamResults.result.ToString()}";
+				teamTwoResults.text = $"{game.teamTwo.name} {teamResults.result.ToString()}";
 				teamOneResults.text = $"{game.teamOne.name} {(teamResults.result == Result.Wins ? "Loses" : "Wins")}";
 			}
 		}

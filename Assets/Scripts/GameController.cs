@@ -79,7 +79,7 @@ namespace LeMinhHuy
 
 			//Register events
 			onBeginRound.AddListener(() => StartCoroutine(TickTeams()));
-			// onEndRound.AddListener(_ => StopAllCoroutines());
+			onEndRound.AddListener(_ => StopAllCoroutines());
 
 			teamOne.onScoreGoal.AddListener(EndRound);
 			teamOne.onNoActiveUnits.AddListener(EndRound);
@@ -184,16 +184,20 @@ namespace LeMinhHuy
 			//Guard
 			if (currentRound >= settings.roundsPerMatch)
 			{
-				throw new InvalidOperationException("Too many round!");
+				EndMatch();
 			}
 
-			//Set match params
+			//Increment next round
 			currentRound++;
+
+			//Reset timer
 			currentRoundRemainingTime = settings.startingRoundRemainingTime;
 
-			//Setup
-			ball.gameObject.SetActive(true);
+			//Reset and show the ball
+			ResetBall();
+			ball.Show();
 
+			//Launch ball on the offensive side (if there is one)
 			switch (teamOne.strategy.stance)
 			{
 				case Stance.Offensive:
@@ -201,11 +205,6 @@ namespace LeMinhHuy
 						//Launch ball
 						ball.transform.SetPositionAndRotation(teamOne.field.GetRandomLocationOnField(ballReleaseHeight), Quaternion.identity);
 						ball.Show();    //let the ball bounce
-
-						//Switch stances (except for the first round)
-						if (currentRound == 1) break;
-						teamOne.strategy = settings.defensiveStrategy;
-						teamTwo.strategy = settings.offensiveStrategy;
 					}
 					break;
 
@@ -214,14 +213,13 @@ namespace LeMinhHuy
 						//Launch ball
 						ball.transform.SetPositionAndRotation(teamTwo.field.GetRandomLocationOnField(ballReleaseHeight), Quaternion.identity);
 						ball.Show();
-
-						//Switch stances (except for the first round)
-						if (currentRound == 1) break;
-						teamOne.strategy = settings.offensiveStrategy;
-						teamTwo.strategy = settings.defensiveStrategy;
 					}
 					break;
 			}
+
+			//Clear all units from the playing field
+			teamOne.DespawnAllUnits();
+			teamTwo.DespawnAllUnits();
 
 			Debug.Log("Begin Round");
 			onBeginRound.Invoke();
@@ -273,6 +271,11 @@ namespace LeMinhHuy
 				teamResult.team.draws++;
 			}
 
+			//Switch team stances
+			var temp = teamOne.strategy;
+			teamOne.strategy = teamTwo.strategy;
+			teamTwo.strategy = temp;
+
 			Debug.Log("End Round");
 			onEndRound.Invoke(teamResult);
 		}
@@ -312,14 +315,13 @@ namespace LeMinhHuy
 		/// <summary>
 		/// Hide/despawn all units, balls or mazes
 		/// </summary>
-		public void Clear()
-		{
-			if (ball is object)
-				ball.gameObject.SetActive(false);
-			teamOne.DespawnAllUnits();
-			teamTwo.DespawnAllUnits();
-			//Clear maze
-		}
+		// public void Clear()
+		// {
+		// 	if (ball is object) ball.gameObject.SetActive(false);
+		// 	teamOne.DespawnAllUnits();
+		// 	teamTwo.DespawnAllUnits();
+		// 	//Clear maze
+		// }
 		#endregion
 
 

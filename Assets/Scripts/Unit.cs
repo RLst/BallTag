@@ -188,14 +188,14 @@ namespace LeMinhHuy
 					break;
 				case State.Inactive:
 					name = "Inactive (Offense)";
-					agent.SetDestination(transform.position);
+					if (agent.isOnNavMesh) agent.SetDestination(transform.position);
 					break;
 			}
 		}
 		void Chase()
 		{
 			name = "Chaser";
-			agent.SetDestination(ball.transform.position);
+			if (agent.isOnNavMesh) agent.SetDestination(ball.transform.position);
 			agent.speed = team.strategy.normalSpeed;
 			agent.radius = radiusNormal;
 			indicatorMoving.SetActive(true);
@@ -224,7 +224,7 @@ namespace LeMinhHuy
 		void Attack()
 		{
 			name = "Attacker";
-			agent.SetDestination(team.opponent.goal.target.transform.position);
+			if (agent.isOnNavMesh) agent.SetDestination(team.opponent.goal.target.transform.position);
 			agent.speed = team.strategy.dribbleSpeed;
 			agent.radius = radiusNormal;
 			HideAuxillaries();
@@ -233,7 +233,7 @@ namespace LeMinhHuy
 		void Advance()
 		{
 			name = "Advancer";
-			agent.SetDestination(transform.position + team.attackDirection * 10f);
+			if (agent.isOnNavMesh) agent.SetDestination(transform.position + team.attackDirection * 10f);
 			agent.speed = team.strategy.normalSpeed;
 			agent.radius = radiusPassthrough;
 			HideAuxillaries();
@@ -267,14 +267,14 @@ namespace LeMinhHuy
 		{
 			//Stand still and wait for ball to come
 			name = "Receiver";
-			agent.SetDestination(ball.transform.position);  //look at the ball
+			if (agent.isOnNavMesh) agent.SetDestination(ball.transform.position);  //look at the ball
 			agent.speed = team.strategy.normalSpeed * 0.5f;
 			agent.radius = radiusNormal;
 			HideAuxillaries();
 		}
 		void Tagout()
 		{
-			print($"{name} tagged out!");
+			// print($"{name} tagged out!");
 
 			//Unit has been tagged. Pass the ball to a nearby player then self deactivate
 			if (state != State.Attacking)
@@ -333,7 +333,7 @@ namespace LeMinhHuy
 			//Disable detector and start chasing the attacker
 			// longRangeDetector.SetActive(false);
 			name = "Defender";
-			agent.SetDestination(targetAttacker.transform.position);
+			if (agent.isOnNavMesh) agent.SetDestination(targetAttacker.transform.position);
 			agent.speed = team.strategy.normalSpeed;
 			HideAuxillaries();
 			indicatorMoving.SetActive(true);
