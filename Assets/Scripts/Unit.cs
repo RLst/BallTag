@@ -35,7 +35,7 @@ namespace LeMinhHuy
 		//AI
 		[Header("AI")]
 		[Tooltip("AI ticks per second")]
-		[SerializeField] float ticksPerSecond = 15f;     //Reduce CPU usage, save battery etc
+		[SerializeField] float ticksPerSecond = 5f;     //Reduce CPU usage, save battery etc
 		float tickRate => 1f / ticksPerSecond;
 		public State state = State.Starting;
 		[SerializeField] float radiusNormal = 0.65f;
@@ -65,7 +65,7 @@ namespace LeMinhHuy
 		Rigidbody rb;
 		Vector3 origin;   //Initial spawn location so it knows where to return to
 		Ball ball;     //Required to chase after the ball
-		private Unit targetAttacker;
+		Unit targetAttacker;    //The attacker you're trying to defend against
 
 		//UNITY
 		protected override void Init()
@@ -115,6 +115,7 @@ namespace LeMinhHuy
 			}
 		}
 
+
 		#region  AI
 		//AI tick cycle that runs as specified rate per second to reduce processing
 		void Tick()
@@ -141,7 +142,6 @@ namespace LeMinhHuy
 			}
 		}
 
-
 		void SetState(State newState)
 		{
 			if (this.state == newState)
@@ -158,8 +158,8 @@ namespace LeMinhHuy
 			switch (state)
 			{
 				case State.Starting:
+					hasBall = false;
 					HideAuxillaries();
-					//First thing unit should do is try chasing
 					SetState(State.Chasing);
 					break;
 				case State.Chasing:
@@ -281,7 +281,6 @@ namespace LeMinhHuy
 
 			PassBall();
 			Deactivate();
-			// Despawn();      //temp
 
 			onOut.Invoke();
 		}
@@ -293,6 +292,7 @@ namespace LeMinhHuy
 			switch (state)
 			{
 				case State.Starting:
+					hasBall = false;
 					HideAuxillaries();
 					SetState(State.Standby);
 					break;
@@ -314,6 +314,7 @@ namespace LeMinhHuy
 		{
 			//Enable and display unit detector and wait for an Attacker to come through
 			name = "Standby";
+			HideAuxillaries();
 			longRangeDetector.SetActive(true);
 		}
 		void OnInsideDetectionZone(Unit unit)
@@ -333,6 +334,8 @@ namespace LeMinhHuy
 			name = "Defender";
 			agent.SetDestination(targetAttacker.transform.position);
 			agent.speed = team.strategy.normalSpeed;
+			HideAuxillaries();
+			indicatorMoving.SetActive(true);
 		}
 		void OnUnitTouch(Unit other)
 		{
@@ -373,6 +376,9 @@ namespace LeMinhHuy
 		//Delay before they can move again And/or move back to their origin if defending
 		public void Deactivate(bool indefinite = false)
 		{
+			if (state == State.Despawning)
+				return;
+
 			SetColor(inactiveColor);
 			inactive = indefinite ? -1f : team.strategy.reactivationTime;
 
@@ -390,6 +396,13 @@ namespace LeMinhHuy
 		//Put back into the pool
 		public void Despawn()
 		{
+			//NOTE: Don't bring the ball with you!
+			if (hasBall)
+			{
+				ball.transform.SetParent(null);
+				hasBall = false;
+			}
+
 			team.DespawnUnit(this);
 			SetActive(false);
 			SetState(State.Despawning);
@@ -397,7 +410,7 @@ namespace LeMinhHuy
 
 		public override void SetColor(Color col)
 		{
-			renderer.material.DOKill();
+			// renderer.material.DOKill();
 			renderer.material.color = col;
 		}
 		#endregion
