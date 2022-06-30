@@ -1288,8 +1288,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   owner: {fileID: 6839786742684477955}
   onTriggerEnter: 1
-  onTriggerStay: 0
-  onTriggerExit: 0
+  onTriggerStay: 1
+  onTriggerExit: 1
 --- !u!1 &8175753517817970511
 GameObject:
   m_ObjectHideFlags: 0
