@@ -280,7 +280,6 @@ namespace LeMinhHuy
 				Debug.LogError("Non attacker tagged out! Error in logic");
 
 			PassBall();
-			// SetState(State)
 			Deactivate();
 			// Despawn();      //temp
 
@@ -377,7 +376,7 @@ namespace LeMinhHuy
 			SetColor(inactiveColor);
 			inactive = indefinite ? -1f : team.strategy.reactivationTime;
 
-			if (!agent.isOnNavMesh)
+			if (agent.isOnNavMesh)
 			{
 				agent.SetDestination(transform.position);       //Stop unit without turning off agent
 				agent.radius = radiusPassthrough;
@@ -404,7 +403,3 @@ namespace LeMinhHuy
 		#endregion
 	}
 }
-
-// if (Input.GetKeyDown(KeyCode.A)) Activate();
-// if (Input.GetKeyDown(KeyCode.D)) Deactivate();
-// if (Input.GetKeyDown(KeyCode.X)) Despawn();
