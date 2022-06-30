@@ -33,7 +33,6 @@ namespace LeMinhHuy
 		[SerializeField] float ballReleaseHeight = 10f;
 
 		[Header("AR")]
-		public ARSessionOrigin arSessionOrigin;
 		public ARRaycastManager arRaycastManager;
 
 		//Make these an array if you ever need more than two teams

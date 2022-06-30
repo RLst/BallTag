@@ -5,6 +5,7 @@ using UnityEngine.XR.ARFoundation;
 
 namespace LeMinhHuy
 {
+
 	public class ARCursorTest : MonoBehaviour
 	{
 		public GameObject cursorChildObject;
@@ -17,7 +18,9 @@ namespace LeMinhHuy
 		void Start()
 		{
 			cursorChildObject.SetActive(useCursor);
+			// planeManager.planesChanged += test;
 		}
+		// void test(ARPlanesChangedEventArgs args) { }
 
 		void Update()
 		{

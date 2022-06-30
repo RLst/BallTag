@@ -50,6 +50,9 @@ namespace LeMinhHuy
 			game.onBeginMatch.AddListener(BeginMatchUI);
 			game.onEndRound.AddListener(EndRoundUI);
 			game.onEndMatch.AddListener(EndMatchUI);
+
+			// game.teamOne.onEnergyChange.AddListener(teamOneEnergyBarInt.onValueChanged);
+			// game.teamOne.onEnergyChange.AddListener(teamOneEnergyBarFloat);
 		}
 		void OnDisable()
 		{
@@ -57,6 +60,11 @@ namespace LeMinhHuy
 			game.onEndRound.RemoveListener(EndRoundUI);
 			game.onEndMatch.RemoveListener(EndMatchUI);
 		}
+
+		// void OnEnergyChange()
+		// {
+		// 	teamOneEnergyBarInt.onc
+		// }
 
 		//Set up the UI, titles, names, colors etc
 		public void BeginMatchUI()

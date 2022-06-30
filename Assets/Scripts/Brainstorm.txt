@@ -2,6 +2,18 @@ Brainstorm
 ==========
 
 
+-----------
+AR Mode
+----------
+? How will switching work?
+Press the AR mode button on the home screen
+	Load AR scene
+		Scan for a suitable plane
+		when one is found, hover over the stadium
+		Tap to place the stadium and start the game
+
+
+
 ---------------------------
 Tag out sequence
 ----------------------
