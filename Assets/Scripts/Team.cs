@@ -47,11 +47,13 @@ namespace LeMinhHuy
 				return false;
 			}
 		}
+		internal bool hasActiveUnits => unitPool.countActive > 0;
 
 		//Events
 		[Space]
 		public FloatEvent onEnergyChange;
 		public UnityEvent onScoreGoal;
+		public UnityEvent onLostRound;
 		// public UnitEvent on
 
 		//Properties
@@ -164,6 +166,7 @@ namespace LeMinhHuy
 			energy -= strategy.spawnCost;
 			unit.SetTeam(this);    //Sets team, color, strategy
 			unit.Spawn();               //Set spawn time so it can do it's spawn sequence
+			unit.SetOrigin();
 			unit.SetActive(true);
 		}
 		void OnRecycleUnit(Unit unit)
@@ -249,6 +252,33 @@ namespace LeMinhHuy
 			}
 		}
 
+		public bool FindNearestUnit(Unit from, out Unit nearest)
+		{
+			nearest = null;
+			if (!hasActiveUnits) return false;
+
+			float minSqrDistance = float.MaxValue;
+
+			foreach (var to in units)
+			{
+				if (to.isActiveAndEnabled)
+				{
+					var sqrDist = Vector3.SqrMagnitude(to.transform.position - from.transform.position);
+					if (sqrDist < minSqrDistance)
+					{
+						minSqrDistance = sqrDist;
+						nearest = to;
+					}
+				}
+			}
+			return nearest is object;
+		}
+
+		public void NotifyNoUnitsLeftToPassBallTo()
+		{
+			//Basically you've lost
+			onLostRound.Invoke();
+		}
 
 		//INFO
 		bool TryGetRandomActiveUnit(out Unit randomActiveUnit)
