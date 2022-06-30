@@ -41,12 +41,14 @@ namespace LeMinhHuy
 			//Calculate time required to move at the desired speed based on distance
 			//Time = Distance / Speed
 			//Optimization note: This only happens once and not every frame so it's ok
-			var distance = Vector3.Distance(this.transform.position, receiver.hands.transform.position);
+			var distance = Vector3.Distance(this.transform.position, receiver.transform.position);
 			float speed = receiver.team.strategy.ballSpeed;
 			float time = distance / speed;
 
 			//Move towards receiving unit then make unit grab ball
-			transform.DOMove(receiver.transform.position, time).OnComplete(receiver.SeizeBall);
+			transform.
+				DOMove(receiver.transform.position, time).
+				OnComplete(receiver.ReceiveBall);
 		}
 	}
 }

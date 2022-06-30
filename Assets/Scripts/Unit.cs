@@ -151,6 +151,7 @@ namespace LeMinhHuy
 				return;
 			this.state = newState;
 
+			print($"{name}'s new state: {newState}");
 			onChangedState.Invoke(newState);
 		}
 
@@ -187,6 +188,12 @@ namespace LeMinhHuy
 				case State.Receiving:
 					Receive();
 					break;
+				case State.Inactive:
+					{
+						name = "Inactive (Offense)";
+						agent.SetDestination(transform.position);
+					}
+					break;
 			}
 		}
 		void Chase()
@@ -202,8 +209,7 @@ namespace LeMinhHuy
 			//Grab ball if chasing
 			if (state == State.Chasing || state == State.Receiving)
 			{
-				SeizeBall();
-				SetState(State.Attacking);
+				ReceiveBall();
 			}
 		}
 		public void SeizeBall()
@@ -211,6 +217,7 @@ namespace LeMinhHuy
 			//Grab ball and turn it off so it can't drift
 			hasBall = true;
 			ball.transform.SetParent(hands);
+			ball.transform.localPosition = Vector3.zero;
 			ball.SetActivatePhysics(active: false);
 		}
 		void Attack()
@@ -219,7 +226,6 @@ namespace LeMinhHuy
 			agent.SetDestination(team.opponent.goal.target.transform.position);
 			agent.speed = team.strategy.dribbleSpeed;
 			agent.radius = radiusNormal;
-
 			HideAuxillaries();
 			indicatorAttacking.SetActive(true);
 		}
@@ -229,31 +235,40 @@ namespace LeMinhHuy
 			agent.SetDestination(transform.position + team.attackDirection * 10f);
 			agent.speed = team.strategy.normalSpeed;
 			agent.radius = radiusPassthrough;
-
 			HideAuxillaries();
 			indicatorMoving.SetActive(true);
 		}
 		void PassBall()
 		{
+			// print("Passing ball");
 			//Pass to the nearest team member
-			if (team.FindNearestUnit(this, out Unit nearest))
+			if (team.FindNearestActiveUnit(this, out Unit nearest))
 			{
+				// print("Closest active unit found");
+				nearest.SetState(State.Receiving);
+				ball.transform.SetParent(game.transform);
 				ball.Pass(nearest);
 			}
 			//No active team members left, you have lost the round
 			else
 			{
+				print("No more active units found!");
 				team.NotifyNoUnitsLeftToPassBallTo();
 			}
+		}
+		public void ReceiveBall()
+		{
+			SeizeBall();
+			SetState(State.Attacking);
 		}
 		void Receive()
 		{
 			//Stand still and wait for ball to come
 			name = "Receiver";
 			agent.SetDestination(ball.transform.position);  //look at the ball
-			agent.speed = 0;
+			agent.speed = 0.1f;
 			agent.radius = radiusNormal;
-			indicatorAttacking.SetActive(false);
+			HideAuxillaries();
 		}
 		#endregion
 
@@ -317,7 +332,8 @@ namespace LeMinhHuy
 		}
 		void Tagout()
 		{
-			print("Unit tagged out!");
+			print($"{name} tagged out!");
+
 			//Unit has been tagged. Pass the ball to a nearby player then self deactivate
 			if (state != State.Attacking)
 				Debug.LogError("Non attacker tagged out! Error in logic");
@@ -358,6 +374,7 @@ namespace LeMinhHuy
 			SetColor(inactiveColor);
 			inactive = indefinite ? -1f : team.strategy.reactivationTime;
 			agent.radius = radiusPassthrough;
+			agent.SetDestination(transform.position);       //Stop unit without turning off
 			SetState(State.Inactive);
 			SetActive(true);
 			HideAuxillaries();

@@ -80,7 +80,10 @@ namespace LeMinhHuy
 
 			//Register events
 			teamOne.onScoreGoal.AddListener(EndRound);
+			teamOne.onLostRound.AddListener(EndRound);
+
 			teamTwo.onScoreGoal.AddListener(EndRound);
+			teamTwo.onLostRound.AddListener(EndRound);
 
 			if (playDemoOnStart) BeginDemo();
 		}
@@ -305,7 +308,7 @@ namespace LeMinhHuy
 		//AI
 		IEnumerator TickTeams()
 		{
-			Debug.Log("TickTeams()");
+			// Debug.Log("TickTeams()");
 			while (true)
 			{
 				teamOne.Tick();

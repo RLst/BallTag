@@ -1,8 +1,34 @@
 Brainstorm
 ==========
 
+
+---------------------------
+Tag out sequence
+----------------------
+Defender touches Attacker
+Defender tags Attacker out
+	Attacker passes ball to nearest Team mate
+		Attacker deactivates
+		Attacker passes ball
+		Attacker sets nearest team mate to receiver
+			Receiver stops and turns and faces the ball
+
+	If no one left then lose round
+
+
+Defender runs Attacker.TagOut()
+	Attacker.PassBall()
+		Team.FindNearestActiveUnit()
+
+
+
+
+
+
+
+----------------------------
 How to calculate the time required based on distance and speed
-==
+---------------------------
 Time = Distance / Speed
 
 

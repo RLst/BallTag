@@ -251,7 +251,7 @@ namespace LeMinhHuy
 			}
 		}
 
-		public bool FindNearestUnit(Unit from, out Unit nearest)
+		public bool FindNearestActiveUnit(Unit from, out Unit nearest)
 		{
 			nearest = null;
 			if (!hasActiveUnits) return false;
@@ -260,6 +260,10 @@ namespace LeMinhHuy
 
 			foreach (var to in units)
 			{
+				//NOTE: skip if it's the unit requesting
+				if (to == from)
+					continue;
+
 				if (to.isActiveAndEnabled)
 				{
 					var sqrDist = Vector3.SqrMagnitude(to.transform.position - from.transform.position);

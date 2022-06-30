@@ -19,7 +19,7 @@ MonoBehaviour:
   maxEnergy: 6
   offensiveStrategy:
     stance: 1
-    energyRegenRate: 0.5
+    energyRegenRate: 2
     spawnCost: 2
     spawnTime: 0.5
     AISpawnChance: 0.4
@@ -33,7 +33,7 @@ MonoBehaviour:
     minSpawnDistanceFromOwnGoal: 2
   defensiveStrategy:
     stance: 0
-    energyRegenRate: 0.5
+    energyRegenRate: 2
     spawnCost: 3
     spawnTime: 0.5
     AISpawnChance: 0.6
