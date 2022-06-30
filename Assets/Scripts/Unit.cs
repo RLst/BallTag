@@ -43,10 +43,10 @@ namespace LeMinhHuy
 
 		[Space]
 		[Tooltip("Where the player will hold the ball")]
-		[SerializeField] Transform hands = null;
+		public Transform hands = null;
 		[SerializeField] GameObject indicatorDirection = null;
 		[SerializeField] GameObject indicatorCarry = null;
-		[SerializeField] DetectionZone detectionZone = null;
+		[SerializeField] GameObject longRangeDetector = null;
 
 		[Header("Graphics")]
 		[SerializeField] Color inactiveColor = Color.green;
@@ -63,8 +63,9 @@ namespace LeMinhHuy
 		//Members
 		NavMeshAgent agent;
 		Rigidbody rb;
-		Transform origin;   //Initial spawn location so it knows where to return to
+		Vector3 origin;   //Initial spawn location so it knows where to return to
 		Ball ball;     //Required to chase after the ball
+		private Unit targetAttacker;
 
 		//UNITY
 		protected override void Init()
@@ -83,9 +84,13 @@ namespace LeMinhHuy
 			//Initial settings, hide indicators, when first instantiated
 			col.isTrigger = true;       //The agent collider will provide collision like behaviour?
 			rb.isKinematic = true;
+			HideAuxillaries();
+		}
+		void HideAuxillaries()
+		{
 			indicatorCarry.SetActive(false);
 			indicatorDirection.SetActive(false);
-			detectionZone.Hide();
+			longRangeDetector.SetActive(false);
 		}
 
 		void Update()
@@ -109,6 +114,7 @@ namespace LeMinhHuy
 		public void ScoreGoal(int amount = 1) => team.ScoreGoal(amount);
 		public bool isOpponent(Unit otherUnit) => !otherUnit.team.Equals(this.team);
 		public void SetActive(bool v) => gameObject.SetActive(v);
+		internal void SetOrigin() => origin = transform.position;
 
 
 		#region  AI
@@ -133,11 +139,14 @@ namespace LeMinhHuy
 					break;
 
 				default:
-					Debug.LogWarning("Invalid stance reached!");
+					Debug.LogWarning("Invalid stance!");
 					break;
 			}
+
 			// yield return new WaitForSeconds(tickRate);
 		}
+
+
 		void SetState(State newState)
 		{
 			if (this.state == newState)
@@ -148,12 +157,13 @@ namespace LeMinhHuy
 			onChangedState.Invoke(newState);
 		}
 
-		//OFFENSE
+		#region Offense
 		void PlayOffence()
 		{
 			switch (state)
 			{
 				case State.Starting:
+					HideAuxillaries();
 					//First thing unit should do is try chasing
 					SetState(State.Chasing);
 					break;
@@ -180,6 +190,10 @@ namespace LeMinhHuy
 					//Head towards the opponent in a straight line
 					Advance();
 					break;
+
+				case State.Receiving:
+					Receive();
+					break;
 			}
 		}
 		void Chase()
@@ -188,7 +202,16 @@ namespace LeMinhHuy
 			agent.speed = team.strategy.normalSpeed;
 			agent.radius = radiusNormal;
 		}
-		void SeizeBall()
+		void OnBallTouch()
+		{
+			//Grab ball if chasing
+			if (state == State.Chasing || state == State.Receiving)
+			{
+				SeizeBall();
+				SetState(State.Attacking);
+			}
+		}
+		public void SeizeBall()
 		{
 			//Grab ball and turn it off so it can't drift
 			hasBall = true;
@@ -207,16 +230,96 @@ namespace LeMinhHuy
 			agent.speed = team.strategy.normalSpeed;
 			agent.radius = radiusPassthrough;
 		}
-		void PassBall(Unit u)
+		void PassBall()
 		{
-			//Move towards player using ball's agent?
-
+			//Pass to the nearest team member
+			if (team.FindNearestUnit(this, out Unit nearest))
+			{
+				ball.Pass(nearest);
+			}
+			//No active team members left, you have lost the round
+			else
+			{
+				team.NotifyNoUnitsLeftToPassBallTo();
+			}
 		}
+		void Receive()
+		{
+			//Stand still and wait for ball to come
+			agent.SetDestination(ball.transform.position);  //look at the ball
+			agent.speed = 0;
+			agent.radius = radiusNormal;
+		}
+		#endregion
 
-		//DEFENSE
-		void PlayDefence() { }
-		void Standby() { }
-		void Defend() { }
+		#region Defence
+		void PlayDefence()
+		{
+			switch (state)
+			{
+				case State.Starting:
+					HideAuxillaries();
+					SetState(State.Standby);
+					break;
+
+				case State.Standby:
+					Standby();
+					break;
+
+				case State.Defending:
+					Defend();
+					break;
+			}
+		}
+		void Standby()
+		{
+			//Enable and display unit detector and wait for an Attacker to come through
+			longRangeDetector.SetActive(true);
+		}
+		void OnDetectionZoneEnter(Unit unit)
+		{
+			//If standing by and an Attacking unit enters then start Defending
+			if (unit.state == State.Attacking)
+			{
+				targetAttacker = unit;
+				longRangeDetector.SetActive(false);
+				SetState(State.Defending);
+			}
+		}
+		void Defend()
+		{
+			//Disable detector and start chasing the attacker
+			// longRangeDetector.SetActive(false);
+			agent.SetDestination(targetAttacker.transform.position);
+			agent.speed = team.strategy.normalSpeed;
+		}
+		void OnUnitTouch(Unit unit)
+		{
+			//If the unit touched is Attacker and this unit is Defending then Tag out
+			if (unit.state == State.Attacking && this.state == State.Defending)
+			{
+				unit.Tagout();
+
+				//Then deactivate ourselves too while moving back to our origin point
+				Deactivate();
+				agent.SetDestination(origin);
+				agent.speed = team.strategy.returnSpeed;
+
+				onTag.Invoke();
+			}
+		}
+		void Tagout()
+		{
+			//Unit has been tagged. Pass the ball to a nearby player then self deactivate
+			if (state != State.Attacking)
+				Debug.LogError("Non attacker tagged out! Error in logic");
+
+			PassBall();
+			Deactivate();
+
+			onOut.Invoke();
+		}
+		#endregion
 		#endregion
 
 
@@ -241,7 +344,7 @@ namespace LeMinhHuy
 
 		//Inactive units are dark/translucent, can be passed through, visible
 		//Delay before they can move again And/or move back to their origin if defending
-		public void Deactivate(bool indefinite)
+		public void Deactivate(bool indefinite = false)
 		{
 			SetColor(inactiveColor);
 			inactive = indefinite ? -1f : team.strategy.reactivationTime;
@@ -265,21 +368,6 @@ namespace LeMinhHuy
 			renderer.material.color = col;
 		}
 		#endregion
-
-
-		//COLLISIONS
-		void OnDetectionZoneEnter(Unit unit)
-		{
-		}
-		void OnBallTouch()
-		{
-			//Grab ball if chasing
-			if (state == State.Chasing || state == State.Receiving)
-			{
-				SeizeBall();
-				SetState(State.Attacking);
-			}
-		}
 	}
 }
 

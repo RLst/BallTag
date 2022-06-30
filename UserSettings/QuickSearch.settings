@@ -16,12 +16,17 @@ filters = {
 	asset = true
 }
 scopes = {
-	"last_search.AB59B443" = ""
+	"last_search.AB59B443" = "unit"
 }
 providers = {
 	asset = {
 		active = true
 		priority = 25
+		defaultAction = null
+	}
+	res = {
+		active = true
+		priority = 100
 		defaultAction = null
 	}
 	query = {
@@ -34,6 +39,16 @@ providers = {
 		priority = 55
 		defaultAction = null
 	}
+	calculator = {
+		active = true
+		priority = 10
+		defaultAction = null
+	}
+	menu = {
+		active = true
+		priority = 80
+		defaultAction = null
+	}
 	scene = {
 		active = true
 		priority = 50
@@ -44,19 +59,9 @@ providers = {
 		priority = 90
 		defaultAction = null
 	}
-	log = {
-		active = false
-		priority = 210
-		defaultAction = null
-	}
-	menu = {
+	static_methods = {
 		active = true
-		priority = 80
-		defaultAction = null
-	}
-	settings = {
-		active = true
-		priority = 100
+		priority = 85
 		defaultAction = null
 	}
 	help = {
@@ -64,19 +69,14 @@ providers = {
 		priority = -1
 		defaultAction = null
 	}
-	calculator = {
-		active = true
-		priority = 10
-		defaultAction = null
-	}
-	static_methods = {
-		active = true
-		priority = 85
-		defaultAction = null
-	}
-	res = {
+	settings = {
 		active = true
 		priority = 100
+		defaultAction = null
+	}
+	log = {
+		active = false
+		priority = 210
 		defaultAction = null
 	}
 }
