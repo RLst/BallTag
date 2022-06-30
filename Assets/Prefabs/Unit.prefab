@@ -1138,7 +1138,7 @@ NavMeshAgent:
   m_AgentTypeID: 0
   m_Radius: 0.05
   m_Speed: 1
-  m_Acceleration: 10
+  m_Acceleration: 25
   avoidancePriority: 50
   m_AngularSpeed: 900
   m_StoppingDistance: 0
@@ -1148,7 +1148,7 @@ NavMeshAgent:
   m_Height: 2
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 1
+  m_ObstacleAvoidanceType: 2
 --- !u!54 &-1585036364189736884
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1288,7 +1288,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   owner: {fileID: 6839786742684477955}
   onTriggerEnter: 1
-  onTriggerStay: 1
+  onTriggerStay: 0
   onTriggerExit: 0
 --- !u!1 &8175753517817970511
 GameObject:
