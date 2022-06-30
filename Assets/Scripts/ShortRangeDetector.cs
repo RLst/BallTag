@@ -15,26 +15,25 @@ namespace LeMinhHuy
 		[SerializeField] bool onTriggerExit = false;
 
 		Collider col;
-		void Awake()
-		{
-			col = GetComponent<Collider>();
-		}
+		void Awake() => col = GetComponent<Collider>();
 
+		//Seems units need higher priority
 		void OnTriggerEnter(Collider other)
 		{
 			if (!onTriggerEnter) return;
 
-			MonoBehaviour hit = other.GetComponent<Ball>();
-			if (hit is Ball)
+			MonoBehaviour hit = other.GetComponent<MonoBehaviour>();
+			switch (hit)
 			{
-				SendMessageUpwards("OnBallTouch");
-				return;
-			}
-			hit = other.GetComponent<Unit>();
-			if (hit is Unit)
-			{
-				SendMessageUpwards("OnUnitTouch", hit);
-				return;
+				case Unit u:
+					// print("SRD: Unit hit!");
+					SendMessageUpwards("OnUnitTouch", u);
+					break;
+
+				case Ball b:
+					// print("SRD: Ball hit!");
+					SendMessageUpwards("OnBallTouch");
+					break;
 			}
 		}
 
@@ -42,17 +41,18 @@ namespace LeMinhHuy
 		{
 			if (!onTriggerStay) return;
 
-			MonoBehaviour hit = other.GetComponent<Ball>();
-			if (hit is Ball)
+			MonoBehaviour hit = other.GetComponent<MonoBehaviour>();
+			switch (hit)
 			{
-				SendMessageUpwards("OnBallTouch");
-				return;
-			}
-			hit = other.GetComponent<Unit>();
-			if (hit is Unit)
-			{
-				SendMessageUpwards("OnUnitTouch", hit);
-				return;
+				case Unit u:
+					// print("SRD: Unit hit!");
+					SendMessageUpwards("OnUnitTouch", u);
+					break;
+
+				case Ball b:
+					// print("SRD: Ball hit!");
+					SendMessageUpwards("OnBallTouch");
+					break;
 			}
 		}
 
@@ -60,17 +60,18 @@ namespace LeMinhHuy
 		{
 			if (!onTriggerExit) return;
 
-			MonoBehaviour hit = other.GetComponent<Ball>();
-			if (hit is Ball)
+			MonoBehaviour hit = other.GetComponent<MonoBehaviour>();
+			switch (hit)
 			{
-				SendMessageUpwards("OnBallTouch");
-				return;
-			}
-			hit = other.GetComponent<Unit>();
-			if (hit is Unit)
-			{
-				SendMessageUpwards("OnUnitTouch", hit);
-				return;
+				case Unit u:
+					// print("SRD: Unit hit!");
+					SendMessageUpwards("OnUnitTouch", u);
+					break;
+
+				case Ball b:
+					// print("SRD: Ball hit!");
+					SendMessageUpwards("OnBallTouch");
+					break;
 			}
 		}
 	}
