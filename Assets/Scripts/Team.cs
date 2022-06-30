@@ -66,9 +66,9 @@ namespace LeMinhHuy
 		#region Stats
 		//Maybe make these into a struct
 		public int goals { get; private set; }
-		public int roundsWon { get; set; }
-		public int roundDraw { get; set; }
-		public int roundLost { get; set; }
+		public int wins { get; set; }
+		public int draws { get; set; }
+		public int losses { get; set; }
 		public int tags { get; set; }   //Opponents caught
 		public int outs { get; set; }    //Team members that got caught
 		public int ballPasses { get; set; }
@@ -77,9 +77,9 @@ namespace LeMinhHuy
 		{
 			//Stats
 			goals = 0;
-			roundsWon = 0;
-			roundDraw = 0;
-			roundLost = 0;
+			wins = 0;
+			draws = 0;
+			losses = 0;
 			tags = 0;
 			outs = 0;
 			ballPasses = 0;
@@ -92,7 +92,7 @@ namespace LeMinhHuy
 		public void ScoreGoal(int amount = 1)
 		{
 			goals += amount;
-			onScoreGoal.Invoke();
+			onScoreGoal.Invoke();   //End round etc
 		}
 		#endregion
 
@@ -178,7 +178,6 @@ namespace LeMinhHuy
 
 			void handleEnergy()
 			{
-				// Debug.Log($"Energy: {energy}, MaxEnergy: {game.parameters.maxEnergy}");
 				if (energy < gc.settings.maxEnergy)
 				{
 					energy += Time.deltaTime * strategy.energyRegenRate;
@@ -220,12 +219,12 @@ namespace LeMinhHuy
 						//Spawn at a random point on a ray going from our goal to a random opponent attacker
 						if (opponent.activeUnits.HasValue && opponent.activeUnits > 0 && opponent.TryGetRandomActiveUnit(out Unit attacker))
 						{
-							//Find random attacker ^
+							//Find random attacker ^^^^
 
 							//Find ray going from goal to random attacker
 							// Debug.Log("Goal: " + goal.name, goal);
 							var ray = new Ray(goal.target.position, attacker.transform.position - goal.target.position);
-							Debug.DrawRay(ray.origin, ray.direction * 10f, Color.red, 10f);
+							Debug.DrawRay(ray.origin, ray.direction * 40, Color.red, 10f);
 
 							//Choose a random location that's not too close to our goal and between the attacker
 							var randomSpawnPoint = ray.GetPoint(UnityEngine.Random.Range(strategy.minSpawnDistanceFromOwnGoal, Vector3.Distance(goal.target.position, attacker.transform.position)));
@@ -246,6 +245,7 @@ namespace LeMinhHuy
 					break;
 			}
 		}
+
 
 		//INFO
 		bool TryGetRandomActiveUnit(out Unit randomActiveUnit)
@@ -268,15 +268,6 @@ namespace LeMinhHuy
 		#endregion
 
 		#region Spawning
-		internal void TrySpawnUnitOnRandomPositionOnField()
-		{
-			//Used when
-		}
-
-		internal void SpawnUnitDistanceFromOpponentUnit(Unit opponent, float distance)
-		{
-		}
-
 		/// <summary>
 		/// Spawns a unit at the specified click/touch point on screen
 		/// </summary>
@@ -342,6 +333,12 @@ namespace LeMinhHuy
 			spawn.transform.SetPositionAndRotation(point, Quaternion.LookRotation(attackDirection, Vector3.up));
 
 			return true;
+		}
+
+		public void DeactivateAllUnits()
+		{
+			foreach (var u in units)
+				u.Deactivate();
 		}
 
 		//DESPAWN and put back into the object pool

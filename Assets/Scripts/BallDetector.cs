@@ -13,7 +13,7 @@ namespace LeMinhHuy
 			var hit = other.GetComponent<Ball>();
 			if (hit is Ball)
 			{
-				SendMessageUpwards("OnBallTouch", hit as Ball);
+				SendMessageUpwards("OnBallTouch");
 			}
 		}
 
@@ -22,7 +22,7 @@ namespace LeMinhHuy
 			var hit = other.GetComponent<Ball>();
 			if (hit is Ball)
 			{
-				SendMessageUpwards("OnBallTouch", hit as Ball);
+				SendMessageUpwards("OnBallTouch");
 			}
 		}
 	}

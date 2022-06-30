@@ -18,11 +18,12 @@ namespace LeMinhHuy
 		public enum State
 		{
 			Starting,       //Set this as the default. This unit will figure out what to do
-			Attacking,      //Heading towards opponent's goal
-			Defending,      //Heading towards opponent with ball
 			Chasing,        //Heading towards the ball
+			Attacking,      //Heading towards opponent's goal
 			Advancing,      //Advancing in the direction of the opponents
+			Receiving,      //Waiting and Receiving a ball
 			Standby,        //Waiting for attackers
+			Defending,      //Heading towards opponent with ball
 			Inactive,       //Caught and waiting for reactivation / moving back to origin
 			Despawned,      //Hit the end of the fence
 		}
@@ -147,7 +148,7 @@ namespace LeMinhHuy
 			onChangedState.Invoke(newState);
 		}
 
-
+		//OFFENSE
 		void PlayOffence()
 		{
 			switch (state)
@@ -200,7 +201,7 @@ namespace LeMinhHuy
 		}
 		void Advance()
 		{
-			agent.SetDestination(team.attackDirection * 10f);
+			agent.SetDestination(transform.position + team.attackDirection * 10f);
 			agent.speed = team.strategy.normalSpeed;
 		}
 		void PassBall(Unit u)
@@ -209,7 +210,7 @@ namespace LeMinhHuy
 
 		}
 
-
+		//DEFENSE
 		void PlayDefence() { }
 		void Standby() { }
 		void Defend() { }
@@ -224,9 +225,6 @@ namespace LeMinhHuy
 			agent.radius = radiusPassthrough;
 			inactive = team.strategy.spawnTime;
 			SetActive(true);
-			// renderer.material.
-			// 	DOColor(team.color, team.strategy.spawnTime).
-			// 	OnComplete(Activate);
 		}
 
 		//Active units are team colored, can't be walked through, visible
@@ -254,6 +252,7 @@ namespace LeMinhHuy
 		{
 			team.DespawnUnit(this);
 			SetActive(false);
+			SetState(State.Despawned);
 		}
 
 		public override void SetColor(Color col)
@@ -268,12 +267,7 @@ namespace LeMinhHuy
 		void OnDetectionZoneEnter(Unit unit)
 		{
 		}
-		void OnTriggerEnter(Collider other)
-		{
-			var ball = other.GetComponent<Ball>();
-			var unit = other.GetComponent<Unit>();
-		}
-		void OnBallTouch(Ball ball)
+		void OnBallTouch()
 		{
 			//Grab ball if chasing
 			if (state == State.Chasing)
