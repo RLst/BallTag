@@ -61,24 +61,28 @@ namespace LeMinhHuy
 			teamOneDetails.text = $"{game.teamOne.name}: {game.teamOne.strategy.stance.ToString()}";
 			teamTwoDetails.text = $"{game.teamTwo.name}: {game.teamTwo.strategy.stance.ToString()}";
 
-			//Energy bars
+			//Energy bars; set color, max values
 			//Team 1
 			ColorBlock temp = teamOneEnergyBarFloat.colors;
 			temp.disabledColor = new Color(game.teamOne.color.r, game.teamOne.color.g, game.teamOne.color.b, floatGaugeAlpha);
 			teamOneEnergyBarFloat.colors = temp;
+			teamOneEnergyBarFloat.maxValue = game.settings.maxEnergy;
 
 			temp = teamOneEnergyBarInt.colors;
 			temp.disabledColor = game.teamOne.color;
 			teamOneEnergyBarInt.colors = temp;
+			teamOneEnergyBarInt.maxValue = game.settings.maxEnergy;
 
 			//Team 2
 			temp = teamTwoEnergyBarFloat.colors;
 			temp.disabledColor = new Color(game.teamTwo.color.r, game.teamTwo.color.g, game.teamTwo.color.b, floatGaugeAlpha);
 			teamTwoEnergyBarFloat.colors = temp;
+			teamTwoEnergyBarFloat.maxValue = game.settings.maxEnergy;
 
 			temp = teamTwoEnergyBarInt.colors;
 			temp.disabledColor = game.teamTwo.color;
 			teamTwoEnergyBarInt.colors = temp;
+			teamTwoEnergyBarInt.maxValue = game.settings.maxEnergy;
 		}
 
 		public void BeginRoundUI()
