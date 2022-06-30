@@ -15,14 +15,9 @@ Defender tags Attacker out
 
 	If no one left then lose round
 
-
 Defender runs Attacker.TagOut()
 	Attacker.PassBall()
 		Team.FindNearestActiveUnit()
-
-
-
-
 
 
 

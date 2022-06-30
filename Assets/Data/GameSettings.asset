@@ -19,7 +19,7 @@ MonoBehaviour:
   maxEnergy: 6
   offensiveStrategy:
     stance: 1
-    energyRegenRate: 2
+    energyRegenRate: 0.5
     spawnCost: 2
     spawnTime: 0.5
     AISpawnChance: 0.4
@@ -33,7 +33,7 @@ MonoBehaviour:
     minSpawnDistanceFromOwnGoal: 2
   defensiveStrategy:
     stance: 0
-    energyRegenRate: 2
+    energyRegenRate: 0.5
     spawnCost: 3
     spawnTime: 0.5
     AISpawnChance: 0.6
@@ -47,7 +47,7 @@ MonoBehaviour:
     minSpawnDistanceFromOwnGoal: 2
   teamOneSettings:
     name: Southerners
-    color: {r: 1, g: 0.74013734, b: 0.30588233, a: 1}
+    color: {r: 0.30588233, g: 0.6066667, b: 1, a: 1}
     userType: 0
     stance: 1
   teamTwoSettings:

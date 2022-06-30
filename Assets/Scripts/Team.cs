@@ -220,25 +220,25 @@ namespace LeMinhHuy
 
 				case Stance.Defensive:
 					{
-						//If opponent has active units
-						//Spawn at a random point on a ray going from our goal to a random opponent attacker
-						if (opponent.activeUnits.HasValue && opponent.activeUnits > 0 && opponent.TryGetRandomActiveUnit(out Unit attacker))
+						//If opponent has attacking units
+						//Spawn at a defensive position between attacker and our own goal;
+						//Pick a random point on a ray going from our goal to a random opponent attacker
+						if (opponent.activeUnits.HasValue &&
+							opponent.activeUnits > 0 &&
+							opponent.TryGetActiveUnitByState(Unit.State.Attacking, out Unit attacker))
 						{
-							//Find random attacker ^^^^
-
 							//Find ray going from goal to random attacker
-							// Debug.Log("Goal: " + goal.name, goal);
 							var ray = new Ray(goal.target.position, attacker.transform.position - goal.target.position);
 							Debug.DrawRay(ray.origin, ray.direction * 40, Color.red, 10f);
 
 							//Choose a random location that's not too close to our goal and between the attacker
-							var randomSpawnPoint = ray.GetPoint(UnityEngine.Random.Range(strategy.minSpawnDistanceFromOwnGoal, Vector3.Distance(goal.target.position, attacker.transform.position)));
+							var randomSpawnPointAlongRay = ray.GetPoint(UnityEngine.Random.Range(strategy.minSpawnDistanceFromOwnGoal, Vector3.Distance(goal.target.position, attacker.transform.position)));
 
 							//Clamp within our field
-							randomSpawnPoint = this.field.collider.ClosestPoint(randomSpawnPoint);
+							randomSpawnPointAlongRay = this.field.collider.ClosestPoint(randomSpawnPointAlongRay);
 
 							//Spawn
-							SpawnUnit(randomSpawnPoint);
+							SpawnUnit(randomSpawnPointAlongRay);
 						}
 						//else spawn at a random location based on specific chance
 						else
@@ -251,6 +251,13 @@ namespace LeMinhHuy
 			}
 		}
 
+		/// <summary>
+		/// Finds the nearest ACTIVE unit on the same team
+		/// Unit will not be
+		/// </summary>
+		/// <param name="from">The unit requesting</param>
+		/// <param name="nearest">The nearest active unit found</param>
+		/// <returns>Returns false if none found</returns>
 		public bool FindNearestActiveUnit(Unit from, out Unit nearest)
 		{
 			nearest = null;
@@ -262,6 +269,8 @@ namespace LeMinhHuy
 			{
 				//NOTE: skip if it's the unit requesting
 				if (to == from)
+					continue;
+				if (to.state == Unit.State.Inactive || to.state == Unit.State.Despawning)
 					continue;
 
 				if (to.isActiveAndEnabled)
@@ -284,22 +293,25 @@ namespace LeMinhHuy
 		}
 
 		//INFO
-		bool TryGetRandomActiveUnit(out Unit randomActiveUnit)
+		bool TryGetActiveUnitByState(Unit.State state, out Unit randomUnit)
 		{
 			//Exit if there aren't any active units to prevent freeze
 			if (unitPool.countActive == 0 || units.Count == 0)
 			{
-				randomActiveUnit = null;
+				randomUnit = null;
 				return false;
 			}
 
-			//Keep trying to find a random active attacker
+			//Keep trying to find a random active unit based on it's state
 			do
 			{
-				randomActiveUnit = units[UnityEngine.Random.Range(0, units.Count)];
-			} while (randomActiveUnit is null);
+				randomUnit = units[UnityEngine.Random.Range(0, units.Count)];
+				if (randomUnit.state != state)
+					continue;
 
-			return (randomActiveUnit is object);
+			} while (randomUnit is null);
+
+			return (randomUnit is object);
 		}
 		#endregion
 

@@ -25,7 +25,7 @@ namespace LeMinhHuy
 			Standby,        //Waiting for attackers
 			Defending,      //Heading towards opponent with ball
 			Inactive,       //Caught and waiting for reactivation / moving back to origin
-			Despawned,      //Hit the end of the fence
+			Despawning,      //Hit the end of the fence
 		}
 
 		//Inspector
@@ -92,6 +92,11 @@ namespace LeMinhHuy
 			indicatorMoving.SetActive(false);
 			longRangeDetector.SetActive(false);
 		}
+		public void ScoreGoal(int amount = 1) => team.ScoreGoal(amount);
+		public bool isOpponent(Unit otherUnit) => !otherUnit.team.Equals(this.team);
+		public void SetActive(bool v) => gameObject.SetActive(v);
+		internal void SetOrigin() => origin = transform.position;
+
 
 		void Update()
 		{
@@ -110,13 +115,6 @@ namespace LeMinhHuy
 			}
 		}
 
-
-		public void ScoreGoal(int amount = 1) => team.ScoreGoal(amount);
-		public bool isOpponent(Unit otherUnit) => !otherUnit.team.Equals(this.team);
-		public void SetActive(bool v) => gameObject.SetActive(v);
-		internal void SetOrigin() => origin = transform.position;
-
-
 		#region  AI
 		//AI tick cycle that runs as specified rate per second to reduce processing
 		void Tick()
@@ -124,6 +122,7 @@ namespace LeMinhHuy
 			//Don't tick if inactive
 			if (inactive > 0f)
 				return;
+
 			//This tick will be run right at instantiate when a team has yet to be assigned
 			if (team is null)
 				return;
@@ -140,8 +139,6 @@ namespace LeMinhHuy
 					Debug.LogWarning("Invalid stance!");
 					break;
 			}
-
-			// yield return new WaitForSeconds(tickRate);
 		}
 
 
@@ -151,7 +148,7 @@ namespace LeMinhHuy
 				return;
 			this.state = newState;
 
-			print($"{name}'s new state: {newState}");
+			// print($"{name}'s new state: {newState}");
 			onChangedState.Invoke(newState);
 		}
 
@@ -189,10 +186,8 @@ namespace LeMinhHuy
 					Receive();
 					break;
 				case State.Inactive:
-					{
-						name = "Inactive (Offense)";
-						agent.SetDestination(transform.position);
-					}
+					name = "Inactive (Offense)";
+					agent.SetDestination(transform.position);
 					break;
 			}
 		}
@@ -207,8 +202,14 @@ namespace LeMinhHuy
 		void OnBallTouch()
 		{
 			//Grab ball if chasing
-			if (state == State.Chasing || state == State.Receiving)
+			if (state == State.Chasing)
 			{
+				ReceiveBall();
+			}
+			else if (state == State.Receiving)
+			{
+				// print("Ball caught!");
+				ball.transform.DOKill();    //"Catch" the ball
 				ReceiveBall();
 			}
 		}
@@ -266,9 +267,24 @@ namespace LeMinhHuy
 			//Stand still and wait for ball to come
 			name = "Receiver";
 			agent.SetDestination(ball.transform.position);  //look at the ball
-			agent.speed = 0.1f;
+			agent.speed = team.strategy.normalSpeed * 0.5f;
 			agent.radius = radiusNormal;
 			HideAuxillaries();
+		}
+		void Tagout()
+		{
+			print($"{name} tagged out!");
+
+			//Unit has been tagged. Pass the ball to a nearby player then self deactivate
+			if (state != State.Attacking)
+				Debug.LogError("Non attacker tagged out! Error in logic");
+
+			PassBall();
+			// SetState(State)
+			Deactivate();
+			// Despawn();      //temp
+
+			onOut.Invoke();
 		}
 		#endregion
 
@@ -286,6 +302,12 @@ namespace LeMinhHuy
 					break;
 				case State.Defending:
 					Defend();
+					break;
+				case State.Inactive:
+					name = "Inactive (Defense)";
+					//Move back towards origin after tagging someone out
+					agent.SetDestination(origin);
+					agent.speed = team.strategy.returnSpeed;
 					break;
 			}
 		}
@@ -315,33 +337,15 @@ namespace LeMinhHuy
 		}
 		void OnUnitTouch(Unit other)
 		{
-			print($"{name} touches {other.name}");
-
+			// print($"{name} touches {other.name}");
 			//If the unit touched is Attacker and this unit is Defending then Tag out
 			if (other.state == State.Attacking && this.state == State.Defending)
 			{
 				other.Tagout();
-
-				//Then deactivate ourselves too while moving back to our origin point
 				Deactivate();
-				agent.SetDestination(origin);
-				agent.speed = team.strategy.returnSpeed;
 
 				onTag.Invoke();
 			}
-		}
-		void Tagout()
-		{
-			print($"{name} tagged out!");
-
-			//Unit has been tagged. Pass the ball to a nearby player then self deactivate
-			if (state != State.Attacking)
-				Debug.LogError("Non attacker tagged out! Error in logic");
-
-			PassBall();
-			Deactivate();
-
-			onOut.Invoke();
 		}
 		#endregion
 		#endregion
@@ -370,11 +374,14 @@ namespace LeMinhHuy
 		//Delay before they can move again And/or move back to their origin if defending
 		public void Deactivate(bool indefinite = false)
 		{
-			name = "Inactive";
 			SetColor(inactiveColor);
 			inactive = indefinite ? -1f : team.strategy.reactivationTime;
-			agent.radius = radiusPassthrough;
-			agent.SetDestination(transform.position);       //Stop unit without turning off
+
+			if (!agent.isOnNavMesh)
+			{
+				agent.SetDestination(transform.position);       //Stop unit without turning off agent
+				agent.radius = radiusPassthrough;
+			}
 			SetState(State.Inactive);
 			SetActive(true);
 			HideAuxillaries();
@@ -386,7 +393,7 @@ namespace LeMinhHuy
 		{
 			team.DespawnUnit(this);
 			SetActive(false);
-			SetState(State.Despawned);
+			SetState(State.Despawning);
 		}
 
 		public override void SetColor(Color col)
