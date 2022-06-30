@@ -28,8 +28,9 @@ namespace LeMinhHuy
 		public virtual void SetTeam(Team team)
 		{
 			this.team = team;
-			SetColor(team.color);
+			SetColor();
 		}
+		public void SetColor() => SetColor(team.color);
 		public virtual void SetColor(Color col) => GetComponent<Renderer>().material.color = col;
 	}
 }

@@ -3352,7 +3352,7 @@ GameObject:
   - component: {fileID: 701153446}
   - component: {fileID: 701153447}
   m_Layer: 0
-  m_Name: <GameController>
+  m_Name: '[GameController]'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3397,7 +3397,7 @@ MonoBehaviour:
   arRaycastManager: {fileID: 0}
   teamOne:
     name: AI One
-    color: {r: 1, g: 0.31699997, b: 0.31699997, a: 1}
+    color: {r: 0.8941177, g: 0.30980393, b: 0.3137255, a: 1}
     userType: 1
     strategy:
       stance: 1
@@ -3461,7 +3461,7 @@ MonoBehaviour:
           m_CallState: 2
   teamTwo:
     name: AI Two
-    color: {r: 1, g: 0.71341777, b: 0, a: 1}
+    color: {r: 0.13725491, g: 0.6156863, b: 0.8941177, a: 1}
     userType: 1
     strategy:
       stance: 0
@@ -6134,7 +6134,7 @@ GameObject:
   - component: {fileID: 946896441}
   - component: {fileID: 946896440}
   m_Layer: 5
-  m_Name: '[DEBUG UI]'
+  m_Name: <DEBUG UI>
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

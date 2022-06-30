@@ -93,20 +93,24 @@ namespace LeMinhHuy
 					hueMin: 0f, hueMax: 1f,
 					saturationMin: 0.55f, saturationMax: 0.65f,
 					valueMin: 0.9f, valueMax: 1f);
+			teamOne.Awake();
+			teamOne.InitTeamObjects();
+
 			teamTwo.color = UnityEngine.Random.ColorHSV(
 					hueMin: 0f, hueMax: 1f,
 					saturationMin: 0.55f, saturationMax: 0.65f,
 					valueMin: 0.9f, valueMax: 1f);
+			teamTwo.Awake();
+			teamTwo.InitTeamObjects();
 
-			// CalculateAttackDirectionForEachTeam();	//should already be done
+			CalculateAttackDirectionForEachTeam();  //should already be done
 			if (ball is null)
 				ball = Instantiate<Ball>(ballPrefab, this.transform);
+
 			SetOpponents();
-			InitTeams();
 			BeginRound();
 			print("Playing demo");
 		}
-
 
 		#region Gameplay
 		/// <summary>

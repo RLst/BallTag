@@ -98,7 +98,7 @@ namespace LeMinhHuy
 
 
 		//INITS
-		void Awake()
+		public void Awake()
 		{
 			this.gc = GameController.current;
 			arRaycastManager = this.gc.arRaycastManager;
@@ -110,7 +110,7 @@ namespace LeMinhHuy
 
 			setParameters();
 
-			initTeamObjects();
+			InitTeamObjects();
 
 			InitUnitPool();
 
@@ -135,11 +135,11 @@ namespace LeMinhHuy
 				}
 			}
 			//Setup team objects and color
-			void initTeamObjects()
-			{
-				foreach (var to in teamObjects)
-					to.SetTeam(this);
-			}
+		}
+		internal void InitTeamObjects()
+		{
+			foreach (var to in teamObjects)
+				to.SetTeam(this);
 		}
 
 		#region Pooling
