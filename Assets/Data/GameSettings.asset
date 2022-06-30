@@ -26,7 +26,7 @@ MonoBehaviour:
     reactivationTime: 2.5
     baseSpeed: 5
     normalSpeedMult: 1.5
-    dribbleSpeedMult: 0.75
+    dribbleSpeedMult: 0.3
     ballSpeedMult: 1.5
     returnSpeedMult: 2
     detectionRange: 0.35

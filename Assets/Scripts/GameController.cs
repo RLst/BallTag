@@ -192,7 +192,7 @@ namespace LeMinhHuy
 					{
 						//Launch ball
 						ball.transform.SetPositionAndRotation(teamOne.field.GetRandomLocationOnField(10f), Quaternion.identity);
-						ball.OnEnable();    //let the ball bounce
+						// ball.OnEnable();    //let the ball bounce
 
 						//Switch stances (except for the first round)
 						if (currentRound == 1) break;
@@ -205,7 +205,7 @@ namespace LeMinhHuy
 					{
 						//Launch ball
 						ball.transform.SetPositionAndRotation(teamTwo.field.GetRandomLocationOnField(10f), Quaternion.identity);
-						ball.OnEnable();
+						// ball.OnEnable();
 
 						//Switch stances (except for the first round)
 						if (currentRound == 1) break;

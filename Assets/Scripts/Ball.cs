@@ -24,6 +24,10 @@ namespace LeMinhHuy
 			rb = GetComponent<Rigidbody>();
 			// agent = GetComponent<NavMeshAgent>();
 		}
+		void Start()
+		{
+			SetActivatePhysics(true);
+		}
 
 		// public void OnEnable()
 		// {

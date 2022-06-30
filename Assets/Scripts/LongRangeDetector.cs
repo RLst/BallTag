@@ -51,21 +51,21 @@ namespace LeMinhHuy
 			if (!onTriggerEnter) return;
 			var unitFound = other.GetComponent<Unit>();
 			if (unitFound is object)
-				SendMessageUpwards("OnDetectionZoneEnter", unitFound);
+				SendMessageUpwards("OnInsideDetectionZone", unitFound);
 		}
 		void OnTriggerStay(Collider other)
 		{
 			if (!onTriggerStay) return;
 			var unitFound = other.GetComponent<Unit>();
 			if (unitFound is object)
-				SendMessageUpwards("OnDetectionZoneStay", unitFound);
+				SendMessageUpwards("OnInsideDetectionZone", unitFound);
 		}
 		void OnTriggerExit(Collider other)
 		{
 			if (!onTriggerExit) return;
 			var unitFound = other.GetComponent<Unit>();
 			if (unitFound is object)
-				SendMessageUpwards("OnDetectionZoneExit", unitFound);
+				SendMessageUpwards("OnInsideDetectionZone", unitFound);
 		}
 	}
 }
