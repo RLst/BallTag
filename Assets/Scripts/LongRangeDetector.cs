@@ -39,13 +39,6 @@ namespace LeMinhHuy
 			this.transform.DOScaleZ(scanWidth, 1f);
 		}
 
-		//These are probably redundant
-		// void OnEnable() => Show();
-		// void OnDisable() => Hide();
-		// //Only hide and show the
-		// public void Hide() => mr.enabled = false;
-		// public void Show() => mr.enabled = true;
-
 		void OnTriggerEnter(Collider other)
 		{
 			if (!onTriggerEnter) return;
