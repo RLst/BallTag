@@ -274,7 +274,7 @@ namespace LeMinhHuy
 		void OnBallTouch()
 		{
 			//Grab ball if chasing
-			if (state == State.Chasing)
+			if (state == State.Chasing || state == State.Receiving)
 			{
 				SeizeBall();
 				SetState(State.Attacking);

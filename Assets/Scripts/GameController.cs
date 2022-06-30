@@ -124,9 +124,6 @@ namespace LeMinhHuy
 		/// </summary>
 		public void BeginMatch()
 		{
-			isPlaying = true;
-
-			//Set scores
 			currentRound = 0;
 
 			SetOpponents();
@@ -173,6 +170,8 @@ namespace LeMinhHuy
 		/// </summary>
 		public void BeginRound()
 		{
+			isPlaying = true;
+
 			//Guard
 			if (currentRound >= settings.roundsPerMatch)
 			{
@@ -227,7 +226,7 @@ namespace LeMinhHuy
 		/// </summary>
 		void Update()
 		{
-			if (isPlaying == false)
+			if (!isPlaying)
 				return;
 
 			//Handle round timer IF a round is currently going on
@@ -251,6 +250,8 @@ namespace LeMinhHuy
 		/// </summary>
 		public void EndRound()
 		{
+			isPlaying = false;
+
 			DeactivateBall();
 
 			teamOne.DeactivateAllUnits(indefinite: true);
