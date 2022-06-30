@@ -24,6 +24,12 @@ Play Settings
 	Player vs CPU
 	Player vs Player
 
+End Round Panel
+
+End Match Panel
+	Display stats
+	
+
 
 
 
