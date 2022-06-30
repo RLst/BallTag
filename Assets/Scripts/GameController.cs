@@ -60,7 +60,6 @@ namespace LeMinhHuy
 		void Awake()
 		{
 			Debug.Assert(settings != null, "No game parameters found!");
-
 			Debug.Assert(teamOne != null, "Team one not found!");
 			Debug.Assert(teamTwo != null, "Team two not found!");
 
@@ -78,18 +77,36 @@ namespace LeMinhHuy
 			{
 				StartCoroutine(TickTeams());
 			});
+
+			//Register events
+			teamOne.onScoreGoal.AddListener(EndRound);
+			teamTwo.onScoreGoal.AddListener(EndRound);
+
+			if (playDemoOnStart) BeginDemo();
 		}
-		public void CalculateAttackDirectionForEachTeam()
+		internal void BeginDemo()
 		{
-			//Calculate attack direction
-			if (teamOne.field is object && teamTwo.field is object)
-			{
-				// Debug.Log(teamOne.field.transform.position);
-				// Debug.Log(teamTwo.field.transform.position);
-				teamOne.attackDirection = (teamTwo.field.transform.position - teamOne.field.transform.position).normalized;
-				teamTwo.attackDirection = (teamOne.field.transform.position - teamTwo.field.transform.position).normalized;
-			}
+			isPlaying = true;
+			currentRound = 0;
+			//Generate random colors
+			teamOne.color = UnityEngine.Random.ColorHSV(
+					hueMin: 0f, hueMax: 1f,
+					saturationMin: 0.55f, saturationMax: 0.65f,
+					valueMin: 0.9f, valueMax: 1f);
+			teamTwo.color = UnityEngine.Random.ColorHSV(
+					hueMin: 0f, hueMax: 1f,
+					saturationMin: 0.55f, saturationMax: 0.65f,
+					valueMin: 0.9f, valueMax: 1f);
+
+			// CalculateAttackDirectionForEachTeam();	//should already be done
+			if (ball is null)
+				ball = Instantiate<Ball>(ballPrefab, this.transform);
+			SetOpponents();
+			InitTeams();
+			BeginRound();
+			print("Playing demo");
 		}
+
 
 		#region Gameplay
 		/// <summary>
@@ -105,12 +122,8 @@ namespace LeMinhHuy
 			//Set scores
 			currentRound = 0;
 
-			//Teams need to know their opponents
-			teamOne.opponent = teamTwo;
-			teamTwo.opponent = teamOne;
-
-			teamOne.Initialize(settings.teamOneSettings);
-			teamTwo.Initialize(settings.teamTwoSettings);
+			SetOpponents();
+			InitTeams();
 			CalculateAttackDirectionForEachTeam();
 
 			//Create ball
@@ -122,6 +135,27 @@ namespace LeMinhHuy
 			//Hook up user input events etc
 			Debug.Log("Begin Match");
 			onBeginMatch.Invoke();
+		}
+		void SetOpponents()
+		{
+			//Teams need to know their opponents
+			teamOne.opponent = teamTwo;
+			teamTwo.opponent = teamOne;
+		}
+		void InitTeams()
+		{
+			//Set colors and strategies
+			teamOne.Initialize(settings.teamOneSettings);
+			teamTwo.Initialize(settings.teamTwoSettings);
+		}
+		public void CalculateAttackDirectionForEachTeam()
+		{
+			//Calculate attack direction vector from one team to the other
+			if (teamOne.field is object && teamTwo.field is object)
+			{
+				teamOne.attackDirection = (teamTwo.field.transform.position - teamOne.field.transform.position).normalized;
+				teamTwo.attackDirection = (teamOne.field.transform.position - teamTwo.field.transform.position).normalized;
+			}
 		}
 
 		/// <summary>
@@ -208,10 +242,19 @@ namespace LeMinhHuy
 		/// </summary>
 		public void EndRound()
 		{
-			ball.gameObject.SetActive(false);
+			DeactivateBall();
+
+			teamOne.DeactivateAllUnits();
+			teamTwo.DeactivateAllUnits();
 
 			Debug.Log("End Round");
 			onEndRound.Invoke();
+		}
+
+		private void DeactivateBall()
+		{
+			ball.gameObject.SetActive(false);
+			ball.transform.SetParent(this.transform);
 		}
 
 		/// <summary>
