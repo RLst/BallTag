@@ -166,7 +166,6 @@ namespace LeMinhHuy
 			energy -= strategy.spawnCost;
 			unit.SetTeam(this);    //Sets team, color, strategy
 			unit.Spawn();               //Set spawn time so it can do it's spawn sequence
-			unit.SetOrigin();
 			unit.SetActive(true);
 		}
 		void OnRecycleUnit(Unit unit)
@@ -364,6 +363,7 @@ namespace LeMinhHuy
 			//Get and position unit
 			var spawn = unitPool.Get();
 			spawn.transform.SetPositionAndRotation(point, Quaternion.LookRotation(attackDirection, Vector3.up));
+			spawn.SetOrigin();
 
 			return true;
 		}
