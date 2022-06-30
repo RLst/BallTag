@@ -23,7 +23,7 @@ namespace LeMinhHuy
 			agent = GetComponent<NavMeshAgent>();
 		}
 
-		void OnEnable()
+		public void OnEnable()
 		{
 			//Delay agent every time the ball get's cycled
 			StartCoroutine(Delay());

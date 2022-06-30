@@ -88,6 +88,7 @@ namespace LeMinhHuy
 		{
 			isPlaying = true;
 			currentRound = 0;
+
 			//Generate random colors
 			teamOne.color = UnityEngine.Random.ColorHSV(
 					hueMin: 0f, hueMax: 1f,
@@ -95,6 +96,7 @@ namespace LeMinhHuy
 					valueMin: 0.9f, valueMax: 1f);
 			teamOne.Awake();
 			teamOne.InitTeamObjects();
+			teamOne.SetStance();
 
 			teamTwo.color = UnityEngine.Random.ColorHSV(
 					hueMin: 0f, hueMax: 1f,
@@ -102,6 +104,7 @@ namespace LeMinhHuy
 					valueMin: 0.9f, valueMax: 1f);
 			teamTwo.Awake();
 			teamTwo.InitTeamObjects();
+			teamOne.SetStance();
 
 			CalculateAttackDirectionForEachTeam();  //should already be done
 			if (ball is null)
@@ -189,7 +192,8 @@ namespace LeMinhHuy
 				case Stance.Offensive:
 					{
 						//Launch ball
-						ball.transform.SetPositionAndRotation(teamOne.field.GetRandomLocationOnField(3f), Quaternion.identity);
+						ball.transform.SetPositionAndRotation(teamOne.field.GetRandomLocationOnField(10f), Quaternion.identity);
+						ball.OnEnable();    //let the ball bounce
 
 						//Switch stances (except for the first round)
 						if (currentRound == 1) break;
@@ -201,7 +205,8 @@ namespace LeMinhHuy
 				case Stance.Defensive:
 					{
 						//Launch ball
-						ball.transform.SetPositionAndRotation(teamTwo.field.GetRandomLocationOnField(3f), Quaternion.identity);
+						ball.transform.SetPositionAndRotation(teamTwo.field.GetRandomLocationOnField(10f), Quaternion.identity);
+						ball.OnEnable();
 
 						//Switch stances (except for the first round)
 						if (currentRound == 1) break;
@@ -248,8 +253,8 @@ namespace LeMinhHuy
 		{
 			DeactivateBall();
 
-			teamOne.DeactivateAllUnits();
-			teamTwo.DeactivateAllUnits();
+			teamOne.DeactivateAllUnits(indefinite: true);
+			teamTwo.DeactivateAllUnits(indefinite: true);
 
 			Debug.Log("End Round");
 			onEndRound.Invoke();
@@ -299,9 +304,9 @@ namespace LeMinhHuy
 		//AI
 		IEnumerator TickTeams()
 		{
+			Debug.Log("TickTeams()");
 			while (true)
 			{
-				// Debug.Log("TickTeams()");
 				teamOne.Tick();
 				teamTwo.Tick();
 				yield return waitOneSecond;

@@ -108,7 +108,11 @@ namespace LeMinhHuy
 		{
 			Awake();
 
-			setParameters();
+			//Set team parameters
+			this.name = settings.name;
+			this.color = settings.color;
+			this.userType = settings.userType;
+			SetStance();
 
 			InitTeamObjects();
 
@@ -116,28 +120,27 @@ namespace LeMinhHuy
 
 			ResetStats();
 
-			//Set team parameters
-			void setParameters()
-			{
-				this.name = settings.name;
-				this.color = settings.color;
-				this.userType = settings.userType;
-				switch (settings.stance)
-				{
-					case Stance.Offensive:
-						this.strategy = gc.settings.offensiveStrategy;
-						break;
-					case Stance.Defensive:
-						this.strategy = gc.settings.defensiveStrategy;
-						break;
-					default:
-						throw new ArgumentException("Invalid stance!");
-				}
-			}
-			//Setup team objects and color
 		}
-		internal void InitTeamObjects()
+		internal void SetStance(Stance? newStance = null)   //This is for the demo system
 		{
+			if (newStance is object && newStance.HasValue)
+				strategy.stance = newStance.Value;
+
+			switch (strategy.stance)
+			{
+				case Stance.Offensive:
+					this.strategy = gc.settings.offensiveStrategy;
+					break;
+				case Stance.Defensive:
+					this.strategy = gc.settings.defensiveStrategy;
+					break;
+				default:
+					throw new ArgumentException("Invalid stance!");
+			}
+		}
+		internal void InitTeamObjects() //Basically colors the objects
+		{
+			//Setup team objects and color
 			foreach (var to in teamObjects)
 				to.SetTeam(this);
 		}
@@ -335,10 +338,10 @@ namespace LeMinhHuy
 			return true;
 		}
 
-		public void DeactivateAllUnits()
+		public void DeactivateAllUnits(bool indefinite)
 		{
 			foreach (var u in units)
-				u.Deactivate();
+				u.Deactivate(indefinite);
 		}
 
 		//DESPAWN and put back into the object pool

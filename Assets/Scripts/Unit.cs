@@ -186,6 +186,7 @@ namespace LeMinhHuy
 		{
 			agent.SetDestination(ball.transform.position);
 			agent.speed = team.strategy.normalSpeed;
+			agent.radius = radiusNormal;
 		}
 		void SeizeBall()
 		{
@@ -198,11 +199,13 @@ namespace LeMinhHuy
 		{
 			agent.SetDestination(team.opponent.goal.target.transform.position);
 			agent.speed = team.strategy.dribbleSpeed;
+			agent.radius = radiusNormal;
 		}
 		void Advance()
 		{
 			agent.SetDestination(transform.position + team.attackDirection * 10f);
 			agent.speed = team.strategy.normalSpeed;
+			agent.radius = radiusPassthrough;
 		}
 		void PassBall(Unit u)
 		{
@@ -238,11 +241,12 @@ namespace LeMinhHuy
 
 		//Inactive units are dark/translucent, can be passed through, visible
 		//Delay before they can move again And/or move back to their origin if defending
-		public void Deactivate()
+		public void Deactivate(bool indefinite)
 		{
 			SetColor(inactiveColor);
+			inactive = indefinite ? -1f : team.strategy.reactivationTime;
 			agent.radius = radiusPassthrough;
-			inactive = team.strategy.reactivationTime;
+			SetState(State.Inactive);
 			SetActive(true);
 		}
 
