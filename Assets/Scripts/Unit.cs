@@ -55,6 +55,7 @@ namespace LeMinhHuy
 		[Header("Events")]
 		public UnityEvent onTag;    //This unit tags an opponent out
 		public UnityEvent onOut;      //This unit got tagged by an opponent
+		public UnityEvent onPass;
 		public StateEvent onChangedState;      //This unit got tagged by an opponent
 
 		//State
@@ -158,7 +159,7 @@ namespace LeMinhHuy
 			switch (state)
 			{
 				case State.Starting:
-					hasBall = false;
+					hasBall = false; ball.SetActivatePhysics(true);
 					HideAuxillaries();
 					SetState(State.Chasing);
 					break;
@@ -216,10 +217,9 @@ namespace LeMinhHuy
 		public void SeizeBall()
 		{
 			//Grab ball and turn it off so it can't drift
-			hasBall = true;
+			hasBall = true; ball.SetActivatePhysics(active: false);
 			ball.transform.SetParent(hands);
 			ball.transform.localPosition = Vector3.zero;
-			ball.SetActivatePhysics(active: false);
 		}
 		void Attack()
 		{
@@ -249,6 +249,7 @@ namespace LeMinhHuy
 				nearest.SetState(State.Receiving);
 				ball.transform.SetParent(game.transform);
 				ball.Pass(nearest);
+				onPass.Invoke();
 			}
 			//No active team members left, you have lost the round
 			else
@@ -292,7 +293,7 @@ namespace LeMinhHuy
 			switch (state)
 			{
 				case State.Starting:
-					hasBall = false;
+					hasBall = false; ball.SetActivatePhysics(true);
 					HideAuxillaries();
 					SetState(State.Standby);
 					break;
@@ -305,7 +306,7 @@ namespace LeMinhHuy
 				case State.Inactive:
 					name = "Inactive (Defense)";
 					//Move back towards origin after tagging someone out
-					agent.SetDestination(origin);
+					if (agent.isOnNavMesh) agent.SetDestination(origin);
 					agent.speed = team.strategy.returnSpeed;
 					break;
 			}
@@ -382,11 +383,9 @@ namespace LeMinhHuy
 			SetColor(inactiveColor);
 			inactive = indefinite ? -1f : team.strategy.reactivationTime;
 
-			if (agent.isOnNavMesh)
-			{
-				agent.SetDestination(transform.position);       //Stop unit without turning off agent
-				agent.radius = radiusPassthrough;
-			}
+			if (agent.isOnNavMesh) agent.SetDestination(transform.position);       //Stop unit without turning off agent
+			agent.radius = radiusPassthrough;
+
 			SetState(State.Inactive);
 			SetActive(true);
 			HideAuxillaries();
@@ -400,7 +399,7 @@ namespace LeMinhHuy
 			if (hasBall)
 			{
 				ball.transform.SetParent(null);
-				hasBall = false;
+				hasBall = false; ball.SetActivatePhysics(true);
 			}
 
 			team.DespawnUnit(this);

@@ -7,63 +7,52 @@ namespace LeMinhHuy
 	{
 		//Members
 		UserInput uIn;
-		GameController gCon;
+		GameController game;
 
 		void Awake()
 		{
 			uIn = GetComponent<UserInput>();
-			gCon = GameController.current;
+			game = GameController.current;
 		}
 
-		void OnEnable()
+		void Start()
 		{
 			//Enable user input for these events
-			gCon.onBeginRound.AddListener(RegisterInputEvents);
-			gCon.onUnpause.AddListener(RegisterInputEvents);
+			game.onBeginRound.AddListener(RegisterInputEvents);
+			game.onUnpause.AddListener(RegisterInputEvents);
 
 			//Disable user input for these events
-			gCon.onPause.AddListener(UnregisterInputEvents);
-			gCon.onEndRound.AddListener(UnregisterInputEvents);
-		}
-
-		void OnDisable()
-		{
-			//Enable user input for these events
-			gCon.onBeginRound.RemoveListener(RegisterInputEvents);
-			gCon.onUnpause.RemoveListener(RegisterInputEvents);
-
-			//Disable user input for these events
-			gCon.onPause.RemoveListener(UnregisterInputEvents);
-			gCon.onEndRound.RemoveListener(UnregisterInputEvents);
+			game.onPause.AddListener(UnregisterInputEvents);
+			game.onEndRound.AddListener(_ => UnregisterInputEvents());
 		}
 
 		public void RegisterInputEvents()
 		{
 			//Only register user input events if the team is Player controlled
-			if (gCon.teamOne.userType == UserType.Player)
+			if (game.teamOne.userType == UserType.Player)
 			{
 				Debug.Log("TeamOne Input Registered", this);
-				uIn.onScreenPosInput.AddListener(gCon.teamOne.Void_SpawnUnitAtScreenPoint);
+				uIn.onScreenPosInput.AddListener(game.teamOne.Void_SpawnUnitAtScreenPoint);
 			}
-			if (gCon.teamTwo.userType == UserType.Player)
+			if (game.teamTwo.userType == UserType.Player)
 			{
 				Debug.Log("TeamTwo Input Registered", this);
-				uIn.onScreenPosInput.AddListener(gCon.teamTwo.Void_SpawnUnitAtScreenPoint);
+				uIn.onScreenPosInput.AddListener(game.teamTwo.Void_SpawnUnitAtScreenPoint);
 			}
 		}
 
 		public void UnregisterInputEvents()
 		{
 			// Debug.Log("UnregisterInputEvents", this);
-			if (gCon.teamOne.userType == UserType.Player)
+			if (game.teamOne.userType == UserType.Player)
 			{
 				Debug.Log("TeamOne Input Unregistered", this);
-				uIn.onScreenPosInput.RemoveListener(gCon.teamOne.Void_SpawnUnitAtScreenPoint);
+				uIn.onScreenPosInput.RemoveListener(game.teamOne.Void_SpawnUnitAtScreenPoint);
 			}
-			if (gCon.teamTwo.userType == UserType.Player)
+			if (game.teamTwo.userType == UserType.Player)
 			{
 				Debug.Log("TeamTwo Input Unregistered", this);
-				uIn.onScreenPosInput.RemoveListener(gCon.teamTwo.Void_SpawnUnitAtScreenPoint);
+				uIn.onScreenPosInput.RemoveListener(game.teamTwo.Void_SpawnUnitAtScreenPoint);
 			}
 		}
 	}

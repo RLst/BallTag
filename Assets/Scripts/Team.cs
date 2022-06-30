@@ -52,9 +52,8 @@ namespace LeMinhHuy
 		//Events
 		[Space]
 		public FloatEvent onEnergyChange;
-		public UnityEvent onScoreGoal;
-		public UnityEvent onLostRound;
-		// public UnitEvent on
+		public ResultEvent onScoreGoal;
+		public ResultEvent onNoActiveUnits;
 
 		//Properties
 		int? activeUnits => unitPool?.countActive;
@@ -67,34 +66,27 @@ namespace LeMinhHuy
 
 		#region Stats
 		//Maybe make these into a struct
-		public int goals { get; private set; }
 		public int wins { get; set; }
 		public int draws { get; set; }
-		public int losses { get; set; }
 		public int tags { get; set; }   //Opponents caught
 		public int outs { get; set; }    //Team members that got caught
-		public int ballPasses { get; set; }
+		public int passes { get; set; }
 		public int despawns { get; set; }
 		void ResetStats()
 		{
 			//Stats
-			goals = 0;
 			wins = 0;
 			draws = 0;
-			losses = 0;
 			tags = 0;
 			outs = 0;
-			ballPasses = 0;
+			passes = 0;
 			despawns = 0;
 
 			energy = 0;
-
-			DespawnAllUnits();
 		}
 		public void ScoreGoal(int amount = 1)
 		{
-			goals += amount;
-			onScoreGoal.Invoke();   //End round etc
+			onScoreGoal.Invoke((this, Result.Wins));   //End round etc
 		}
 		#endregion
 
@@ -122,7 +114,9 @@ namespace LeMinhHuy
 
 			ResetStats();
 
+			DespawnAllUnits();
 		}
+
 		internal void SetStance(Stance? newStance = null)   //This is for the demo system
 		{
 			if (newStance is object && newStance.HasValue)
@@ -148,7 +142,7 @@ namespace LeMinhHuy
 		}
 
 		#region Pooling
-		void InitUnitPool()
+		public void InitUnitPool()
 		{
 			if (unitPool is object)
 				return; //Pool has already been initiated
@@ -159,6 +153,12 @@ namespace LeMinhHuy
 		{
 			var u = GameObject.Instantiate<Unit>(gc.unitPrefab, field.transform);
 			units.Add(u);
+
+			//Register unit events
+			u.onOut.AddListener(() => outs++);
+			u.onTag.AddListener(() => tags++);
+			u.onPass.AddListener(() => passes++);
+
 			return u;
 		}
 		void OnGetUnit(Unit unit)
@@ -289,7 +289,7 @@ namespace LeMinhHuy
 		public void NotifyNoUnitsLeftToPassBallTo()
 		{
 			//Basically you've lost
-			onLostRound.Invoke();
+			onNoActiveUnits.Invoke((this, Result.Loses));
 		}
 
 		//INFO

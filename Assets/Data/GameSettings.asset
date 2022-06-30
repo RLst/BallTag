@@ -47,11 +47,11 @@ MonoBehaviour:
     minSpawnDistanceFromOwnGoal: 2
   teamOneSettings:
     name: Southerners
-    color: {r: 0.30588233, g: 0.6066667, b: 1, a: 1}
+    color: {r: 1, g: 0.682302, b: 0.2216981, a: 1}
     userType: 0
-    stance: 1
+    stance: 0
   teamTwoSettings:
     name: Northerners
-    color: {r: 1, g: 0.26992142, b: 0.1372549, a: 1}
+    color: {r: 1, g: 0.27269888, b: 0.1372549, a: 1}
     userType: 1
-    stance: 0
+    stance: 1

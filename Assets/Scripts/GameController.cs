@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using LeMinhHuy.Events;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.XR.ARFoundation;
@@ -29,6 +30,7 @@ namespace LeMinhHuy
 		[Header("Prefabs")]
 		public Unit unitPrefab = null;
 		[SerializeField] Ball ballPrefab = null;
+		[SerializeField] float ballReleaseHeight = 10f;
 
 		[Header("AR")]
 		public ARSessionOrigin arSessionOrigin;
@@ -47,8 +49,9 @@ namespace LeMinhHuy
 		public UnityEvent onBeginRound;
 		public UnityEvent onPause;
 		public UnityEvent onUnpause;
-		public UnityEvent onEndRound;
-		public UnityEvent onEndMatch;
+		public ResultEvent onEndRound;
+		public ResultEvent onEndMatch;
+		public UnityEvent onBeginPenaltyRound;
 
 		//Members
 		Ball ball;
@@ -73,17 +76,16 @@ namespace LeMinhHuy
 			waitOneSecond = new WaitForSeconds(1f);
 
 			CalculateAttackDirectionForEachTeam();
-			onBeginMatch.AddListener(() =>
-			{
-				StartCoroutine(TickTeams());
-			});
 
 			//Register events
+			onBeginRound.AddListener(() => StartCoroutine(TickTeams()));
+			// onEndRound.AddListener(_ => StopAllCoroutines());
+
 			teamOne.onScoreGoal.AddListener(EndRound);
-			teamOne.onLostRound.AddListener(EndRound);
+			teamOne.onNoActiveUnits.AddListener(EndRound);
 
 			teamTwo.onScoreGoal.AddListener(EndRound);
-			teamTwo.onLostRound.AddListener(EndRound);
+			teamTwo.onNoActiveUnits.AddListener(EndRound);
 
 			if (playDemoOnStart) BeginDemo();
 		}
@@ -99,6 +101,7 @@ namespace LeMinhHuy
 					valueMin: 0.9f, valueMax: 1f);
 			teamOne.Awake();
 			teamOne.InitTeamObjects();
+			teamOne.InitUnitPool();
 			teamOne.SetStance();
 
 			teamTwo.color = UnityEngine.Random.ColorHSV(
@@ -107,14 +110,17 @@ namespace LeMinhHuy
 					valueMin: 0.9f, valueMax: 1f);
 			teamTwo.Awake();
 			teamTwo.InitTeamObjects();
-			teamOne.SetStance();
+			teamTwo.InitUnitPool();
+			teamTwo.SetStance();
 
 			CalculateAttackDirectionForEachTeam();  //should already be done
 			if (ball is null)
-				ball = Instantiate<Ball>(ballPrefab, this.transform);
+				ball = Instantiate<Ball>(ballPrefab);
 
 			SetOpponents();
 			BeginRound();
+
+			// StartCoroutine(TickTeams());
 			print("Playing demo");
 		}
 
@@ -135,7 +141,7 @@ namespace LeMinhHuy
 
 			//Create ball
 			if (ball is null)
-				ball = Instantiate<Ball>(ballPrefab, this.transform);
+				ball = Instantiate<Ball>(ballPrefab);
 
 			BeginRound();
 
@@ -178,8 +184,7 @@ namespace LeMinhHuy
 			//Guard
 			if (currentRound >= settings.roundsPerMatch)
 			{
-				EndRound();
-				return;
+				throw new InvalidOperationException("Too many round!");
 			}
 
 			//Set match params
@@ -194,8 +199,8 @@ namespace LeMinhHuy
 				case Stance.Offensive:
 					{
 						//Launch ball
-						ball.transform.SetPositionAndRotation(teamOne.field.GetRandomLocationOnField(10f), Quaternion.identity);
-						// ball.OnEnable();    //let the ball bounce
+						ball.transform.SetPositionAndRotation(teamOne.field.GetRandomLocationOnField(ballReleaseHeight), Quaternion.identity);
+						ball.Show();    //let the ball bounce
 
 						//Switch stances (except for the first round)
 						if (currentRound == 1) break;
@@ -207,8 +212,8 @@ namespace LeMinhHuy
 				case Stance.Defensive:
 					{
 						//Launch ball
-						ball.transform.SetPositionAndRotation(teamTwo.field.GetRandomLocationOnField(10f), Quaternion.identity);
-						// ball.OnEnable();
+						ball.transform.SetPositionAndRotation(teamTwo.field.GetRandomLocationOnField(ballReleaseHeight), Quaternion.identity);
+						ball.Show();
 
 						//Switch stances (except for the first round)
 						if (currentRound == 1) break;
@@ -238,7 +243,7 @@ namespace LeMinhHuy
 				currentRoundRemainingTime -= Time.deltaTime;
 
 				if (currentRoundRemainingTime <= 0)
-					EndRound();
+					EndRound((null, Result.Draws));
 			}
 
 			//Update teams
@@ -251,23 +256,36 @@ namespace LeMinhHuy
 		/// CIf no more rounds left then end match
 		/// Rest a bit so player can continue
 		/// </summary>
-		public void EndRound()
+		public void EndRound((Team team, Result result) teamResult)
 		{
 			isPlaying = false;
-
-			DeactivateBall();
 
 			teamOne.DeactivateAllUnits(indefinite: true);
 			teamTwo.DeactivateAllUnits(indefinite: true);
 
-			Debug.Log("End Round");
-			onEndRound.Invoke();
-		}
+			//Set scores
+			if (teamResult.result == Result.Wins)
+			{
+				teamResult.team.wins++;
+			}
+			else if (teamResult.result == Result.Draws)
+			{
+				teamResult.team.draws++;
+			}
 
-		private void DeactivateBall()
+			Debug.Log("End Round");
+			onEndRound.Invoke(teamResult);
+		}
+		// public int wins =
+
+		//Hide the ball, release from parents, zero
+		//NOTE: Ball should NEVER be deactivated
+		internal void ResetBall()
 		{
-			ball.gameObject.SetActive(false);
-			ball.transform.SetParent(this.transform);
+			print("Resetball");
+			ball.Hide();
+			ball.transform.SetParent(null);
+			ball.transform.position = Vector3.zero;
 		}
 
 		/// <summary>
@@ -285,10 +303,10 @@ namespace LeMinhHuy
 			isPlaying = false;
 
 			//Hide ball
-			ball.gameObject.SetActive(false);
+			// ResetBall();
 
 			//ie. stop input
-			onEndMatch.Invoke();
+			onEndMatch.Invoke((null, Result.None));
 		}
 
 		/// <summary>
@@ -308,9 +326,9 @@ namespace LeMinhHuy
 		//AI
 		IEnumerator TickTeams()
 		{
-			// Debug.Log("TickTeams()");
-			while (true)
+			while (isPlaying)
 			{
+				// Debug.Log("TickTeams()");
 				teamOne.Tick();
 				teamTwo.Tick();
 				yield return waitOneSecond;

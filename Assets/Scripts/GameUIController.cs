@@ -20,7 +20,11 @@ namespace LeMinhHuy
 		[SerializeField] Slider teamTwoEnergyBarFloat = null;
 		[SerializeField] float floatGaugeAlpha = 0.5f;
 
-		[SerializeField] GameObject endRoundScreen;
+		[Header("End Round UI")]
+		[SerializeField] GameObject endRoundUI;
+		[SerializeField] TextMeshProUGUI teamOneResults;
+		[SerializeField] TextMeshProUGUI resultRoundNumber;
+		[SerializeField] TextMeshProUGUI teamTwoResults;
 
 		//Members
 		GameController game;
@@ -36,6 +40,8 @@ namespace LeMinhHuy
 		{
 			//Hide main game UI
 			c.enabled = false;
+
+			endRoundUI.SetActive(false);
 		}
 
 		//Event rego
@@ -56,6 +62,7 @@ namespace LeMinhHuy
 		public void BeginMatchUI()
 		{
 			c.enabled = true;
+			endRoundUI.SetActive(false);    //Turn off due to AI demo
 
 			//Title
 			teamOneDetails.text = $"{game.teamOne.name}: {game.teamOne.strategy.stance.ToString()}";
@@ -87,15 +94,41 @@ namespace LeMinhHuy
 
 		public void BeginRoundUI()
 		{
-			endRoundScreen.SetActive(false);
+			endRoundUI.SetActive(false);
 		}
 
-		public void EndRoundUI()
+		public void EndRoundUI((Team team, Result result) teamResults)
 		{
-			endRoundScreen.SetActive(true);
+			//Display end round UI, show results
+			endRoundUI.SetActive(true);
+			teamOneResults.color = game.teamOne.color;
+			teamTwoResults.color = game.teamTwo.color;
+
+			//Round
+			resultRoundNumber.text = "Round " + game.currentRound;
+
+			//Draw scenario
+			if (teamResults.result == Result.Draws)
+			{
+				teamOneResults.text = $"{game.teamOne.name} {teamResults.result.ToString()}";
+				teamTwoResults.text = $"{game.teamTwo.name} {teamResults.result.ToString()}";
+				return;
+			}
+
+			//Normal scenario
+			if (teamResults.team == game.teamOne)
+			{
+				teamOneResults.text = $"{game.teamOne.name} {teamResults.result.ToString()}";
+				teamTwoResults.text = $"{game.teamTwo.name} {(teamResults.result == Result.Wins ? "Loses" : "Wins")}";
+			}
+			else
+			{
+				teamTwoResults.text = $"{game.teamOne.name} {teamResults.result.ToString()}";
+				teamOneResults.text = $"{game.teamOne.name} {(teamResults.result == Result.Wins ? "Loses" : "Wins")}";
+			}
 		}
 
-		public void EndMatchUI()
+		public void EndMatchUI((Team team, Result result) teamResults)
 		{
 			c.enabled = false;
 		}
