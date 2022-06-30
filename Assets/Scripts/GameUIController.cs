@@ -8,10 +8,7 @@ namespace LeMinhHuy
 	[RequireComponent(typeof(Canvas))]
 	public class GameUIController : MonoBehaviour
 	{
-		const float FLOAT_SLIDER_ALPHA = 0.5f;
-
 		[SerializeField] TextMeshProUGUI timeLeft = null;
-
 		[Header("Team One")]
 		[SerializeField] TextMeshProUGUI teamOneDetails = null;
 		[SerializeField] Slider teamOneEnergyBarInt = null;
@@ -21,63 +18,84 @@ namespace LeMinhHuy
 		[SerializeField] TextMeshProUGUI teamTwoDetails = null;
 		[SerializeField] Slider teamTwoEnergyBarInt = null;
 		[SerializeField] Slider teamTwoEnergyBarFloat = null;
+		[SerializeField] float floatGaugeAlpha = 0.5f;
+
+		[SerializeField] GameObject endRoundScreen;
 
 		//Members
-		GameController gc;
+		GameController game;
 		Canvas c;
 
 		void Awake()
 		{
-			gc = GameController.current;
+			game = GameController.current;
 			c = GetComponent<Canvas>();
 		}
 
 		void Start()
 		{
+			//Hide main game UI
 			c.enabled = false;
 		}
 
 		//Event rego
 		void OnEnable()
 		{
-			gc.onBeginMatch.AddListener(BeginMatch);
-			gc.onEndMatch.AddListener(EndMatch);
+			game.onBeginMatch.AddListener(BeginMatchUI);
+			game.onEndRound.AddListener(EndRoundUI);
+			game.onEndMatch.AddListener(EndMatchUI);
 		}
 		void OnDisable()
 		{
-			gc.onBeginMatch.RemoveListener(BeginMatch);
-			gc.onEndMatch.RemoveListener(EndMatch);
+			game.onBeginMatch.RemoveListener(BeginMatchUI);
+			game.onEndRound.RemoveListener(EndRoundUI);
+			game.onEndMatch.RemoveListener(EndMatchUI);
 		}
 
-		public void BeginMatch()
+		//Set up the UI, titles, names, colors etc
+		public void BeginMatchUI()
 		{
 			c.enabled = true;
 
 			//Title
-			teamOneDetails.text = $"{gc.teamOne.name}: {gc.teamOne.strategy.stance.ToString()}";
-			teamTwoDetails.text = $"{gc.teamTwo.name}: {gc.teamTwo.strategy.stance.ToString()}";
+			teamOneDetails.text = $"{game.teamOne.name}: {game.teamOne.strategy.stance.ToString()}";
+			teamTwoDetails.text = $"{game.teamTwo.name}: {game.teamTwo.strategy.stance.ToString()}";
 
-			//Energy bars
+			//Energy bars; set color, max values
+			//Team 1
 			ColorBlock temp = teamOneEnergyBarFloat.colors;
-			temp.disabledColor = Color.Lerp(gc.teamOne.color, Color.white, 0.6f);
-			// temp.disabledColor = new Color(gc.teamOne.color.r, gc.teamOne.color.g, gc.teamOne.color.b, FLOAT_SLIDER_ALPHA);
+			temp.disabledColor = new Color(game.teamOne.color.r, game.teamOne.color.g, game.teamOne.color.b, floatGaugeAlpha);
 			teamOneEnergyBarFloat.colors = temp;
+			teamOneEnergyBarFloat.maxValue = game.settings.maxEnergy;
 
 			temp = teamOneEnergyBarInt.colors;
-			temp.disabledColor = gc.teamOne.color;
+			temp.disabledColor = game.teamOne.color;
 			teamOneEnergyBarInt.colors = temp;
+			teamOneEnergyBarInt.maxValue = game.settings.maxEnergy;
 
+			//Team 2
 			temp = teamTwoEnergyBarFloat.colors;
-			// temp.disabledColor = Color.Lerp(gc.teamTwo.color, Color.white, 0.6f);
-			temp.disabledColor = new Color(gc.teamOne.color.r, gc.teamOne.color.g, gc.teamOne.color.b, FLOAT_SLIDER_ALPHA);
+			temp.disabledColor = new Color(game.teamTwo.color.r, game.teamTwo.color.g, game.teamTwo.color.b, floatGaugeAlpha);
 			teamTwoEnergyBarFloat.colors = temp;
+			teamTwoEnergyBarFloat.maxValue = game.settings.maxEnergy;
 
 			temp = teamTwoEnergyBarInt.colors;
-			temp.disabledColor = gc.teamTwo.color;
+			temp.disabledColor = game.teamTwo.color;
 			teamTwoEnergyBarInt.colors = temp;
+			teamTwoEnergyBarInt.maxValue = game.settings.maxEnergy;
 		}
 
-		public void EndMatch()
+		public void BeginRoundUI()
+		{
+			endRoundScreen.SetActive(false);
+		}
+
+		public void EndRoundUI()
+		{
+			endRoundScreen.SetActive(true);
+		}
+
+		public void EndMatchUI()
 		{
 			c.enabled = false;
 		}
@@ -87,20 +105,20 @@ namespace LeMinhHuy
 			if (c.enabled)  //If canvas is enabled means the game is running
 			{
 				//Control timer
-				if (gc.currentRoundRemainingTime > 15f)
+				if (game.currentRoundRemainingTime > 15f)
 				{
 					timeLeft.color = Color.white;
-					timeLeft.text = string.Format("{0:000}", gc.currentRoundRemainingTime);
+					timeLeft.text = string.Format("{0:000}", game.currentRoundRemainingTime);
 				}
-				else if (gc.currentRoundRemainingTime > 0f && gc.currentRoundRemainingTime <= 15f)
+				else if (game.currentRoundRemainingTime > 0f && game.currentRoundRemainingTime <= 15f)
 				{
 					timeLeft.color = Color.red;
-					int fraction = (int)gc.currentRoundRemainingTime * 10;
+					int fraction = (int)game.currentRoundRemainingTime * 10;
 					fraction %= 10;
-					timeLeft.text = string.Format("{0:000}", gc.currentRoundRemainingTime);
-					timeLeft.text = gc.currentRoundRemainingTime.ToString();
+					timeLeft.text = string.Format("{0:000}", game.currentRoundRemainingTime);
+					timeLeft.text = game.currentRoundRemainingTime.ToString();
 				}
-				else if (gc.currentRound <= 0f)
+				else if (game.currentRound <= 0f)
 				{
 					timeLeft.color = Color.red;
 					timeLeft.text = "00:00";

@@ -36,12 +36,25 @@ namespace LeMinhHuy
 		Pool<Unit> unitPool;
 		List<Unit> units = new List<Unit>();
 
-		List<ARRaycastHit> arHitResults = null;
+		//Properties
+		internal bool hasBall
+		{
+			get
+			{
+				foreach (var u in units)
+					if (u.hasBall)
+						return true;
+				return false;
+			}
+		}
+		internal bool hasActiveUnits => unitPool.countActive > 0;
 
 		//Events
 		[Space]
 		public FloatEvent onEnergyChange;
-		UnityEvent onScoreGoal = null;
+		public UnityEvent onScoreGoal;
+		public UnityEvent onLostRound;
+		// public UnitEvent on
 
 		//Properties
 		int? activeUnits => unitPool?.countActive;
@@ -49,14 +62,15 @@ namespace LeMinhHuy
 		//Members
 		GameController gc;
 		ARRaycastManager arRaycastManager;
+		List<ARRaycastHit> arHitResults = null;
 		internal Team opponent;
 
 		#region Stats
 		//Maybe make these into a struct
 		public int goals { get; private set; }
-		public int roundsWon { get; set; }
-		public int roundDraw { get; set; }
-		public int roundLost { get; set; }
+		public int wins { get; set; }
+		public int draws { get; set; }
+		public int losses { get; set; }
 		public int tags { get; set; }   //Opponents caught
 		public int outs { get; set; }    //Team members that got caught
 		public int ballPasses { get; set; }
@@ -65,9 +79,9 @@ namespace LeMinhHuy
 		{
 			//Stats
 			goals = 0;
-			roundsWon = 0;
-			roundDraw = 0;
-			roundLost = 0;
+			wins = 0;
+			draws = 0;
+			losses = 0;
 			tags = 0;
 			outs = 0;
 			ballPasses = 0;
@@ -80,13 +94,13 @@ namespace LeMinhHuy
 		public void ScoreGoal(int amount = 1)
 		{
 			goals += amount;
-			onScoreGoal.Invoke();
+			onScoreGoal.Invoke();   //End round etc
 		}
 		#endregion
 
 
 		//INITS
-		void Awake()
+		public void Awake()
 		{
 			this.gc = GameController.current;
 			arRaycastManager = this.gc.arRaycastManager;
@@ -96,38 +110,41 @@ namespace LeMinhHuy
 		{
 			Awake();
 
-			setParameters();
+			//Set team parameters
+			this.name = settings.name;
+			this.color = settings.color;
+			this.userType = settings.userType;
+			SetStance();
 
-			initTeamObjects();
+			InitTeamObjects();
 
 			InitUnitPool();
 
 			ResetStats();
 
-			//Set team parameters
-			void setParameters()
+		}
+		internal void SetStance(Stance? newStance = null)   //This is for the demo system
+		{
+			if (newStance is object && newStance.HasValue)
+				strategy.stance = newStance.Value;
+
+			switch (strategy.stance)
 			{
-				this.name = settings.name;
-				this.color = settings.color;
-				this.userType = settings.userType;
-				switch (settings.stance)
-				{
-					case Stance.Offensive:
-						this.strategy = gc.parameters.offensiveStrategy;
-						break;
-					case Stance.Defensive:
-						this.strategy = gc.parameters.defensiveStrategy;
-						break;
-					default:
-						throw new ArgumentException("Invalid stance!");
-				}
+				case Stance.Offensive:
+					this.strategy = gc.settings.offensiveStrategy;
+					break;
+				case Stance.Defensive:
+					this.strategy = gc.settings.defensiveStrategy;
+					break;
+				default:
+					throw new ArgumentException("Invalid stance!");
 			}
+		}
+		internal void InitTeamObjects() //Basically colors the objects
+		{
 			//Setup team objects and color
-			void initTeamObjects()
-			{
-				foreach (var to in teamObjects)
-					to.SetTeam(this);
-			}
+			foreach (var to in teamObjects)
+				to.SetTeam(this);
 		}
 
 		#region Pooling
@@ -149,7 +166,6 @@ namespace LeMinhHuy
 			energy -= strategy.spawnCost;
 			unit.SetTeam(this);    //Sets team, color, strategy
 			unit.Spawn();               //Set spawn time so it can do it's spawn sequence
-			unit.Activate();            //start unit
 			unit.SetActive(true);
 		}
 		void OnRecycleUnit(Unit unit)
@@ -167,14 +183,13 @@ namespace LeMinhHuy
 
 			void handleEnergy()
 			{
-				// Debug.Log($"Energy: {energy}, MaxEnergy: {game.parameters.maxEnergy}");
-				if (energy < gc.parameters.maxEnergy)
+				if (energy < gc.settings.maxEnergy)
 				{
 					energy += Time.deltaTime * strategy.energyRegenRate;
 					onEnergyChange.Invoke(energy);
 
-					if (energy > gc.parameters.maxEnergy)
-						energy = gc.parameters.maxEnergy;
+					if (energy > gc.settings.maxEnergy)
+						energy = gc.settings.maxEnergy;
 				}
 			}
 		}
@@ -209,12 +224,12 @@ namespace LeMinhHuy
 						//Spawn at a random point on a ray going from our goal to a random opponent attacker
 						if (opponent.activeUnits.HasValue && opponent.activeUnits > 0 && opponent.TryGetRandomActiveUnit(out Unit attacker))
 						{
-							//Find random attacker ^
+							//Find random attacker ^^^^
 
 							//Find ray going from goal to random attacker
 							// Debug.Log("Goal: " + goal.name, goal);
 							var ray = new Ray(goal.target.position, attacker.transform.position - goal.target.position);
-							Debug.DrawRay(ray.origin, ray.direction * 10f, Color.red, 10f);
+							Debug.DrawRay(ray.origin, ray.direction * 40, Color.red, 10f);
 
 							//Choose a random location that's not too close to our goal and between the attacker
 							var randomSpawnPoint = ray.GetPoint(UnityEngine.Random.Range(strategy.minSpawnDistanceFromOwnGoal, Vector3.Distance(goal.target.position, attacker.transform.position)));
@@ -234,6 +249,34 @@ namespace LeMinhHuy
 					}
 					break;
 			}
+		}
+
+		public bool FindNearestUnit(Unit from, out Unit nearest)
+		{
+			nearest = null;
+			if (!hasActiveUnits) return false;
+
+			float minSqrDistance = float.MaxValue;
+
+			foreach (var to in units)
+			{
+				if (to.isActiveAndEnabled)
+				{
+					var sqrDist = Vector3.SqrMagnitude(to.transform.position - from.transform.position);
+					if (sqrDist < minSqrDistance)
+					{
+						minSqrDistance = sqrDist;
+						nearest = to;
+					}
+				}
+			}
+			return nearest is object;
+		}
+
+		public void NotifyNoUnitsLeftToPassBallTo()
+		{
+			//Basically you've lost
+			onLostRound.Invoke();
 		}
 
 		//INFO
@@ -257,15 +300,6 @@ namespace LeMinhHuy
 		#endregion
 
 		#region Spawning
-		internal void TrySpawnUnitOnRandomPositionOnField()
-		{
-			//Used when
-		}
-
-		internal void SpawnUnitDistanceFromOpponentUnit(Unit opponent, float distance)
-		{
-		}
-
 		/// <summary>
 		/// Spawns a unit at the specified click/touch point on screen
 		/// </summary>
@@ -329,8 +363,15 @@ namespace LeMinhHuy
 			//Get and position unit
 			var spawn = unitPool.Get();
 			spawn.transform.SetPositionAndRotation(point, Quaternion.LookRotation(attackDirection, Vector3.up));
+			spawn.SetOrigin();
 
 			return true;
+		}
+
+		public void DeactivateAllUnits(bool indefinite)
+		{
+			foreach (var u in units)
+				u.Deactivate(indefinite);
 		}
 
 		//DESPAWN and put back into the object pool
@@ -338,7 +379,7 @@ namespace LeMinhHuy
 		{
 			unitPool.Recycle(u);
 			despawns++;
-			//onDespawnUnit.Invoke(u);
+			// onDespawnUnit.Invoke(u);
 		}
 		public void DespawnAllUnits()
 		{
@@ -346,7 +387,7 @@ namespace LeMinhHuy
 				DespawnUnit(u);
 		}
 
-		//DESTROY
+		//DESTROY; might be redundant
 		public void DestroyAllUnits()
 		{
 			//Untested

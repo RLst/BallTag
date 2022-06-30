@@ -1,6 +1,11 @@
 Brainstorm
 ==========
 
+How to calculate the time required based on distance and speed
+==
+Time = Distance / Speed
+
+
 ----------------------
 MENU
 -----------------------
@@ -23,6 +28,12 @@ Play Settings
 		Player/CPU
 	Player vs CPU
 	Player vs Player
+
+End Round Panel
+
+End Match Panel
+	Display stats
+
 
 
 

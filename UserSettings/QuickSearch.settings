@@ -1,4 +1,4 @@
-trackSelection = false
+trackSelection = true
 fetchPreview = true
 wantsMore = true
 dockable = false
@@ -9,14 +9,14 @@ onBoardingDoNotAskAgain = true
 showPackageIndexes = false
 debounceMs = 250
 filters = {
-	asset = true
-	menu = true
-	object = true
-	scene = true
 	settings = true
+	scene = true
+	object = true
+	menu = true
+	asset = true
 }
 scopes = {
-	"last_search.AB59B443" = ""
+	"last_search.AB59B443" = "unit"
 }
 providers = {
 	asset = {
@@ -24,9 +24,14 @@ providers = {
 		priority = 25
 		defaultAction = null
 	}
-	log = {
-		active = false
-		priority = 210
+	res = {
+		active = true
+		priority = 100
+		defaultAction = null
+	}
+	query = {
+		active = true
+		priority = 100
 		defaultAction = null
 	}
 	object = {
@@ -34,9 +39,14 @@ providers = {
 		priority = 55
 		defaultAction = null
 	}
-	packages = {
+	calculator = {
 		active = true
-		priority = 90
+		priority = 10
+		defaultAction = null
+	}
+	menu = {
+		active = true
+		priority = 80
 		defaultAction = null
 	}
 	scene = {
@@ -44,9 +54,29 @@ providers = {
 		priority = 50
 		defaultAction = null
 	}
-	query = {
+	packages = {
+		active = true
+		priority = 90
+		defaultAction = null
+	}
+	static_methods = {
+		active = true
+		priority = 85
+		defaultAction = null
+	}
+	help = {
+		active = true
+		priority = -1
+		defaultAction = null
+	}
+	settings = {
 		active = true
 		priority = 100
+		defaultAction = null
+	}
+	log = {
+		active = false
+		priority = 210
 		defaultAction = null
 	}
 }

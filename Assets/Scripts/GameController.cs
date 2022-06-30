@@ -24,7 +24,7 @@ namespace LeMinhHuy
 		public float currentRoundRemainingTime { get; private set; } = -1;
 
 		[Space]
-		public GameParameters parameters;
+		public GameSettings settings;
 
 		[Header("Prefabs")]
 		public Unit unitPrefab = null;
@@ -52,14 +52,14 @@ namespace LeMinhHuy
 
 		//Members
 		Ball ball;
+		WaitForSeconds waitOneSecond;
 
 
 		//INITS
 		void OnValidate() => CalculateAttackDirectionForEachTeam();
 		void Awake()
 		{
-			Debug.Assert(parameters != null, "No game parameters found!");
-
+			Debug.Assert(settings != null, "No game parameters found!");
 			Debug.Assert(teamOne != null, "Team one not found!");
 			Debug.Assert(teamTwo != null, "Team two not found!");
 
@@ -70,38 +70,64 @@ namespace LeMinhHuy
 		}
 		void Start()
 		{
+			waitOneSecond = new WaitForSeconds(1f);
+
 			CalculateAttackDirectionForEachTeam();
 			onBeginMatch.AddListener(() =>
 			{
 				StartCoroutine(TickTeams());
 			});
+
+			//Register events
+			teamOne.onScoreGoal.AddListener(EndRound);
+			teamTwo.onScoreGoal.AddListener(EndRound);
+
+			if (playDemoOnStart) BeginDemo();
 		}
-		public void CalculateAttackDirectionForEachTeam()
+		internal void BeginDemo()
 		{
-			//Calculate attack direction
-			if (teamOne.field is object && teamTwo.field is object)
-			{
-				// Debug.Log(teamOne.field.transform.position);
-				// Debug.Log(teamTwo.field.transform.position);
-				teamOne.attackDirection = (teamTwo.field.transform.position - teamOne.field.transform.position).normalized;
-				teamTwo.attackDirection = (teamOne.field.transform.position - teamTwo.field.transform.position).normalized;
-			}
+			isPlaying = true;
+			currentRound = 0;
+
+			//Generate random colors
+			teamOne.color = UnityEngine.Random.ColorHSV(
+					hueMin: 0f, hueMax: 1f,
+					saturationMin: 0.55f, saturationMax: 0.65f,
+					valueMin: 0.9f, valueMax: 1f);
+			teamOne.Awake();
+			teamOne.InitTeamObjects();
+			teamOne.SetStance();
+
+			teamTwo.color = UnityEngine.Random.ColorHSV(
+					hueMin: 0f, hueMax: 1f,
+					saturationMin: 0.55f, saturationMax: 0.65f,
+					valueMin: 0.9f, valueMax: 1f);
+			teamTwo.Awake();
+			teamTwo.InitTeamObjects();
+			teamOne.SetStance();
+
+			CalculateAttackDirectionForEachTeam();  //should already be done
+			if (ball is null)
+				ball = Instantiate<Ball>(ballPrefab, this.transform);
+
+			SetOpponents();
+			BeginRound();
+			print("Playing demo");
 		}
 
 		#region Gameplay
+		/// <summary>
+		/// Prep teams
+		/// Set team's opponent
+		/// Create the ball
+		/// Start the first round
+		/// </summary>
 		public void BeginMatch()
 		{
-			isPlaying = true;
-
-			//Set scores
 			currentRound = 0;
 
-			//Teams need to know their opponents
-			teamOne.opponent = teamTwo;
-			teamTwo.opponent = teamOne;
-
-			teamOne.Initialize(parameters.teamOneSettings);
-			teamTwo.Initialize(parameters.teamTwoSettings);
+			SetOpponents();
+			InitTeams();
 			CalculateAttackDirectionForEachTeam();
 
 			//Create ball
@@ -114,11 +140,40 @@ namespace LeMinhHuy
 			Debug.Log("Begin Match");
 			onBeginMatch.Invoke();
 		}
+		void SetOpponents()
+		{
+			//Teams need to know their opponents
+			teamOne.opponent = teamTwo;
+			teamTwo.opponent = teamOne;
+		}
+		void InitTeams()
+		{
+			//Set colors and strategies
+			teamOne.Initialize(settings.teamOneSettings);
+			teamTwo.Initialize(settings.teamTwoSettings);
+		}
+		public void CalculateAttackDirectionForEachTeam()
+		{
+			//Calculate attack direction vector from one team to the other
+			if (teamOne.field is object && teamTwo.field is object)
+			{
+				teamOne.attackDirection = (teamTwo.field.transform.position - teamOne.field.transform.position).normalized;
+				teamTwo.attackDirection = (teamOne.field.transform.position - teamTwo.field.transform.position).normalized;
+			}
+		}
 
+		/// <summary>
+		/// Starts a new/next round
+		/// Drops ball somewhere random over in attacker's field
+		/// Set/Swap each team's strategy
+		/// Set round number and time left
+		/// </summary>
 		public void BeginRound()
 		{
+			isPlaying = true;
+
 			//Guard
-			if (currentRound >= parameters.roundsPerMatch)
+			if (currentRound >= settings.roundsPerMatch)
 			{
 				EndRound();
 				return;
@@ -126,7 +181,7 @@ namespace LeMinhHuy
 
 			//Set match params
 			currentRound++;
-			currentRoundRemainingTime = parameters.startingRoundRemainingTime;
+			currentRoundRemainingTime = settings.startingRoundRemainingTime;
 
 			//Setup
 			ball.gameObject.SetActive(true);
@@ -136,24 +191,26 @@ namespace LeMinhHuy
 				case Stance.Offensive:
 					{
 						//Launch ball
-						ball.transform.SetPositionAndRotation(teamOne.field.GetRandomLocationOnField(3f), Quaternion.identity);
+						ball.transform.SetPositionAndRotation(teamOne.field.GetRandomLocationOnField(10f), Quaternion.identity);
+						// ball.OnEnable();    //let the ball bounce
 
 						//Switch stances (except for the first round)
 						if (currentRound == 1) break;
-						teamOne.strategy = parameters.defensiveStrategy;
-						teamTwo.strategy = parameters.offensiveStrategy;
+						teamOne.strategy = settings.defensiveStrategy;
+						teamTwo.strategy = settings.offensiveStrategy;
 					}
 					break;
 
 				case Stance.Defensive:
 					{
 						//Launch ball
-						ball.transform.SetPositionAndRotation(teamTwo.field.GetRandomLocationOnField(3f), Quaternion.identity);
+						ball.transform.SetPositionAndRotation(teamTwo.field.GetRandomLocationOnField(10f), Quaternion.identity);
+						// ball.OnEnable();
 
 						//Switch stances (except for the first round)
 						if (currentRound == 1) break;
-						teamOne.strategy = parameters.offensiveStrategy;
-						teamTwo.strategy = parameters.defensiveStrategy;
+						teamOne.strategy = settings.offensiveStrategy;
+						teamTwo.strategy = settings.defensiveStrategy;
 					}
 					break;
 			}
@@ -162,33 +219,14 @@ namespace LeMinhHuy
 			onBeginRound.Invoke();
 		}
 
-		public void EndRound()
-		{
-			ball.gameObject.SetActive(false);
-
-			Debug.Log("End Round");
-			onEndRound.Invoke();
-		}
-
-		void BeginPenaltyRound() { }
-
-		//End the match immediately
-		public void EndMatch()
-		{
-			//Resolve match
-			isPlaying = false;
-
-			ball.gameObject.SetActive(false);
-
-			//ie. stop input
-			onEndMatch.Invoke();
-		}
-		#endregion
-
-		//CORE
+		/// <summary>
+		/// Count down time left
+		/// End round if out of time
+		/// Let teams borrow MonoBehaviour.Update()
+		/// </summary>
 		void Update()
 		{
-			if (isPlaying == false)
+			if (!isPlaying)
 				return;
 
 			//Handle round timer IF a round is currently going on
@@ -197,9 +235,7 @@ namespace LeMinhHuy
 				currentRoundRemainingTime -= Time.deltaTime;
 
 				if (currentRoundRemainingTime <= 0)
-				{
 					EndRound();
-				}
 			}
 
 			//Update teams
@@ -207,17 +243,74 @@ namespace LeMinhHuy
 			teamTwo.Update();
 		}
 
-		//AI
-		WaitForSeconds waitOneSecond = new WaitForSeconds(1f);  //will always be one second
+		/// <summary>
+		/// Invoke when out of round time OR a goal is scored
+		/// CIf no more rounds left then end match
+		/// Rest a bit so player can continue
+		/// </summary>
+		public void EndRound()
+		{
+			isPlaying = false;
 
+			DeactivateBall();
+
+			teamOne.DeactivateAllUnits(indefinite: true);
+			teamTwo.DeactivateAllUnits(indefinite: true);
+
+			Debug.Log("End Round");
+			onEndRound.Invoke();
+		}
+
+		private void DeactivateBall()
+		{
+			ball.gameObject.SetActive(false);
+			ball.transform.SetParent(this.transform);
+		}
+
+		/// <summary>
+		/// Invoke when the match is a draw
+		/// Generate maze, clear area around goals, rebake field navmesh, place ball at random, place a unit at team goal, let run attacker AI logic
+		/// </summary>
+		void BeginPenaltyRound() { }
+
+		//End the match immediately. If early then you lose
+		//Show match end screen
+		//Start playing ending animations and cutscenes
+		public void EndMatch()
+		{
+			//Resolve match
+			isPlaying = false;
+
+			//Hide ball
+			ball.gameObject.SetActive(false);
+
+			//ie. stop input
+			onEndMatch.Invoke();
+		}
+
+		/// <summary>
+		/// Hide/despawn all units, balls or mazes
+		/// </summary>
+		public void Clear()
+		{
+			if (ball is object)
+				ball.gameObject.SetActive(false);
+			teamOne.DespawnAllUnits();
+			teamTwo.DespawnAllUnits();
+			//Clear maze
+		}
+		#endregion
+
+
+		//AI
 		IEnumerator TickTeams()
 		{
+			Debug.Log("TickTeams()");
 			while (true)
 			{
-				// Debug.Log("TickTeams()");
 				teamOne.Tick();
 				teamTwo.Tick();
-				yield return new WaitForSeconds(1f);
+				yield return waitOneSecond;
 			}
 		}
 
