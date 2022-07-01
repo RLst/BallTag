@@ -3,8 +3,8 @@ namespace LeMinhHuy
 	public enum Result
 	{
 		Wins,
-		Loses,
-		Draws,
+		Lose,
+		Draw,
 		WonPenalty,
 		LosePenalty,
 		None

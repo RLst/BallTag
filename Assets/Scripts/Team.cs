@@ -52,8 +52,8 @@ namespace LeMinhHuy
 		//Events
 		[Space]
 		public FloatEvent onEnergyChange;
-		public ResultEvent onScoreGoal;
-		public ResultEvent onNoActiveUnits;
+		[HideInInspector] public ResultEvent onScoreGoal;
+		[HideInInspector] public ResultEvent onNoActiveUnits;
 
 		//Properties
 		int? activeUnits => unitPool?.countActive;
@@ -289,7 +289,7 @@ namespace LeMinhHuy
 		public void NotifyNoUnitsLeftToPassBallTo()
 		{
 			//Basically you've lost
-			onNoActiveUnits.Invoke((this, Result.Loses));
+			onNoActiveUnits.Invoke((this, Result.Lose));
 		}
 
 		//INFO
@@ -384,23 +384,24 @@ namespace LeMinhHuy
 			return true;
 		}
 
+		//Deactivate and stop all units from moving
 		public void DeactivateAllUnits(bool indefinite)
 		{
 			foreach (var u in units)
 				u.Deactivate(indefinite);
 		}
 
-		//DESPAWN and put back into the object pool
-		public void DespawnUnit(Unit u)
+		//Hard deactivate units and recycle into the object pool
+		public void DespawnAllUnits()
+		{
+			foreach (var u in units)
+				u.Despawn();
+		}
+		public void RecycleUnit(Unit u)
 		{
 			unitPool.Recycle(u);
 			despawns++;
 			// onDespawnUnit.Invoke(u);
-		}
-		public void DespawnAllUnits()
-		{
-			foreach (var u in units)
-				DespawnUnit(u);
 		}
 
 		//DESTROY; might be redundant

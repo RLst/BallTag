@@ -16,7 +16,7 @@ filters = {
 	asset = true
 }
 scopes = {
-	"last_search.AB59B443" = "ar"
+	"last_search.AB59B443" = "mainmenu"
 }
 providers = {
 	asset = {
@@ -29,24 +29,9 @@ providers = {
 		priority = 100
 		defaultAction = null
 	}
-	scene = {
-		active = true
-		priority = 50
-		defaultAction = null
-	}
-	object = {
-		active = true
-		priority = 55
-		defaultAction = null
-	}
 	settings = {
 		active = true
 		priority = 100
-		defaultAction = null
-	}
-	menu = {
-		active = true
-		priority = 80
 		defaultAction = null
 	}
 	calculator = {
@@ -54,9 +39,24 @@ providers = {
 		priority = 10
 		defaultAction = null
 	}
+	menu = {
+		active = true
+		priority = 80
+		defaultAction = null
+	}
+	scene = {
+		active = true
+		priority = 50
+		defaultAction = null
+	}
 	res = {
 		active = true
 		priority = 100
+		defaultAction = null
+	}
+	static_methods = {
+		active = true
+		priority = 85
 		defaultAction = null
 	}
 	help = {
@@ -74,9 +74,9 @@ providers = {
 		priority = 210
 		defaultAction = null
 	}
-	static_methods = {
+	object = {
 		active = true
-		priority = 85
+		priority = 55
 		defaultAction = null
 	}
 }

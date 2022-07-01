@@ -50,21 +50,7 @@ namespace LeMinhHuy
 			game.onBeginMatch.AddListener(BeginMatchUI);
 			game.onEndRound.AddListener(EndRoundUI);
 			game.onEndMatch.AddListener(EndMatchUI);
-
-			// game.teamOne.onEnergyChange.AddListener(teamOneEnergyBarInt.onValueChanged);
-			// game.teamOne.onEnergyChange.AddListener(teamOneEnergyBarFloat);
 		}
-		void OnDisable()
-		{
-			game.onBeginMatch.RemoveListener(BeginMatchUI);
-			game.onEndRound.RemoveListener(EndRoundUI);
-			game.onEndMatch.RemoveListener(EndMatchUI);
-		}
-
-		// void OnEnergyChange()
-		// {
-		// 	teamOneEnergyBarInt.onc
-		// }
 
 		//Set up the UI, titles, names, colors etc
 		public void BeginMatchUI()
@@ -116,23 +102,23 @@ namespace LeMinhHuy
 			resultRoundNumber.text = "Round " + game.currentRound;
 
 			//Draw scenario
-			if (teamResults.result == Result.Draws)
+			if (teamResults.result == Result.Draw)
 			{
-				teamOneResults.text = $"{game.teamOne.name} {teamResults.result.ToString()}";
-				teamTwoResults.text = $"{game.teamTwo.name} {teamResults.result.ToString()}";
+				teamOneResults.text = $"{game.teamOne.name}\n{teamResults.result.ToString()}";
+				teamTwoResults.text = $"{game.teamTwo.name}\n{teamResults.result.ToString()}";
 				return;
 			}
 
 			//Normal scenario
 			if (teamResults.team == game.teamOne)
 			{
-				teamOneResults.text = $"{game.teamOne.name} {teamResults.result.ToString()}";
-				teamTwoResults.text = $"{game.teamTwo.name} {(teamResults.result == Result.Wins ? "Loses" : "Wins")}";
+				teamOneResults.text = $"{game.teamOne.name}\n{teamResults.result.ToString()}";
+				teamTwoResults.text = $"{game.teamTwo.name}\n{(teamResults.result == Result.Wins ? "Lose" : "Wins")}";
 			}
 			else
 			{
-				teamTwoResults.text = $"{game.teamTwo.name} {teamResults.result.ToString()}";
-				teamOneResults.text = $"{game.teamOne.name} {(teamResults.result == Result.Wins ? "Loses" : "Wins")}";
+				teamTwoResults.text = $"{game.teamTwo.name}\n{teamResults.result.ToString()}";
+				teamOneResults.text = $"{game.teamOne.name}\n{(teamResults.result == Result.Wins ? "Lose" : "Wins")}";
 			}
 		}
 

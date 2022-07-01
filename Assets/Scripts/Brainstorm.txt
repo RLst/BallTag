@@ -1,11 +1,22 @@
 Brainstorm
 ==========
 
+----------
+What does GameController.isPlaying control?
+----------
+GameController.Update()
+GameController.TickTeams()
+Unit.Update()
+Unit.Tick()
+In other words it controls the team and unit logic and AI
 
 -----------
 AR Mode
 ----------
 ? How will switching work?
+! MainMenu.TapToStart blocks input
+!
+
 Press the AR mode button on the home screen > Switch to AR mode
 	Load AR scene
 		Turn off main menu tap to start detector

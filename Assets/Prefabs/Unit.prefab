@@ -1209,7 +1209,7 @@ MonoBehaviour:
   ticksPerSecond: 12
   state: 5
   radiusNormal: 0.5
-  radiusPassthrough: 0.05
+  radiusPassthrough: 0.01
   hands: {fileID: 7972339662747037255}
   indicatorMoving: {fileID: 3207323515460899257}
   indicatorAttacking: {fileID: 7166912885723558846}
@@ -1287,7 +1287,7 @@ NavMeshAgent:
   m_Height: 2.2
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 2
+  m_ObstacleAvoidanceType: 0
 --- !u!54 &-1585036364189736884
 Rigidbody:
   m_ObjectHideFlags: 0

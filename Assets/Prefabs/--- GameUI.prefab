@@ -804,7 +804,7 @@ GameObject:
   - component: {fileID: 2047907602121284425}
   - component: {fileID: 2047907602121284426}
   m_Layer: 5
-  m_Name: IntergerGauge
+  m_Name: SouthIntergerGauge
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1188,7 +1188,7 @@ GameObject:
   - component: {fileID: 2047907602165033499}
   - component: {fileID: 2047907602165033572}
   m_Layer: 5
-  m_Name: FloatGauge
+  m_Name: SouthFloatGauge
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1601,7 +1601,7 @@ GameObject:
   - component: {fileID: 2047907602632666276}
   - component: {fileID: 2047907602632666203}
   m_Layer: 5
-  m_Name: Team Details
+  m_Name: SouthTeamDetails
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1866,7 +1866,7 @@ GameObject:
   - component: {fileID: 2047907602724685256}
   - component: {fileID: 2047907602724685257}
   m_Layer: 5
-  m_Name: FloatGauge
+  m_Name: NorthFloatGauge
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2087,7 +2087,7 @@ GameObject:
   - component: {fileID: 2047907602860457299}
   - component: {fileID: 2047907602860457298}
   m_Layer: 5
-  m_Name: Team Details
+  m_Name: NorthTeamDetails
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2483,7 +2483,7 @@ GameObject:
   - component: {fileID: 2047907603356688068}
   - component: {fileID: 2047907603356688069}
   m_Layer: 5
-  m_Name: IntergerGauge
+  m_Name: NorthIntergerGauge
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -390,7 +390,7 @@ namespace LeMinhHuy
 			SetActive(true);
 		}
 
-		//Inactive units are dark/translucent, can be passed through, visible
+		//Soft Deactivation: Inactive units are dark/translucent, can be passed through, visible
 		//Delay before they can move again And/or move back to their origin if defending
 		public void Deactivate(bool indefinite = false)
 		{
@@ -410,8 +410,7 @@ namespace LeMinhHuy
 			HideAuxillaries();
 		}
 
-		//Despawned units are invisible
-		//Put back into the pool
+		//Hard Deactivation: Despawned units are setactive false and to be recycled
 		public void Despawn()
 		{
 			//NOTE: Don't bring the ball with you!
@@ -423,7 +422,7 @@ namespace LeMinhHuy
 				ball.GroundBall();
 			}
 
-			team.DespawnUnit(this);
+			team.RecycleUnit(this);
 			SetState(State.Despawning);
 		}
 		#endregion

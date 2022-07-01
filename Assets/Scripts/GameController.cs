@@ -17,8 +17,9 @@ namespace LeMinhHuy
 		//Inspector
 		[SerializeField] bool playDemoOnStart = true;
 		[Space]
+		[Tooltip("Tick this if this scene is for AR")]
 		public bool isARMode = false;
-		[SerializeField] public bool isPlaying = false;
+		[SerializeField] public bool isPlaying = false;     //Controls team and unit logic and AI
 		[SerializeField] bool isPaused = false;
 		//MATCH PARAMS
 		public int currentRound { get; private set; } = 0;
@@ -42,16 +43,17 @@ namespace LeMinhHuy
 		public Team teamTwo;
 
 		//Events
-		[Header("Events")]
-		public UnityEvent onBeginMatch;
-		public UnityEvent onBeginRound;
-		public UnityEvent onPause;
-		public UnityEvent onUnpause;
-		public ResultEvent onEndRound;
-		public ResultEvent onEndMatch;
-		public UnityEvent onBeginPenaltyRound;
+		// [Header("Events")]
+		[HideInInspector] public UnityEvent onBeginMatch;
+		[HideInInspector] public UnityEvent onBeginRound;
+		[HideInInspector] public UnityEvent onPause;
+		[HideInInspector] public UnityEvent onUnpause;
+		[HideInInspector] public ResultEvent onEndRound;
+		[HideInInspector] public ResultEvent onEndMatch;
+		[HideInInspector] public UnityEvent onBeginPenaltyRound;
 
 		//Members
+		bool isPlayingDemo = false;
 		Ball ball;
 		WaitForSeconds waitOneSecond;
 
@@ -90,6 +92,7 @@ namespace LeMinhHuy
 		internal void BeginDemo()
 		{
 			isPlaying = true;
+			isPlayingDemo = true;
 			currentRound = 0;
 
 			//Generate random colors
@@ -132,6 +135,7 @@ namespace LeMinhHuy
 		public void BeginMatch()
 		{
 			currentRound = 0;
+			isPlayingDemo = false;
 
 			SetOpponents();
 			InitTeams();
@@ -178,6 +182,7 @@ namespace LeMinhHuy
 		public void BeginRound()
 		{
 			isPlaying = true;
+			Time.timeScale = 1f;
 
 			//Guard
 			if (currentRound >= settings.roundsPerMatch)
@@ -188,10 +193,10 @@ namespace LeMinhHuy
 			//Increment next round
 			currentRound++;
 
-			//Reset timer
+			//Resets
 			currentRoundRemainingTime = settings.startingRoundRemainingTime;
-
-			//Reset and show the ball
+			teamOne.energy = 0;
+			teamTwo.energy = 0;
 			ResetBall();
 			ball.Show();
 
@@ -248,7 +253,7 @@ namespace LeMinhHuy
 				currentRoundRemainingTime -= Time.deltaTime;
 
 				if (currentRoundRemainingTime <= 0)
-					EndRound((null, Result.Draws));
+					EndRound((null, Result.Draw));
 			}
 
 			//Update teams
@@ -264,24 +269,36 @@ namespace LeMinhHuy
 		public void EndRound((Team team, Result result) teamResult)
 		{
 			isPlaying = false;
+			Time.timeScale = 0.3f;
 
+			//Stop units moving and scoring etc but still keep them on screen
 			teamOne.DeactivateAllUnits(indefinite: true);
 			teamTwo.DeactivateAllUnits(indefinite: true);
 
-			//Set scores
-			if (teamResult.result == Result.Wins)
+			//Don't let demo mess things up
+			if (!isPlayingDemo)
 			{
-				teamResult.team.wins++;
-			}
-			else if (teamResult.result == Result.Draws)
-			{
-				teamResult.team.draws++;
-			}
+				//Set scores
+				if (teamResult.result == Result.Wins)
+				{
+					teamResult.team.wins++;
+				}
+				else if (teamResult.result == Result.Draw)
+				{
+					teamOne.draws++;
+					teamTwo.draws++;
+				}
 
-			//Switch team stances
-			var temp = teamOne.strategy;
-			teamOne.strategy = teamTwo.strategy;
-			teamTwo.strategy = temp;
+				//Switch team stances
+				var temp = teamOne.strategy;
+				teamOne.strategy = teamTwo.strategy;
+				teamTwo.strategy = temp;
+			}
+			else
+			{
+				//Keep restarting the demo
+				Invoke("BeginDemo", 1f);
+			}
 
 			Debug.Log("End Round");
 			onEndRound.Invoke(teamResult);
@@ -304,7 +321,7 @@ namespace LeMinhHuy
 			if (teamOne.wins == teamTwo.wins)
 			{
 				//DRAW; play penalty match
-				onEndMatch.Invoke((teamOne, Result.Draws));
+				onEndMatch.Invoke((teamOne, Result.Draw));
 			}
 			else if (teamOne.wins > teamTwo.wins)
 			{
@@ -314,7 +331,7 @@ namespace LeMinhHuy
 			else if (teamOne.wins < teamTwo.wins)
 			{
 				//Player loses
-				onEndMatch.Invoke((teamOne, Result.Loses));
+				onEndMatch.Invoke((teamOne, Result.Lose));
 			}
 
 			//Also stop input
@@ -326,7 +343,7 @@ namespace LeMinhHuy
 		/// </summary>
 		void BeginPenaltyRound()
 		{
-			
+
 		}
 		#endregion
 
@@ -355,6 +372,12 @@ namespace LeMinhHuy
 			Time.timeScale = 1f;
 			isPaused = false;
 			onUnpause.Invoke();
+		}
+
+		//TESTS
+		public void TestDraw()
+		{
+			EndRound((teamOne, Result.Draw));
 		}
 	}
 }
