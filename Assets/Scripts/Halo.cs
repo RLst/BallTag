@@ -5,12 +5,11 @@ namespace LeMinhHuy
 	//This just spins this at a set speed when it's active
 	public class Halo : MonoBehaviour
 	{
-		[SerializeField] float speed = 0.3f;
-		float currentAngle = 0;
+		[SerializeField] float rotationSpeed = 120f;
 
 		void Update()
 		{
-			this.transform.Rotate(Vector3.up, currentAngle += speed);
+			this.transform.Rotate(Vector3.up, rotationSpeed * Time.deltaTime);
 		}
 	}
 }
