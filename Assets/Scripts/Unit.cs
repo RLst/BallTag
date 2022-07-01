@@ -92,6 +92,7 @@ namespace LeMinhHuy
 
 			HideAuxillaries();
 		}
+
 		void HideAuxillaries()
 		{
 			indicatorAttacking.SetActive(false);
@@ -102,14 +103,13 @@ namespace LeMinhHuy
 		public bool isOpponent(Unit otherUnit) => !otherUnit.team.Equals(this.team);
 		public void SetActive(bool v) => gameObject.SetActive(v);
 		internal void SetOrigin() => origin = transform.position;
+		public override void SetColor(Color col) => renderer.material.color = col;
 
 		void Update()
 		{
 			if (!game.isPlaying) return;
 
 			handleInactiveUnits();
-
-			UpdateThirdPersonCharacter();
 
 			void handleInactiveUnits()
 			{
@@ -123,6 +123,8 @@ namespace LeMinhHuy
 				}
 			}
 		}
+
+		void FixedUpdate() => UpdateThirdPersonCharacter();
 
 		void UpdateThirdPersonCharacter()
 		{
@@ -140,13 +142,12 @@ namespace LeMinhHuy
 		//AI tick cycle that runs as specified rate per second to reduce processing
 		void Tick()
 		{
-
+			if (!gameObject.activeSelf) return;     //Navmesh agent only works when unit is active
 
 			if (!game.isPlaying) return;    //Prevent units from moving about after the round has finished
 
 			//Don't tick if inactive
-			if (inactive > 0f)
-				return;
+			if (inactive > 0f) return;
 
 			//This tick will be run right at instantiate when a team has yet to be assigned
 			if (team is null)
@@ -187,7 +188,7 @@ namespace LeMinhHuy
 					SetState(State.Chasing);
 					break;
 				case State.Chasing:
-					//If our team no in possession then chase after ball
+					//If our team not in possession then chase after ball
 					if (!team.hasBall)
 					{
 						Chase();
@@ -209,16 +210,14 @@ namespace LeMinhHuy
 				case State.Receiving:
 					Receive();
 					break;
-				case State.Inactive:
-					name = "Inactive (Offense)";
-					if (agent.isOnNavMesh) agent.SetDestination(transform.position);
+				case State.Inactive:    //NOTE! inactive never ticks!!!
 					break;
 			}
 		}
 		void Chase()
 		{
 			name = "Chaser";
-			if (agent.isOnNavMesh) agent.SetDestination(ball.transform.position);
+			agent.SetDestination(ball.transform.position);
 			agent.speed = team.strategy.normalSpeed;
 			agent.radius = radiusNormal;
 			indicatorMoving.SetActive(true);
@@ -247,7 +246,7 @@ namespace LeMinhHuy
 		void Attack()
 		{
 			name = "Attacker";
-			if (agent.isOnNavMesh) agent.SetDestination(team.opponent.goal.target.transform.position);
+			agent.SetDestination(team.opponent.goal.target.transform.position);
 			agent.speed = team.strategy.dribbleSpeed;
 			agent.radius = radiusNormal;
 			HideAuxillaries();
@@ -256,7 +255,7 @@ namespace LeMinhHuy
 		void Advance()
 		{
 			name = "Advancer";
-			if (agent.isOnNavMesh) agent.SetDestination(transform.position + team.attackDirection * 10f);
+			agent.SetDestination(transform.position + team.attackDirection * 10f);
 			agent.speed = team.strategy.normalSpeed;
 			agent.radius = radiusPassthrough;
 			HideAuxillaries();
@@ -290,7 +289,7 @@ namespace LeMinhHuy
 		{
 			//Stand still and wait for ball to come
 			name = "Receiver";
-			if (agent.isOnNavMesh) agent.SetDestination(ball.transform.position);  //look at the ball
+			agent.SetDestination(ball.transform.position);  //look at the ball
 			agent.speed = team.strategy.normalSpeed * 0.5f;
 			agent.radius = radiusNormal;
 			HideAuxillaries();
@@ -326,14 +325,6 @@ namespace LeMinhHuy
 				case State.Defending:
 					Defend();
 					break;
-				case State.Inactive:
-					//NOTE: For some reason deactivated units become disconnected from navmesh?
-					// print("inactive, moving back to orign");
-					// name = "Inactive (Defense)";
-					// //Move back towards origin after tagging someone out
-					// agent.SetDestination(origin);
-					// agent.speed = team.strategy.returnSpeed;
-					break;
 			}
 		}
 		void Standby()
@@ -356,9 +347,8 @@ namespace LeMinhHuy
 		void Defend()
 		{
 			//Disable detector and start chasing the attacker
-			// longRangeDetector.SetActive(false);
 			name = "Defender";
-			if (agent.isOnNavMesh) agent.SetDestination(targetAttacker.transform.position);
+			agent.SetDestination(targetAttacker.transform.position);
 			agent.speed = team.strategy.normalSpeed;
 			HideAuxillaries();
 			indicatorMoving.SetActive(true);
@@ -404,7 +394,7 @@ namespace LeMinhHuy
 		//Delay before they can move again And/or move back to their origin if defending
 		public void Deactivate(bool indefinite = false)
 		{
-			if (state == State.Despawning)
+			if (state == State.Despawning || !gameObject.activeSelf)
 				return;
 
 			//Set the inactive time
@@ -412,8 +402,7 @@ namespace LeMinhHuy
 
 			SetColor(inactiveColor);
 
-			if (agent.isOnNavMesh)
-				agent.SetDestination(transform.position);       //Stop unit without turning off agent
+			agent.SetDestination(transform.position);       //Stop unit without turning off agent
 			agent.radius = radiusPassthrough;
 
 			SetState(State.Inactive);
@@ -436,12 +425,6 @@ namespace LeMinhHuy
 
 			team.DespawnUnit(this);
 			SetState(State.Despawning);
-		}
-
-		public override void SetColor(Color col)
-		{
-			// renderer.material.DOKill();
-			renderer.material.color = col;
 		}
 		#endregion
 	}
