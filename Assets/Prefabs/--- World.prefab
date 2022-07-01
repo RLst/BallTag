@@ -1647,6 +1647,10 @@ GameObject:
   m_Component:
   - component: {fileID: 3120716179716224444}
   - component: {fileID: 3120716179716224445}
+  - component: {fileID: 2109042910541016276}
+  - component: {fileID: 2827587353813454409}
+  - component: {fileID: 5237029604450128000}
+  - component: {fileID: 6182277310693577260}
   m_Layer: 0
   m_Name: Stadium
   m_TagString: Untagged
@@ -1699,6 +1703,58 @@ MonoBehaviour:
   m_VoxelSize: 0.16666667
   m_BuildHeightMesh: 0
   m_NavMeshData: {fileID: 23800000, guid: 56ff2b2ed8e69784dbf8db349b71b548, type: 2}
+--- !u!65 &2109042910541016276
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3120716179716224447}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 25, y: 20, z: 1}
+  m_Center: {x: 0, y: 0, z: -22}
+--- !u!65 &2827587353813454409
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3120716179716224447}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 25, y: 20, z: 1}
+  m_Center: {x: 0, y: 0, z: 22}
+--- !u!65 &5237029604450128000
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3120716179716224447}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 20, z: 45}
+  m_Center: {x: -10, y: 0, z: 0}
+--- !u!65 &6182277310693577260
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3120716179716224447}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 20, z: 45}
+  m_Center: {x: 10, y: 0, z: 0}
 --- !u!1 &3120716179997013157
 GameObject:
   m_ObjectHideFlags: 0
