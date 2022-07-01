@@ -39,7 +39,7 @@ namespace LeMinhHuy
 		float tickRate => 1f / ticksPerSecond;
 		public State state = State.Starting;
 		[SerializeField] float radiusNormal = 0.65f;
-		[SerializeField] float radiusPassthrough = 0.01f;
+		[SerializeField] float radiusPassthrough = 0.1f;    //If this is too low the agent gets disconnected from the navmesh?
 
 		[Space]
 		[Tooltip("Where the player will hold the ball")]
@@ -308,10 +308,12 @@ namespace LeMinhHuy
 					Defend();
 					break;
 				case State.Inactive:
-					name = "Inactive (Defense)";
-					//Move back towards origin after tagging someone out
-					if (agent.isOnNavMesh) agent.SetDestination(origin);
-					agent.speed = team.strategy.returnSpeed;
+					//NOTE: For some reason deactivated units become disconnected from navmesh?
+					// print("inactive, moving back to orign");
+					// name = "Inactive (Defense)";
+					// //Move back towards origin after tagging someone out
+					// agent.SetDestination(origin);
+					// agent.speed = team.strategy.returnSpeed;
 					break;
 			}
 		}
@@ -350,6 +352,9 @@ namespace LeMinhHuy
 			{
 				other.Tagout();
 				Deactivate();
+				//Return to origin
+				agent.SetDestination(origin);
+				agent.speed = team.strategy.returnSpeed;
 
 				onTag.Invoke();
 			}
@@ -387,7 +392,8 @@ namespace LeMinhHuy
 			SetColor(inactiveColor);
 			inactive = indefinite ? -1f : team.strategy.reactivationTime;
 
-			if (agent.isOnNavMesh) agent.SetDestination(transform.position);       //Stop unit without turning off agent
+			// if (agent.isOnNavMesh)
+			agent.SetDestination(transform.position);       //Stop unit without turning off agent
 			agent.radius = radiusPassthrough;
 
 			SetState(State.Inactive);
@@ -403,11 +409,12 @@ namespace LeMinhHuy
 			if (hasBall)
 			{
 				ball.transform.SetParent(null);
-				hasBall = false; ball.SetActivatePhysics(true);
+				hasBall = false;
+				ball.SetActivatePhysics(true);
+				ball.GroundBall();
 			}
 
 			team.DespawnUnit(this);
-			SetActive(false);
 			SetState(State.Despawning);
 		}
 
