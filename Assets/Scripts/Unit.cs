@@ -5,6 +5,7 @@ using UnityEngine.AI;
 using UnityEngine.Events;
 using DG.Tweening;
 using LeMinhHuy.Events;
+using UnityStandardAssets.Characters.ThirdPerson;
 
 namespace LeMinhHuy
 {
@@ -63,6 +64,7 @@ namespace LeMinhHuy
 
 		//Members
 		NavMeshAgent agent;
+		ThirdPersonCharacter tpc;
 		Rigidbody rb;
 		Vector3 origin;   //Initial spawn location so it knows where to return to
 		Ball ball;     //Required to chase after the ball
@@ -72,8 +74,9 @@ namespace LeMinhHuy
 		protected override void Init()
 		{
 			agent = GetComponent<NavMeshAgent>();
+			tpc = GetComponent<ThirdPersonCharacter>();
 			rb = GetComponent<Rigidbody>();
-			ball = GameObject.FindGameObjectWithTag("Ball").GetComponent<Ball>();
+			ball = Ball.current;
 			Debug.Assert(hands is object, "Unit has no hands");
 		}
 
@@ -85,6 +88,8 @@ namespace LeMinhHuy
 			//Initial settings, hide indicators, when first instantiated
 			col.isTrigger = true;       //The agent collider will provide collision like behaviour?
 			rb.isKinematic = true;
+			agent.updateRotation = false;   //third person controller will handle this
+
 			HideAuxillaries();
 		}
 		void HideAuxillaries()
@@ -98,19 +103,20 @@ namespace LeMinhHuy
 		public void SetActive(bool v) => gameObject.SetActive(v);
 		internal void SetOrigin() => origin = transform.position;
 
-
 		void Update()
 		{
 			if (!game.isPlaying) return;
 
 			handleInactiveUnits();
 
+			UpdateThirdPersonCharacter();
+
 			void handleInactiveUnits()
 			{
 				//Handle inactive
 				if (inactive > 0f)
 				{
-					//Countdown downtime timer
+					//Countdown inactive timer
 					inactive -= Time.deltaTime;
 					if (inactive <= 0)
 						Activate();
@@ -118,11 +124,24 @@ namespace LeMinhHuy
 			}
 		}
 
+		void UpdateThirdPersonCharacter()
+		{
+			if (agent.remainingDistance > agent.stoppingDistance)
+			{
+				tpc.Move(agent.desiredVelocity, false, false);
+			}
+			else
+			{
+				tpc.Move(Vector3.zero, false, false);
+			}
+		}
 
 		#region  AI
 		//AI tick cycle that runs as specified rate per second to reduce processing
 		void Tick()
 		{
+
+
 			if (!game.isPlaying) return;    //Prevent units from moving about after the round has finished
 
 			//Don't tick if inactive
@@ -362,7 +381,6 @@ namespace LeMinhHuy
 		#endregion
 		#endregion
 
-
 		#region Spawn
 		//Spawning units are dark, can be passed through, have a slight delay before they move and visible
 		public void Spawn()
@@ -389,11 +407,13 @@ namespace LeMinhHuy
 			if (state == State.Despawning)
 				return;
 
-			SetColor(inactiveColor);
+			//Set the inactive time
 			inactive = indefinite ? -1f : team.strategy.reactivationTime;
 
-			// if (agent.isOnNavMesh)
-			agent.SetDestination(transform.position);       //Stop unit without turning off agent
+			SetColor(inactiveColor);
+
+			if (agent.isOnNavMesh)
+				agent.SetDestination(transform.position);       //Stop unit without turning off agent
 			agent.radius = radiusPassthrough;
 
 			SetState(State.Inactive);

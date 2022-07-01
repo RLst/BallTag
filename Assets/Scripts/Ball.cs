@@ -8,7 +8,7 @@ using UnityEngine.AI;
 namespace LeMinhHuy
 {
 	[RequireComponent(typeof(NavMeshAgent))]
-	public class Ball : MonoBehaviour
+	public class Ball : Singleton<Ball>
 	{
 		[SerializeField] float startDelay = 5f;     //To let the ball bounce a bit
 		[SerializeField] float distancePerBounce = 5f;
