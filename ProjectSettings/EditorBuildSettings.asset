@@ -11,8 +11,13 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/AR.unity
     guid: 383594893e9254a218a6fcd0af8fd402
+  - enabled: 0
+    path: Assets/Scenes/ARBasic.unity
+    guid: be87ab5170d704fa28696ae276d16758
   m_configObjects:
-    com.unity.xr.arkit.PlayerSettings: {fileID: 11400000, guid: 2d5fb8e61571b4e3897f221189089fd6,
+    com.unity.xr.arcore.PlayerSettings: {fileID: 11400000, guid: f738e882365f14cda8f23e4342f0bd20,
+      type: 2}
+    com.unity.xr.arkit.PlayerSettings: {fileID: 11400000, guid: 81c25969ab61844a0a30387567938ad4,
       type: 2}
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 25ddef0d7da3944209907c5b85f30693,
       type: 2}

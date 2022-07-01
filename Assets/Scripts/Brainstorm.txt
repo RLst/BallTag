@@ -6,12 +6,18 @@ Brainstorm
 AR Mode
 ----------
 ? How will switching work?
-Press the AR mode button on the home screen
+Press the AR mode button on the home screen > Switch to AR mode
 	Load AR scene
-		Scan for a suitable plane
-		when one is found, hover over the stadium
-		Tap to place the stadium and start the game
+		Turn off main menu tap to start detector
+			Scan for a suitable plane
+			when one is found, hover the stadium over
+			Tap to place the stadium down
+			Set as assembly has been placed
+		Turn on main menu tap to start detector
+	Resume as normal
 
+Switching back to normal mode
+	No changes to main menu
 
 
 ---------------------------

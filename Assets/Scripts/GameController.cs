@@ -18,7 +18,7 @@ namespace LeMinhHuy
 		[SerializeField] bool playDemoOnStart = true;
 		[Space]
 		public bool isARMode = false;
-		[SerializeField] bool isPlaying = false;
+		[SerializeField] public bool isPlaying = false;
 		[SerializeField] bool isPaused = false;
 		//MATCH PARAMS
 		public int currentRound { get; private set; } = 0;
@@ -34,13 +34,12 @@ namespace LeMinhHuy
 
 		[Header("AR")]
 		public ARRaycastManager arRaycastManager;
+		public ARGamePlacer arGamePlacer;
 
 		//Make these an array if you ever need more than two teams
 		[Header("Teams")]
-		public Team teamOne;
+		public Team teamOne;    //This is the player
 		public Team teamTwo;
-
-		[Space]
 
 		//Events
 		[Header("Events")]
@@ -56,7 +55,6 @@ namespace LeMinhHuy
 		Ball ball;
 		WaitForSeconds waitOneSecond;
 
-
 		//INITS
 		void OnValidate() => CalculateAttackDirectionForEachTeam();
 		void Awake()
@@ -68,6 +66,7 @@ namespace LeMinhHuy
 			if (isARMode)
 			{
 				Debug.Assert(arRaycastManager != null, "No ARRaycastManager found!");
+				Debug.Assert(arGamePlacer != null, "No ARGamePlacer found!");
 			}
 		}
 		void Start()
@@ -223,6 +222,15 @@ namespace LeMinhHuy
 			Debug.Log("Begin Round");
 			onBeginRound.Invoke();
 		}
+		//Hide the ball, release from parents, zero
+		//NOTE: Ball should NEVER be deactivated
+		internal void ResetBall()
+		{
+			print("Resetball");
+			ball.Hide();
+			ball.transform.SetParent(null);
+			ball.transform.position = Vector3.zero;
+		}
 
 		/// <summary>
 		/// Count down time left
@@ -278,49 +286,48 @@ namespace LeMinhHuy
 			Debug.Log("End Round");
 			onEndRound.Invoke(teamResult);
 		}
-		// public int wins =
 
-		//Hide the ball, release from parents, zero
-		//NOTE: Ball should NEVER be deactivated
-		internal void ResetBall()
-		{
-			print("Resetball");
-			ball.Hide();
-			ball.transform.SetParent(null);
-			ball.transform.position = Vector3.zero;
-		}
-
-		/// <summary>
-		/// Invoke when the match is a draw
-		/// Generate maze, clear area around goals, rebake field navmesh, place ball at random, place a unit at team goal, let run attacker AI logic
-		/// </summary>
-		void BeginPenaltyRound() { }
 
 		//End the match immediately. If early then you lose
 		//Show match end screen
 		//Start playing ending animations and cutscenes
 		public void EndMatch()
 		{
-			//Resolve match
 			isPlaying = false;
 
-			//Hide ball
-			// ResetBall();
+			//Turn everything off
+			teamOne.DeactivateAllUnits(indefinite: true);
+			teamTwo.DeactivateAllUnits(indefinite: true);
 
-			//ie. stop input
-			onEndMatch.Invoke((null, Result.None));
+			//Resolve match
+			//onEndMatch being listened by GameUIController and PenaltyMatchSystem?
+			if (teamOne.wins == teamTwo.wins)
+			{
+				//DRAW; play penalty match
+				onEndMatch.Invoke((teamOne, Result.Draws));
+			}
+			else if (teamOne.wins > teamTwo.wins)
+			{
+				//Player wins
+				onEndMatch.Invoke((teamOne, Result.Wins));
+			}
+			else if (teamOne.wins < teamTwo.wins)
+			{
+				//Player loses
+				onEndMatch.Invoke((teamOne, Result.Loses));
+			}
+
+			//Also stop input
 		}
 
 		/// <summary>
-		/// Hide/despawn all units, balls or mazes
+		/// Invoke when the match is a draw
+		/// Generate maze, clear area around goals, rebake field navmesh, place ball at random, place a unit at team goal, let run attacker AI logic
 		/// </summary>
-		// public void Clear()
-		// {
-		// 	if (ball is object) ball.gameObject.SetActive(false);
-		// 	teamOne.DespawnAllUnits();
-		// 	teamTwo.DespawnAllUnits();
-		// 	//Clear maze
-		// }
+		void BeginPenaltyRound()
+		{
+			
+		}
 		#endregion
 
 

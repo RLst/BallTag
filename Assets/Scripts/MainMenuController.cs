@@ -1,45 +1,67 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 namespace LeMinhHuy
 {
 	/// <summary>
 	/// Handle menus etc
 	/// </summary>
-	public class MainMenuController : MonoBehaviour
+	[RequireComponent(typeof(Canvas))]
+	public class MainMenuController : Singleton<MainMenuController>
 	{
+		//Since this is a floating dont destroy on load class it shouldn't directly reference anything else other than itself
+
 		[SerializeField] string mainSceneName = "Main";
 		[SerializeField] string ARSceneName = "AR";
+		[SerializeField] TextMeshProUGUI arToggleButtonText;
+		[SerializeField] Button tapToStart;
 
-		GameController gc;
-		GameSettings gp;
+		Canvas canvas;
+		GameController game => GameController.current;
 
 		void Awake()
 		{
 			DontDestroyOnLoad(this);
-			gc = FindObjectOfType<GameController>();
-			gp = gc.settings;
+			canvas = GetComponent<Canvas>();
+			Show();
 		}
 
+		void Start()
+		{
+			tapToStart.onClick.AddListener(() => game.BeginMatch());
+		}
+
+		public void SetActiveTapToStart(bool active) => tapToStart.enabled = (active);
+		public void Show() => canvas.enabled = true;
+		public void Hide() => canvas.enabled = false;
+		
 		public void ToggleARMode()
 		{
-			gc.isARMode = !gc.isARMode;
+			game.isARMode = !game.isARMode;
 
 			var currentScene = SceneManager.GetActiveScene();
 
-			if (gc.isARMode)
+			if (game.isARMode)
 			{
 				if (currentScene.name == ARSceneName)
-					return;
+					throw new System.Exception("Invalid scene name");
 
 				SceneManager.LoadScene(ARSceneName);
+
+				arToggleButtonText.text = "AR\nOFF";
+
+				tapToStart.enabled = (false);
 			}
 			else
 			{
 				if (currentScene.name == mainSceneName)
-					return;
+					throw new System.Exception("Invalid scene name");
 
 				SceneManager.LoadScene(mainSceneName);
+
+				arToggleButtonText.text = "AR\nON";
 			}
 		}
 
