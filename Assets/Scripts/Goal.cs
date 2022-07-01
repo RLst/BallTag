@@ -20,6 +20,10 @@ namespace LeMinhHuy
 			var hit = other.GetComponent<Unit>();
 			if (hit is object)
 			{
+				//Edge case; ball gets stuck in the goal, chasers need to be able to get there
+				if (hit.state == Unit.State.Chasing)
+					return;
+
 				//If the unit is from the other team...
 				if (!hit.team.Equals(this.team))
 				{
@@ -34,6 +38,7 @@ namespace LeMinhHuy
 				//Do nothing if it's our own team
 			}
 		}
+		void OnTriggerStay(Collider other) => OnTriggerEnter(other);
 
 	}
 }
