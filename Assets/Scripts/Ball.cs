@@ -7,6 +7,7 @@ using UnityEngine.AI;
 
 namespace LeMinhHuy
 {
+	[RequireComponent(typeof(NavMeshAgent))]
 	public class Ball : MonoBehaviour
 	{
 		[SerializeField] float startDelay = 5f;     //To let the ball bounce a bit
@@ -16,19 +17,34 @@ namespace LeMinhHuy
 		Rigidbody rb;
 		Unit receiver;
 		Renderer r;
+		NavMeshAgent agent;     //This is only so the ball stays within the playing boundaries
 
 		void Awake()
 		{
 			r = GetComponent<Renderer>();
 			col = GetComponent<Collider>();
 			rb = GetComponent<Rigidbody>();
+			agent = GetComponent<NavMeshAgent>();
 		}
 		void Start()
 		{
 			SetActivatePhysics(true);
+			agent.enabled = false;
 		}
+
 		public void Hide() => r.enabled = false;
 		public void Show() => r.enabled = true;
+		public void GroundBall()
+		{
+			//Just turns the agent on for a second to ground it on the nav mesh
+			StartCoroutine(groundBall());
+			IEnumerator groundBall()
+			{
+				agent.enabled = true;
+				yield return new WaitForSeconds(1f);
+				agent.enabled = false;
+			}
+		}
 
 		/// <summary>
 		/// Deactivating physics will lock the ball in position ie. for carrying

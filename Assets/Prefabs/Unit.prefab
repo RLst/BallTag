@@ -1109,7 +1109,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   renderer: {fileID: 509169339145983520}
   inactive: -1
-  ticksPerSecond: 5
+  ticksPerSecond: 12
   state: 5
   radiusNormal: 0.65
   radiusPassthrough: 0.01
@@ -1122,6 +1122,9 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   onOut:
+    m_PersistentCalls:
+      m_Calls: []
+  onPass:
     m_PersistentCalls:
       m_Calls: []
   onChangedState:
