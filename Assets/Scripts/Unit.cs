@@ -101,6 +101,8 @@ namespace LeMinhHuy
 
 		void Update()
 		{
+			if (!game.isPlaying) return;
+
 			handleInactiveUnits();
 
 			void handleInactiveUnits()
@@ -121,6 +123,8 @@ namespace LeMinhHuy
 		//AI tick cycle that runs as specified rate per second to reduce processing
 		void Tick()
 		{
+			if (!game.isPlaying) return;    //Prevent units from moving about after the round has finished
+
 			//Don't tick if inactive
 			if (inactive > 0f)
 				return;
