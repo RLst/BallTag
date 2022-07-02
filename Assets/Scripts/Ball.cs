@@ -15,9 +15,9 @@ namespace LeMinhHuy
 		[SerializeField] float passHeight = 2.5f;
 		Collider col;
 		Rigidbody rb;
-		Unit receiver;
 		Renderer r;
 		NavMeshAgent agent;     //This is only so the ball stays within the playing boundaries
+		Stadium stadium;
 
 		void Awake()
 		{
@@ -25,9 +25,11 @@ namespace LeMinhHuy
 			col = GetComponent<Collider>();
 			rb = GetComponent<Rigidbody>();
 			agent = GetComponent<NavMeshAgent>();
+			stadium = Stadium.current;
 		}
 		void Start()
 		{
+			ResetParentToStadium();
 			SetActivatePhysics(true);
 			agent.enabled = false;
 		}
@@ -58,34 +60,40 @@ namespace LeMinhHuy
 		}
 
 		/// <summary>
-		/// Passes this ball to a unit. Unit should be on the same team
+		/// Passes this ball to a unit with simulated bounce effects
 		/// </summary>
 		/// <param name="receiver">Receiving unit on the same team</param>
 		public void Pass(Unit receiver)
 		{
 			// print("Passing ball to " + receiver.name);
-			this.receiver = receiver;
 
 			//Calculate time required to move at the desired speed based on distance
 			//Time = Distance / Speed
-			//Optimization note: This only happens once and not every frame so it's ok
+			//Optimization note: v3.dist() not ideal but this only happens once and not repeatedly so it's ok
 			var distance = Vector3.Distance(this.transform.position, receiver.transform.position);
 			float speed = receiver.team.strategy.ballSpeed;
 			float time = distance / speed;
 
 			//Calculate bounces based on distance
-			int bounces = Mathf.RoundToInt(distance / distancePerBounce);
-			// print("Bounces: " + bounces);
+			int bounces = Mathf.RoundToInt(distance / distancePerBounce);  // print("Bounces: " + bounces);
 
 			//Move towards receiving unit then make unit grab ball
 			transform.DOJump(receiver.transform.position, passHeight, bounces, time)
-				//The physics have to be activated so that
+				//The physics have to be activated so that the other unit can detect it so that they can kill the tween early
 				.OnStart(() => SetActivatePhysics(true))
-				.OnKill(() =>
-				{
-					SetActivatePhysics(false);
-					receiver = null;
-				});
+				//Deactivate physics so the ball doesn't move around randomly
+				.OnKill(() => SetActivatePhysics(false));
+		}
+
+		/// <summary>
+		/// Release ball from units and root it under the stadium
+		/// Move the ball to the same level as the playing surface
+		/// </summary>
+		public void ResetParentToStadium()
+		{
+			const float smallAmountAbovePlayingSurface = 0.5f;
+			this.transform.SetParent(stadium.transform);
+			transform.localPosition = transform.localPosition + Vector3.up * (stadium.transform.position.y + smallAmountAbovePlayingSurface);
 		}
 	}
 }
