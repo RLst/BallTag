@@ -16,6 +16,7 @@ MonoBehaviour:
   fieldLength: 40
   roundsPerMatch: 5
   startingRoundRemainingTime: 140
+  endOfRoundTimescale: 0.4
   maxEnergy: 6
   offensiveStrategy:
     stance: 1
@@ -49,9 +50,9 @@ MonoBehaviour:
     name: Southerners
     color: {r: 1, g: 0.682302, b: 0.2216981, a: 1}
     userType: 0
-    stance: 0
+    stance: 1
   teamTwoSettings:
     name: Northerners
     color: {r: 1, g: 0.27269888, b: 0.1372549, a: 1}
     userType: 1
-    stance: 1
+    stance: 0
