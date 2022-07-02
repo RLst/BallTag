@@ -415,7 +415,6 @@ namespace LeMinhHuy
 				hasBall = false;
 				ball.ResetParentToStadium();
 				ball.SetActivatePhysics(true);
-				ball.GroundBall();
 			}
 
 			team.RecycleUnit(this);

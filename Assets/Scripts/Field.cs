@@ -12,7 +12,7 @@ namespace LeMinhHuy
 	{
 		const float CHECK_CAST_LENGTH = 10f;
 		//Members
-		new public BoxCollider collider;
+		[HideInInspector] new public BoxCollider collider;
 		RaycastHit[] hitResults;
 
 		void Awake()
@@ -21,7 +21,7 @@ namespace LeMinhHuy
 			hitResults = new RaycastHit[10];
 		}
 
-		public bool isPointWithinField(Vector3 position, float sphereCastRadius = 0.2f)
+		public bool isPointWithinField(Vector3 position, float sphereCastRadius = 0.1f)
 		{
 			var posHigh = position + Vector3.up * 5f;
 			Debug.DrawRay(posHigh, Vector3.down * CHECK_CAST_LENGTH, Color.green, 5f);
@@ -39,7 +39,7 @@ namespace LeMinhHuy
 		public Vector3 GetRandomLocationOnField(float height = 0.05f)
 		{
 			var point = Extensions.GetRandomPointInsideCollider(collider);
-			point.y = height;
+			point.y = this.transform.position.y + height;
 			return point;
 		}
 	}
