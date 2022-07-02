@@ -61,7 +61,7 @@ namespace LeMinhHuy
 		//Members
 		GameController gc;
 		ARRaycastManager arRaycastManager;
-		List<ARRaycastHit> arHitResults = null;
+		List<ARRaycastHit> arHitResults = new List<ARRaycastHit>();
 		internal Team opponent;
 
 		#region Stats

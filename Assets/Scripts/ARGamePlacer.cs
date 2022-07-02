@@ -1,5 +1,5 @@
-/*  */using System;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.XR.ARFoundation;
@@ -15,25 +15,34 @@ namespace LeMinhHuy
 		[Tooltip("The main game assembly for this AR scene")]
 		[SerializeField] GameObject gameAssembly;
 
+		public TextMeshProUGUI infoText;  //TEMP
+
+		public UnityEvent onAssemblyPlaced;
+
 		//Members
 		bool assemblyPlaced = false;
 		bool assemblyCanBePlaced = false;
 		ARRaycastManager raycastManager;
 		Camera cam;
+		List<ARRaycastHit> arRayHits = new List<ARRaycastHit>();
 
 		void Awake()
 		{
 			raycastManager = FindObjectOfType<ARRaycastManager>();
-			Debug.Assert(raycastManager is object, "AR Raycast manager not found");
 			cam = FindObjectOfType<Camera>();
+
+			Debug.Assert(gameAssembly is object, "Game Assembly Object required");
+			Debug.Assert(raycastManager is object, "AR Raycast manager not found");
 		}
 
 		void Start()
 		{
 			assemblyPlaced = false;
 
-			//TEMP
-			gameAssembly.transform.localScale = Vector3.one * 0.1f;
+			//Prevent game from starting etc
+			MainMenuController.current.SetActiveTapToStart(false);
+
+			onAssemblyPlaced.AddListener(OnAssemblyPlaced);
 		}
 
 		void Update()
@@ -42,11 +51,19 @@ namespace LeMinhHuy
 			if (assemblyPlaced) return;
 
 			//Hover assembly over if a surface is found
+			HoverAssembly();
+		}
+
+		private void HoverAssembly()
+		{
 			var screenCenter = cam.ViewportToScreenPoint(new Vector3(0.5f, 0.5f));
 			if (TryGetPoseAtScreenPos(out Pose pose, screenCenter))
 			{
 				assemblyCanBePlaced = true;
 
+				infoText.text = "Tap to place the game down";
+
+				//Hover
 				gameAssembly.transform.SetPositionAndRotation(pose.position, pose.rotation);
 
 				//Place assembly
@@ -57,42 +74,11 @@ namespace LeMinhHuy
 			{
 				assemblyCanBePlaced = false;
 
-				//Move it far away out of veiw
-				var outOfView = Vector3.up * 1000f;
+				infoText.text = "Move camera to a better surface";
+
+				//Move game far away out of view
+				var outOfView = Vector3.up * 10f;
 				gameAssembly.transform.position = outOfView;
-			}
-
-			ControlScale();
-		}
-
-		//Touch zoom
-		Touch[] touchStart = new Touch[2];
-		float touchStartDistance;
-		float touchZoomScaleMult = 0.5f;
-		void ControlScale()
-		{
-			if (Input.touchCount >= 2)
-			{
-				//Start
-				if (Input.GetTouch(0).phase == TouchPhase.Began)
-				{
-					touchStart[0] = Input.GetTouch(0);
-					touchStart[1] = Input.GetTouch(1);
-				}
-
-				//Initial dist
-				if (Input.GetTouch(0).phase == TouchPhase.Stationary)
-				{
-					touchStartDistance = Vector2.Distance(touchStart[0].position, touchStart[1].position);
-				}
-
-				//Zoom
-				if (Input.GetTouch(0).phase == TouchPhase.Moved)
-				{
-					var newTouchDistance = Vector2.Distance(Input.GetTouch(0).position, Input.GetTouch(1).position);
-					var difference = touchStartDistance - newTouchDistance;
-					gameAssembly.transform.localScale *= difference * touchZoomScaleMult;
-				}
 			}
 		}
 
@@ -102,14 +88,29 @@ namespace LeMinhHuy
 			if (!assemblyCanBePlaced)
 				return;
 
-			assemblyPlaced = true;
+			assemblyPlaced = true;  //Stop
 
 			MainMenuController.current.SetActiveTapToStart(true);
+
+			onAssemblyPlaced.Invoke();
 		}
-		public void ReleaseAssembly() => assemblyPlaced = false;
+		// public void ReleaseAssembly() => assemblyPlaced = false;
 
+		void OnAssemblyPlaced()
+		{
+			//Disable plane manager
 
-		List<ARRaycastHit> arRayHits = new List<ARRaycastHit>();
+			//Play particle effects?
+
+		}
+
+		/// <summary>
+		///	Get a pose at the specified screen point
+		/// </summary>
+		/// <param name="pose"></param>
+		/// <param name="screenPos">Screen point that will be raycasted out to</param>
+		/// <param name="trackableType"></param>
+		/// <returns>Returns true if a surface in session space was detected</returns>
 		bool TryGetPoseAtScreenPos(out Pose pose, Vector3 screenPos, TrackableType trackableType = TrackableType.PlaneWithinPolygon)
 		{
 			pose = Pose.identity;
