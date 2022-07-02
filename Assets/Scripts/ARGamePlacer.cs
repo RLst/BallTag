@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UI;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
 
@@ -14,25 +15,35 @@ namespace LeMinhHuy
 	{
 		[Tooltip("The main game assembly for this AR scene")]
 		[SerializeField] GameObject gameAssembly;
+		[SerializeField] ARPlaneManager arPlane;
+		[SerializeField] Vector3 outOfViewPosition = new Vector3(0, 1000f, 0);
 
-		public TextMeshProUGUI infoText;  //TEMP
+		[Header("UI")]
+		[SerializeField] GameObject arUIAssembly;   //The canvas that is only specific to the AR scene
+		[SerializeField] TextMeshProUGUI infoText;
+		[SerializeField] Image scanningTint;
+		[SerializeField] Color okColor = Color.green;
+		[SerializeField] Color notOkColor = Color.red;
 
+		[Space]
 		public UnityEvent onAssemblyPlaced;
 
 		//Members
 		bool assemblyPlaced = false;
 		bool assemblyCanBePlaced = false;
-		ARRaycastManager raycastManager;
+		ARRaycastManager arRaycaster;
 		Camera cam;
 		List<ARRaycastHit> arRayHits = new List<ARRaycastHit>();
 
 		void Awake()
 		{
-			raycastManager = FindObjectOfType<ARRaycastManager>();
+			arRaycaster = FindObjectOfType<ARRaycastManager>();
 			cam = FindObjectOfType<Camera>();
 
 			Debug.Assert(gameAssembly is object, "Game Assembly Object required");
-			Debug.Assert(raycastManager is object, "AR Raycast manager not found");
+			Debug.Assert(arRaycaster is object, "AR Raycast manager not found");
+			Debug.Assert(arPlane is object, "AR Plane manager not found");
+			Debug.Assert(arUIAssembly is object, "AR Canvas not found");
 		}
 
 		void Start()
@@ -41,8 +52,6 @@ namespace LeMinhHuy
 
 			//Prevent game from starting etc
 			MainMenuController.current.SetActiveTapToStart(false);
-
-			onAssemblyPlaced.AddListener(OnAssemblyPlaced);
 		}
 
 		void Update()
@@ -61,24 +70,25 @@ namespace LeMinhHuy
 			{
 				assemblyCanBePlaced = true;
 
-				infoText.text = "Tap to place the game down";
+				infoText.text = "Tap to place the game";
+				scanningTint.color = okColor;
 
 				//Hover
 				gameAssembly.transform.SetPositionAndRotation(pose.position, pose.rotation);
 
 				//Place assembly
-				if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Ended)
-					PlaceAssembly();
+				// if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Ended)
+				// 	PlaceAssembly();
 			}
 			else
 			{
 				assemblyCanBePlaced = false;
 
-				infoText.text = "Move camera to a better surface";
+				infoText.text = "Point camera towards a non-reflective, textured and level surface";
+				scanningTint.color = notOkColor;
 
-				//Move game far away out of view
-				var outOfView = Vector3.up * 10f;
-				gameAssembly.transform.position = outOfView;
+				//Move game far away out of view (can't deactivate it because it screws it up)
+				gameAssembly.transform.position = outOfViewPosition;
 			}
 		}
 
@@ -88,22 +98,23 @@ namespace LeMinhHuy
 			if (!assemblyCanBePlaced)
 				return;
 
-			assemblyPlaced = true;  //Stop
+			assemblyPlaced = true;  //Stop trying to find surfaces
 
+			//Hide any AR specific UIs
+			arUIAssembly.SetActive(false);
+
+			//Re-enable and resume normal main menu functions
 			MainMenuController.current.SetActiveTapToStart(true);
+
+			//Disable plane manager so the dots don't keep showing up
+			arPlane.enabled = false;
 
 			onAssemblyPlaced.Invoke();
 		}
-		// public void ReleaseAssembly() => assemblyPlaced = false;
+		public void ReleaseAssembly() => assemblyPlaced = false;
 
-		void OnAssemblyPlaced()
-		{
-			//Disable plane manager
 
-			//Play particle effects?
-
-		}
-
+		//UTILS
 		/// <summary>
 		///	Get a pose at the specified screen point
 		/// </summary>
@@ -116,7 +127,7 @@ namespace LeMinhHuy
 			pose = Pose.identity;
 
 			arRayHits.Clear();
-			raycastManager.Raycast(screenPos, arRayHits, trackableType);
+			arRaycaster.Raycast(screenPos, arRayHits, trackableType);
 			if (arRayHits.Count > 0)
 			{
 				pose = arRayHits[0].pose;

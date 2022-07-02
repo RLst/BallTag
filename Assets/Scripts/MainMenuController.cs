@@ -36,7 +36,7 @@ namespace LeMinhHuy
 		public void SetActiveTapToStart(bool active) => tapToStart.enabled = (active);
 		public void Show() => canvas.enabled = true;
 		public void Hide() => canvas.enabled = false;
-		
+
 		public void ToggleARMode()
 		{
 			game.isARMode = !game.isARMode;
@@ -61,7 +61,7 @@ namespace LeMinhHuy
 
 				SceneManager.LoadScene(mainSceneName);
 
-				arToggleButtonText.text = "AR\nON";
+				arToggleButtonText.text = "AR";
 			}
 		}
 

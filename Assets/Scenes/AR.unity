@@ -152,8 +152,8 @@ Camera:
   m_GameObject: {fileID: 31288671}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.3679245, g: 0.3679245, b: 0.3679245, a: 1}
+  m_ClearFlags: 2
+  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 1}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -315,7 +315,7 @@ PrefabInstance:
         type: 3}
       propertyPath: arGamePlacer
       value: 
-      objectReference: {fileID: 967537272}
+      objectReference: {fileID: 743686404}
     - target: {fileID: 6852594140958801551, guid: 80e2c460c7425db4daa4aca363a72858,
         type: 3}
       propertyPath: teamOne.field
@@ -1648,7 +1648,7 @@ MonoBehaviour:
     RequiredMouseButtons: 1
     RequiredSelectable: {fileID: 0}
   Camera: {fileID: 31288672}
-  Relative: 0
+  Relative: 1
   Sensitivity: 1
   Damping: -1
   remainingScale: {x: 0, y: 0, z: 0}
@@ -1662,6 +1662,7 @@ GameObject:
   m_Component:
   - component: {fileID: 743686402}
   - component: {fileID: 743686403}
+  - component: {fileID: 743686404}
   m_Layer: 0
   m_Name: AR Controllers
   m_TagString: Untagged
@@ -1681,7 +1682,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1164031263}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &743686403
 MonoBehaviour:
@@ -1709,6 +1710,29 @@ MonoBehaviour:
   MovePivotKey: 308
   MultiDragKey: 308
   FingerTexture: {fileID: 2800000, guid: 25c48be3a87ea0f489a6d41c9c9a2194, type: 3}
+--- !u!114 &743686404
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 743686401}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5855b9edc39289248845c1687d75aabf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameAssembly: {fileID: 1910559754}
+  arPlane: {fileID: 715463119}
+  outOfViewPosition: {x: 0, y: 100, z: 0}
+  arUIAssembly: {fileID: 1640410499}
+  infoText: {fileID: 842427841}
+  scanningTint: {fileID: 1369869222}
+  okColor: {r: 0.4346952, g: 0.8867924, b: 0.29699183, a: 0.4}
+  notOkColor: {r: 0.9433962, g: 0.4268121, b: 0.32484868, a: 0.4}
+  onAssemblyPlaced:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &842427839
 GameObject:
   m_ObjectHideFlags: 0
@@ -1739,12 +1763,12 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1640410500}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -231}
-  m_SizeDelta: {x: 0, y: 173.51672}
+  m_AnchoredPosition: {x: 0, y: -300}
+  m_SizeDelta: {x: -200, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &842427841
 MonoBehaviour:
@@ -1765,7 +1789,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: New Text
+  m_text: Point camera towards a non-reflective, textured and level surface
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1792,12 +1816,12 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 72
+  m_fontSize: 50
   m_fontSizeBase: 51.52
   m_fontWeight: 400
   m_enableAutoSizing: 1
   m_fontSizeMin: 18
-  m_fontSizeMax: 72
+  m_fontSizeMax: 50
   m_fontStyle: 0
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
@@ -1842,54 +1866,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 842427839}
   m_CullTransparentMesh: 0
---- !u!1 &967537270
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 967537271}
-  - component: {fileID: 967537272}
-  m_Layer: 0
-  m_Name: AR Game Placer
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &967537271
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 967537270}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 5, y: 0, z: 5}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 1164031263}
-  m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &967537272
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 967537270}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5855b9edc39289248845c1687d75aabf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  gameAssembly: {fileID: 1910559754}
-  infoText: {fileID: 842427841}
-  onAssemblyPlaced:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &1164031262
 GameObject:
   m_ObjectHideFlags: 0
@@ -1919,7 +1895,6 @@ Transform:
   m_Children:
   - {fileID: 224645644}
   - {fileID: 715463118}
-  - {fileID: 967537271}
   - {fileID: 743686402}
   - {fileID: 1640410500}
   m_Father: {fileID: 0}
@@ -2276,7 +2251,7 @@ GameObject:
   - component: {fileID: 1369869222}
   - component: {fileID: 1369869224}
   m_Layer: 5
-  m_Name: TouchToPlace
+  m_Name: TintedSensor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2294,7 +2269,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1640410500}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -2314,7 +2289,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0.97842264, b: 1, a: 0.15686275}
+  m_Color: {r: 0.6348467, g: 0, b: 1, a: 0.12156863}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -2355,20 +2330,9 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 967537272}
+        - m_Target: {fileID: 0}
           m_MethodName: PlaceAssembly
           m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-        - m_Target: {fileID: 1369869220}
-          m_MethodName: SetActive
-          m_Mode: 6
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
             m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -2407,10 +2371,10 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children:
-  - {fileID: 1369869221}
   - {fileID: 842427840}
+  - {fileID: 1369869221}
   m_Father: {fileID: 1164031263}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -3063,7 +3027,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 967537272}
+      objectReference: {fileID: 0}
     - target: {fileID: 7637195461635458617, guid: cd3dca3bc57d64c4fa24e27343f32449,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName

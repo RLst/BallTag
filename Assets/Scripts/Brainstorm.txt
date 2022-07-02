@@ -1,6 +1,31 @@
 Brainstorm
 ==========
 
+--------
+Intro
+--------
+Just let the game run by itself while a cinemachine camera flys around the stadium at medium distance while focusing on the ball
+
+
+--------
+End Match
+--------
+On Win / Lose
+	Display screen showing who won
+	Stats
+		Wins / losses
+		Draws
+		Passes
+		Despawns
+		etc
+	Display MainMenu
+		Button: AR Toggle
+		Button: Sound
+		Button: Info?
+
+
+
+
 ----------
 What does GameController.isPlaying control?
 ----------
@@ -17,13 +42,15 @@ AR Mode
 ! MainMenu.TapToStart blocks input
 !
 
-Press the AR mode button on the home screen > Switch to AR mode
+Tap the AR mode toggle button on the home screen
 	Load AR scene
-		Turn off main menu tap to start detector
-			Scan for a suitable plane
-			when one is found, hover the stadium over
-			Tap to place the stadium down
-			Set as assembly has been placed
+		temporarily turn off main menu tap to start sensor
+		Scan for a suitable plane
+			If one is found, hover the stadium over
+			else hide it 1000m above
+		ARCanvas.TapSensor > tap to place the stadium down
+		Set flat that assembly has been placed
+
 		Turn on main menu tap to start detector
 	Resume as normal
 

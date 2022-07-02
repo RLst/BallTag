@@ -1246,7 +1246,7 @@ MonoBehaviour:
   m_RunCycleLegOffset: 0.2
   m_MoveSpeedMultiplier: 1
   m_AnimSpeedMultiplier: 0.8
-  m_GroundCheckDistance: 0.7
+  m_GroundCheckDistance: 1
 --- !u!95 &2358086959517708842
 Animator:
   serializedVersion: 3

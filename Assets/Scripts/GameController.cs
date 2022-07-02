@@ -36,7 +36,7 @@ namespace LeMinhHuy
 
 		[Header("AR")]
 		public ARRaycastManager arRaycastManager;
-		public ARGamePlacer arGamePlacer;
+		public ARGamePlacer arGamePlacer => FindObjectOfType<ARGamePlacer>();
 
 		//Make these an array if you ever need more than two teams
 		[Header("Teams")]
