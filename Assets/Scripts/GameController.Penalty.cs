@@ -14,29 +14,30 @@ namespace LeMinhHuy
 			//This may be called before any matches begin ie. Penalty game mode
 
 			teamOne.DeactivateAllUnits();
-			teamTwo.DestroyAllUnits();
+			teamTwo.DeactivateAllUnits();
 
-			//Create maze
-			GenerateMaze();
+			Stadium.current.GenerateMaze();
 
 			CreateBall();
 
-			//Place the ball at some random location on the field
+			//Launch ball at some random location on the entire field
 			LaunchBallAtRandomLocationOnField(null, 20f);
 			ball.Show();
 
 			//Place player in front of their goal
 			PlaceUnitInFrontOfGoal(teamOne);
+
+			teamOne.strategy.stance = Stance.Offensive;
+
+			//Start penalty match
+			isPlaying = true;
+			Time.timeScale = 1f;
 		}
 
 		void PlaceUnitInFrontOfGoal(Team team)
 		{
-			throw new NotImplementedException();
-		}
-
-		void GenerateMaze()
-		{
-
+			team.energy = 100;
+			team.SpawnUnit(Stadium.current.frontOfGoal.position);
 		}
 	}
 }

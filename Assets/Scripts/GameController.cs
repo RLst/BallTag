@@ -49,6 +49,8 @@ namespace LeMinhHuy
 		[HideInInspector] public ResultEvent onEndMatch;
 		[HideInInspector] public UnityEvent onBeginPenaltyRound;
 
+		public bool isPenaltyRound = false;
+
 		//Members
 		bool isPlayingDemo = false;
 		Ball ball;
@@ -190,6 +192,10 @@ namespace LeMinhHuy
 		public void BeginRound()
 		{
 			//Guard
+			if (isPenaltyRound)
+			{
+				return;
+			}
 			if (currentRound >= settings.roundsPerMatch)
 			{
 				EndMatch();
@@ -269,7 +275,15 @@ namespace LeMinhHuy
 				currentRoundRemainingTime -= Time.deltaTime;
 
 				if (currentRoundRemainingTime <= 0)
+				{
+					//TEMP: Deal with penalty
+					if (isPenaltyRound)
+					{
+						onEndMatch.Invoke((teamOne, Result.Lose));
+						return;
+					}
 					EndRound((null, Result.Draw));
+				}
 			}
 
 			//Update teams
@@ -341,6 +355,7 @@ namespace LeMinhHuy
 			if (teamOne.wins == teamTwo.wins)
 			{
 				//DRAW; play penalty match
+				isPenaltyRound = true;
 				//Also delay displaying the final game over screen with stats etc
 				onEndMatch.Invoke((teamOne, Result.Draw));
 			}
@@ -374,7 +389,8 @@ namespace LeMinhHuy
 			{
 				// Debug.Log("TickTeams()");
 				teamOne.Tick();
-				teamTwo.Tick();
+				if (!isPenaltyRound)    //TEMP
+					teamTwo.Tick();
 				yield return waitOneSecond;
 			}
 		}

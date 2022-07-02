@@ -1701,6 +1701,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3120716179716224444}
   - component: {fileID: 3158698318286584882}
+  - component: {fileID: 1987236422413400015}
   - component: {fileID: 3120716179716224445}
   m_Layer: 0
   m_Name: Stadium
@@ -1720,6 +1721,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 72708591952425444}
   - {fileID: 3120716179353896795}
   - {fileID: 3120716179997013177}
   m_Father: {fileID: 3120716179098884278}
@@ -1737,6 +1739,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae0a05c028b394370a6f70a0c768794b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mazeOrigin: {fileID: 72708591952425444}
+--- !u!114 &1987236422413400015
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3120716179716224447}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1cd0fcef82084366ba8fccfdceb42c3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  width: 10
+  height: 10
+  size: 3
+  wallPrefab: {fileID: 7059759324385198935, guid: b671080fe555947b982e1380fa34d396,
+    type: 3}
+  floorPrefab: {fileID: 0}
 --- !u!114 &3120716179716224445
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1803,7 +1824,7 @@ Transform:
   - {fileID: 3120716178939700479}
   - {fileID: 3120716179332993376}
   m_Father: {fileID: 3120716179716224444}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3120716179997013176
 MonoBehaviour:
@@ -3353,8 +3374,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 20, y: 0.5, z: 20}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 20, y: 1, z: 20}
+  m_Center: {x: 0, y: -0.5, z: 0}
 --- !u!114 &3120716179997013180
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3596,6 +3617,36 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &6356093570151118974
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 72708591952425444}
+  m_Layer: 0
+  m_Name: MazeOrigin
+  m_TagString: Untagged
+  m_Icon: {fileID: -5938655980376293919, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &72708591952425444
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6356093570151118974}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 5.0000005, y: 0, z: -2.7499995}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 3120716179716224444}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6980502411241244436
 GameObject:
   m_ObjectHideFlags: 0
@@ -3858,7 +3909,7 @@ PrefabInstance:
     - target: {fileID: 3711688263318795001, guid: 3cb36790a9bdbc94580c8d2c76a355ba,
         type: 3}
       propertyPath: m_RootOrder
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3711688263318795001, guid: 3cb36790a9bdbc94580c8d2c76a355ba,
         type: 3}

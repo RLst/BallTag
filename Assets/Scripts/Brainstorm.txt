@@ -1,6 +1,17 @@
 Brainstorm
 ==========
 
+maze generation
+1
+1
+0. origin must be at 0,0,0
+1. build maze
+	width=8, height=16
+2. scale and move origin
+scale, x=-2.5,1,-2.6
+position: -1.62, 0, -1.22
+
+
 --------
 Scene setups
 -------

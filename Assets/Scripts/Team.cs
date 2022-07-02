@@ -84,6 +84,12 @@ namespace LeMinhHuy
 		}
 		public void ScoreGoal(int amount = 1)
 		{
+			//TEMP: deal with penalty
+			if (game.isPenaltyRound)
+			{
+				game.onEndMatch.Invoke((this, Result.Wins));
+				return;
+			}
 			onScoreGoal.Invoke((this, Result.Wins));   //End round etc
 		}
 		#endregion
