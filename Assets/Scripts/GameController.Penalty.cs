@@ -32,6 +32,7 @@ namespace LeMinhHuy
 			//Start penalty match
 			isPlaying = true;
 			Time.timeScale = 1f;
+			currentRoundRemainingTime = settings.startingRoundRemainingTime;
 		}
 
 		void PlaceUnitInFrontOfGoal(Team team)
