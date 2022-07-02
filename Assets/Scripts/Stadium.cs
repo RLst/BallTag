@@ -20,7 +20,7 @@ namespace LeMinhHuy
 		{
 			mazeOrigin.localPosition = Vector3.zero;
 			mb.Build(mazeOrigin);
-			mazeOrigin.localPosition = new Vector3(-1.62f, 0, -1.75f);
+			mazeOrigin.localPosition = new Vector3(-1.62f, 0, -1.75f);  //TEMP
 			mazeOrigin.localScale = new Vector3(2.5f, 1, 2.6f);
 		}
 		internal void DeleteMaze()
@@ -29,16 +29,18 @@ namespace LeMinhHuy
 				Destroy(mazeOrigin.GetChild(i).gameObject);
 		}
 
-		void Update()
-		{
-			if (Input.GetKeyDown(KeyCode.Space))
-			{
-				GenerateMaze();
-			}
-			if (Input.GetKeyDown(KeyCode.D))
-			{
-				DeleteMaze();
-			}
-		}
+
+		//TEST ONLY
+		// void Update()
+		// {
+		// 	if (Input.GetKeyDown(KeyCode.Space))
+		// 	{
+		// 		GenerateMaze();
+		// 	}
+		// 	if (Input.GetKeyDown(KeyCode.D))
+		// 	{
+		// 		DeleteMaze();
+		// 	}
+		// }
 	}
 }
