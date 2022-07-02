@@ -1,7 +1,12 @@
 Brainstorm
 ==========
 
+
+Bug: if there are two chasers, one will have caught and the other would have not and doesn't hence doesn't get cancelled and will keep trying to chase after an attacker
+
+-----------------
 maze generation
+--------------
 1
 1
 0. origin must be at 0,0,0

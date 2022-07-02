@@ -392,6 +392,13 @@ namespace LeMinhHuy
 			return true;
 		}
 
+		public void SetAllUnitStatesFromTo(Unit.State from, Unit.State to)
+		{
+			foreach (var u in units)
+				if (u.state == from)
+					u.state = to;
+		}
+
 		//Deactivate and stop all units from moving
 		public void DeactivateAllUnits(bool indefinite = false)
 		{

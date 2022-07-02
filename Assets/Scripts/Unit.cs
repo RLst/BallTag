@@ -361,6 +361,9 @@ namespace LeMinhHuy
 				agent.SetDestination(origin);
 				agent.speed = team.strategy.returnSpeed;
 
+				//Need to stop other defenders and set them back to standby
+				team.SetAllUnitStatesFromTo(State.Defending, State.Standby);
+
 				onTag.Invoke();
 			}
 		}
