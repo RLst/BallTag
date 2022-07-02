@@ -95,7 +95,8 @@ namespace LeMinhHuy
 		public void Awake()
 		{
 			this.gc = GameController.current;
-			arRaycastManager = this.gc.arRaycastManager;
+			if (gc.isARMode)
+				arRaycastManager = this.gc.arRaycastManager;
 		}
 
 		public void Initialize(TeamSettings settings)
@@ -385,10 +386,16 @@ namespace LeMinhHuy
 		}
 
 		//Deactivate and stop all units from moving
-		public void DeactivateAllUnits(bool indefinite)
+		public void DeactivateAllUnits(bool indefinite = false)
 		{
 			foreach (var u in units)
 				u.Deactivate(indefinite);
+		}
+		public void RecycleUnit(Unit u)
+		{
+			unitPool.Recycle(u);
+			despawns++;
+			// onDespawnUnit.Invoke(u);
 		}
 
 		//Hard deactivate units and recycle into the object pool
@@ -396,12 +403,6 @@ namespace LeMinhHuy
 		{
 			foreach (var u in units)
 				u.Despawn();
-		}
-		public void RecycleUnit(Unit u)
-		{
-			unitPool.Recycle(u);
-			despawns++;
-			// onDespawnUnit.Invoke(u);
 		}
 
 		//DESTROY; might be redundant

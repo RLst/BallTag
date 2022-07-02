@@ -12,7 +12,7 @@ namespace LeMinhHuy
 	/// Basically the game manager; Registers details and starts the match
 	/// Is the only one that is a monobehaviour and is in the scene so it can pass in objects etc
 	/// </summary>
-	public class GameController : Singleton<GameController>     //Rename to GameManager or GameController?
+	public partial class GameController : Singleton<GameController>     //Rename to GameManager or GameController?
 	{
 		//Inspector
 		[SerializeField] bool playDemoOnStart = true;
@@ -21,6 +21,7 @@ namespace LeMinhHuy
 		public bool isARMode = false;
 		[SerializeField] public bool isPlaying = false;     //Controls team and unit logic and AI
 		[SerializeField] bool isPaused = false;
+
 		//MATCH PARAMS
 		public int currentRound { get; private set; } = 0;
 		public float currentRoundRemainingTime { get; private set; } = -1;
@@ -91,11 +92,14 @@ namespace LeMinhHuy
 		}
 		internal void BeginDemo()
 		{
+			print("Playing Demo");
+
+			//Bespoke settings only for the demo to not screw around with the main game
 			isPlaying = true;
 			isPlayingDemo = true;
 			currentRound = 0;
 
-			//Generate random colors
+			//Generate random colors for each team
 			teamOne.color = UnityEngine.Random.ColorHSV(
 					hueMin: 0f, hueMax: 1f,
 					saturationMin: 0.55f, saturationMax: 0.65f,
@@ -115,14 +119,12 @@ namespace LeMinhHuy
 			teamTwo.SetStance();
 
 			CalculateAttackDirectionForEachTeam();  //should already be done
-			if (ball is null)
-				ball = Instantiate<Ball>(ballPrefab);
+
+			CreateBall();
 
 			SetOpponents();
-			BeginRound();
 
-			// StartCoroutine(TickTeams());
-			print("Playing demo");
+			BeginRound();
 		}
 
 		#region Gameplay
@@ -134,6 +136,8 @@ namespace LeMinhHuy
 		/// </summary>
 		public void BeginMatch()
 		{
+			Debug.Log("Begin Match");
+
 			currentRound = 0;
 			isPlayingDemo = false;
 
@@ -141,14 +145,10 @@ namespace LeMinhHuy
 			InitTeams();
 			CalculateAttackDirectionForEachTeam();
 
-			//Create ball
-			if (ball is null)
-				ball = Instantiate<Ball>(ballPrefab);
+			CreateBall();
 
 			BeginRound();
 
-			//Hook up user input events etc
-			Debug.Log("Begin Match");
 			onBeginMatch.Invoke();
 		}
 		void SetOpponents()
@@ -172,6 +172,13 @@ namespace LeMinhHuy
 				teamTwo.attackDirection = (teamOne.field.transform.position - teamTwo.field.transform.position).normalized;
 			}
 		}
+		void CreateBall()
+		{
+			if (ball is object) return;
+
+			ball = Instantiate<Ball>(ballPrefab);
+			ball.ResetParentToStadium();
+		}
 
 		/// <summary>
 		/// Starts a new/next round
@@ -181,6 +188,8 @@ namespace LeMinhHuy
 		/// </summary>
 		public void BeginRound()
 		{
+			Debug.Log("Begin Round");
+
 			isPlaying = true;
 			Time.timeScale = 1f;
 
@@ -197,7 +206,7 @@ namespace LeMinhHuy
 			currentRoundRemainingTime = settings.startingRoundRemainingTime;
 			teamOne.energy = 0;
 			teamTwo.energy = 0;
-			ResetBall();
+			ball.ResetParentToStadium();
 			ball.Show();
 
 			//Launch ball on the offensive side (if there is one)
@@ -205,16 +214,14 @@ namespace LeMinhHuy
 			{
 				case Stance.Offensive:
 					{
-						//Launch ball
-						ball.transform.SetPositionAndRotation(teamOne.field.GetRandomLocationOnField(ballReleaseHeight), Quaternion.identity);
+						LaunchBallAtRandomLocationOnField(teamOne.field);
 						ball.Show();    //let the ball bounce
 					}
 					break;
 
 				case Stance.Defensive:
 					{
-						//Launch ball
-						ball.transform.SetPositionAndRotation(teamTwo.field.GetRandomLocationOnField(ballReleaseHeight), Quaternion.identity);
+						LaunchBallAtRandomLocationOnField(teamTwo.field);
 						ball.Show();
 					}
 					break;
@@ -224,17 +231,24 @@ namespace LeMinhHuy
 			teamOne.DespawnAllUnits();
 			teamTwo.DespawnAllUnits();
 
-			Debug.Log("Begin Round");
 			onBeginRound.Invoke();
 		}
-		//Hide the ball, release from parents, zero
-		//NOTE: Ball should NEVER be deactivated
-		internal void ResetBall()
+		void LaunchBallAtRandomLocationOnField(Field field = null, float releaseHeight = 15f)
 		{
-			print("Resetball");
-			ball.Hide();
-			ball.transform.SetParent(null);
-			ball.transform.position = Vector3.zero;
+			if (field is null)
+			{
+				//Select a random field
+				if (UnityEngine.Random.value > 0.5f)
+				{
+					field = teamOne.field;
+				}
+				else
+				{
+					field = teamTwo.field;
+				}
+			}
+
+			ball.transform.SetPositionAndRotation(field.GetRandomLocationOnField(releaseHeight), Quaternion.identity);
 		}
 
 		/// <summary>
@@ -268,39 +282,41 @@ namespace LeMinhHuy
 		/// </summary>
 		public void EndRound((Team team, Result result) teamResult)
 		{
-			isPlaying = false;
-			Time.timeScale = 0.3f;
+			Debug.Log("End Round");
 
-			//Stop units moving and scoring etc but still keep them on screen
+			isPlaying = false;
+			Time.timeScale = settings.endOfRoundTimescale;
+
+			//Stop units moving and scoring etc but still keep them on screen indefinitely
 			teamOne.DeactivateAllUnits(indefinite: true);
 			teamTwo.DeactivateAllUnits(indefinite: true);
 
-			//Don't let demo mess things up
-			if (!isPlayingDemo)
-			{
-				//Set scores
-				if (teamResult.result == Result.Wins)
-				{
-					teamResult.team.wins++;
-				}
-				else if (teamResult.result == Result.Draw)
-				{
-					teamOne.draws++;
-					teamTwo.draws++;
-				}
+			ball.ResetParentToStadium();
 
-				//Switch team stances
-				var temp = teamOne.strategy;
-				teamOne.strategy = teamTwo.strategy;
-				teamTwo.strategy = temp;
-			}
-			else
+			//Don't let demo mess things up like the score and team stances
+			if (isPlayingDemo)
 			{
 				//Keep restarting the demo
 				Invoke("BeginDemo", 1f);
+				return;
 			}
 
-			Debug.Log("End Round");
+			//Set scores
+			if (teamResult.result == Result.Wins)
+			{
+				teamResult.team.wins++;
+			}
+			else if (teamResult.result == Result.Draw)
+			{
+				teamOne.draws++;
+				teamTwo.draws++;
+			}
+
+			//Switch team stances
+			var temp = teamOne.strategy;
+			teamOne.strategy = teamTwo.strategy;
+			teamTwo.strategy = temp;
+
 			onEndRound.Invoke(teamResult);
 		}
 
@@ -317,6 +333,7 @@ namespace LeMinhHuy
 			teamTwo.DeactivateAllUnits(indefinite: true);
 
 			//Resolve match
+			//ie. Display final screen with stats, prompt to start a new match, turn main menu back on
 			//onEndMatch being listened by GameUIController and PenaltyMatchSystem?
 			if (teamOne.wins == teamTwo.wins)
 			{
@@ -335,15 +352,6 @@ namespace LeMinhHuy
 			}
 
 			//Also stop input
-		}
-
-		/// <summary>
-		/// Invoke when the match is a draw
-		/// Generate maze, clear area around goals, rebake field navmesh, place ball at random, place a unit at team goal, let run attacker AI logic
-		/// </summary>
-		void BeginPenaltyRound()
-		{
-
 		}
 		#endregion
 

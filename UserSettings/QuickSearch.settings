@@ -16,7 +16,7 @@ filters = {
 	asset = true
 }
 scopes = {
-	"last_search.AB59B443" = "mainmenu"
+	"last_search.AB59B443" = "main"
 }
 providers = {
 	asset = {
@@ -34,9 +34,9 @@ providers = {
 		priority = 100
 		defaultAction = null
 	}
-	calculator = {
+	res = {
 		active = true
-		priority = 10
+		priority = 100
 		defaultAction = null
 	}
 	menu = {
@@ -49,9 +49,9 @@ providers = {
 		priority = 50
 		defaultAction = null
 	}
-	res = {
+	object = {
 		active = true
-		priority = 100
+		priority = 55
 		defaultAction = null
 	}
 	static_methods = {
@@ -74,9 +74,9 @@ providers = {
 		priority = 210
 		defaultAction = null
 	}
-	object = {
+	calculator = {
 		active = true
-		priority = 55
+		priority = 10
 		defaultAction = null
 	}
 }

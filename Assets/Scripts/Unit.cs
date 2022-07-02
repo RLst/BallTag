@@ -124,7 +124,7 @@ namespace LeMinhHuy
 			}
 		}
 
-		void FixedUpdate() => UpdateThirdPersonCharacter();
+		void FixedUpdate() => UpdateThirdPersonCharacter(); //Doesn't update as often to reduce computation
 
 		void UpdateThirdPersonCharacter()
 		{
@@ -190,14 +190,10 @@ namespace LeMinhHuy
 				case State.Chasing:
 					//If our team not in possession then chase after ball
 					if (!team.hasBall)
-					{
 						Chase();
-					}
 					//Otherwise advance towards opponent
 					else
-					{
 						SetState(State.Advancing);
-					}
 					break;
 				case State.Attacking:
 					//You have the ball so head towards the goal
@@ -210,7 +206,8 @@ namespace LeMinhHuy
 				case State.Receiving:
 					Receive();
 					break;
-				case State.Inactive:    //NOTE! inactive never ticks!!!
+				case State.Inactive:
+					//NOTE! inactive never ticks!!! Don't put anything here
 					break;
 			}
 		}
@@ -222,26 +219,26 @@ namespace LeMinhHuy
 			agent.radius = radiusNormal;
 			indicatorMoving.SetActive(true);
 		}
-		void OnBallTouch()
+		void OnBallTouch()  //Message
 		{
-			//Grab ball if chasing
-			if (state == State.Chasing)
+			switch (state)
 			{
-				ReceiveBall();
-			}
-			else if (state == State.Receiving)
-			{
-				// print("Ball caught!");
-				ball.transform.DOKill();    //"Catch" the ball
-				ReceiveBall();
+				case State.Chasing: PickupBall(); break;
+				case State.Receiving: ReceiveBall(); break;
 			}
 		}
-		public void SeizeBall()
+		void PickupBall()   //Pick it up off the ground
 		{
-			//Grab ball and turn it off so it can't drift
-			hasBall = true; ball.SetActivatePhysics(active: false);
+			ParentBall();
+			SetState(State.Attacking);
+		}
+		void ParentBall()
+		{
+			//Lock the ball into this unit smoothly
+			hasBall = true;
+			ball.SetActivatePhysics(active: false);
 			ball.transform.SetParent(hands);
-			ball.transform.localPosition = Vector3.zero;
+			ball.transform.DOLocalMove(Vector3.zero, 0.2f);
 		}
 		void Attack()
 		{
@@ -261,9 +258,20 @@ namespace LeMinhHuy
 			HideAuxillaries();
 			indicatorMoving.SetActive(true);
 		}
+		void Tagout()
+		{
+			// print($"{name} tagged out!");
+			//Unit has been tagged. Pass the ball to a nearby player then self deactivate
+			if (state != State.Attacking)
+				Debug.LogError("Non attacker tagged out! Error in logic");
+
+			PassBall();
+			Deactivate();
+
+			onOut.Invoke();
+		}
 		void PassBall()
 		{
-			// print("Passing ball");
 			//Pass to the nearest team member
 			if (team.FindNearestActiveUnit(this, out Unit nearest))
 			{
@@ -280,32 +288,20 @@ namespace LeMinhHuy
 				team.NotifyNoUnitsLeftToPassBallTo();
 			}
 		}
-		public void ReceiveBall()
+		void ReceiveBall()  //"Catch" the ball from the other player
 		{
-			SeizeBall();
-			SetState(State.Attacking);
+			//Must first kill it's tween to "catch" it
+			ball.transform.DOKill();
+			PickupBall();
 		}
 		void Receive()
 		{
-			//Stand still and wait for ball to come
+			//Move towards ball then catch it early
 			name = "Receiver";
 			agent.SetDestination(ball.transform.position);  //look at the ball
 			agent.speed = team.strategy.normalSpeed * 0.5f;
 			agent.radius = radiusNormal;
 			HideAuxillaries();
-		}
-		void Tagout()
-		{
-			// print($"{name} tagged out!");
-
-			//Unit has been tagged. Pass the ball to a nearby player then self deactivate
-			if (state != State.Attacking)
-				Debug.LogError("Non attacker tagged out! Error in logic");
-
-			PassBall();
-			Deactivate();
-
-			onOut.Invoke();
 		}
 		#endregion
 
@@ -416,8 +412,8 @@ namespace LeMinhHuy
 			//NOTE: Don't bring the ball with you!
 			if (hasBall)
 			{
-				ball.transform.SetParent(null);
 				hasBall = false;
+				ball.ResetParentToStadium();
 				ball.SetActivatePhysics(true);
 				ball.GroundBall();
 			}

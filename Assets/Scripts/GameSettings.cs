@@ -11,6 +11,7 @@ namespace LeMinhHuy
 		//Round
 		public int roundsPerMatch = 5;
 		public float startingRoundRemainingTime = 140f;
+		public float endOfRoundTimescale = 0.4f;
 
 		//Energy
 		public float maxEnergy;
