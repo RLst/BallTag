@@ -188,16 +188,17 @@ namespace LeMinhHuy
 		/// </summary>
 		public void BeginRound()
 		{
-			Debug.Log("Begin Round");
-
-			isPlaying = true;
-			Time.timeScale = 1f;
-
 			//Guard
 			if (currentRound >= settings.roundsPerMatch)
 			{
 				EndMatch();
+				return;
 			}
+
+			Debug.Log("Begin Round");
+
+			isPlaying = true;
+			Time.timeScale = 1f;
 
 			//Increment next round
 			currentRound++;
@@ -320,12 +321,13 @@ namespace LeMinhHuy
 			onEndRound.Invoke(teamResult);
 		}
 
-
 		//End the match immediately. If early then you lose
 		//Show match end screen
 		//Start playing ending animations and cutscenes
 		public void EndMatch()
 		{
+			print("End of Main Match");
+
 			isPlaying = false;
 
 			//Turn everything off
@@ -338,6 +340,7 @@ namespace LeMinhHuy
 			if (teamOne.wins == teamTwo.wins)
 			{
 				//DRAW; play penalty match
+				//Also delay displaying the final game over screen with stats etc
 				onEndMatch.Invoke((teamOne, Result.Draw));
 			}
 			else if (teamOne.wins > teamTwo.wins)
@@ -350,8 +353,15 @@ namespace LeMinhHuy
 				//Player loses
 				onEndMatch.Invoke((teamOne, Result.Lose));
 			}
+		}
 
-			//Also stop input
+		/// <summary>
+		/// Completely end all rounds, matches and game
+		/// </summary>
+		public void GameOver()
+		{
+			//Reload the main scene (slight slack)
+			MainMenuController.current.ReloadGameScene();
 		}
 		#endregion
 
@@ -386,6 +396,14 @@ namespace LeMinhHuy
 		public void TestDraw()
 		{
 			EndRound((teamOne, Result.Draw));
+		}
+		public void TestWin()
+		{
+			EndRound((teamOne, Result.Wins));
+		}
+		public void TestLose()
+		{
+			EndRound((teamOne, Result.Lose));
 		}
 	}
 }

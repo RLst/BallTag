@@ -5,8 +5,8 @@ namespace LeMinhHuy
 		Wins,
 		Lose,
 		Draw,
-		WonPenalty,
-		LosePenalty,
+		// WinsPenalty,
+		// LosePenalty,
 		None
 	}
 }

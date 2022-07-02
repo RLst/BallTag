@@ -5,6 +5,10 @@ using UnityEngine.UI;
 
 namespace LeMinhHuy
 {
+	/// <summary>
+	/// Controls the in game UI such as timer, energy gauges, team info, end round, end match screens etc
+	/// NOTE: This is AR agnostic
+	/// </summary>
 	[RequireComponent(typeof(Canvas))]
 	public class GameUIController : MonoBehaviour
 	{
@@ -26,6 +30,15 @@ namespace LeMinhHuy
 		[SerializeField] TextMeshProUGUI resultRoundNumber;
 		[SerializeField] TextMeshProUGUI teamTwoResults;
 
+		[Header("Penalty Round UI")]
+		[SerializeField] GameObject penaltyRoundUI;
+
+		[Header("End Game UI")]
+		[SerializeField] GameObject endGameUI;
+		[SerializeField] TextMeshProUGUI endGameResults;
+		[SerializeField] TextMeshProUGUI endGameStats;
+
+
 		//Members
 		GameController game;
 		Canvas c;
@@ -42,14 +55,12 @@ namespace LeMinhHuy
 			c.enabled = false;
 
 			endRoundUI.SetActive(false);
-		}
 
-		//Event rego
-		void OnEnable()
-		{
+			//Event regos
 			game.onBeginMatch.AddListener(BeginMatchUI);
-			game.onEndRound.AddListener(EndRoundUI);
-			game.onEndMatch.AddListener(EndMatchUI);
+			game.onBeginRound.AddListener(BeginRoundUI);
+			game.onEndRound.AddListener(HandleEndRound);
+			game.onEndMatch.AddListener(HandleEndMatch);
 		}
 
 		//Set up the UI, titles, names, colors etc
@@ -91,7 +102,7 @@ namespace LeMinhHuy
 			endRoundUI.SetActive(false);
 		}
 
-		public void EndRoundUI((Team team, Result result) teamResults)
+		public void HandleEndRound((Team team, Result result) teamResults)
 		{
 			//Display end round UI, show results
 			endRoundUI.SetActive(true);
@@ -122,34 +133,69 @@ namespace LeMinhHuy
 			}
 		}
 
-		public void EndMatchUI((Team team, Result result) teamResults)
+		public void HandleEndMatch((Team team, Result result) teamResults)
 		{
-			c.enabled = false;
+			//Determine which screen to activate based on result
+			//Draw > Penalty Round required
+			if (teamResults.result == Result.Draw)
+			{
+				penaltyRoundUI.SetActive(true);
+				//Don't need to adjust anything on this screen
+				//The logic will come back and run this function again and the win/lose logic below
+			}
+			else
+			{
+				endGameUI.SetActive(true);
+
+				//Populate end screen
+				//Result
+				if (teamResults.result == Result.Wins)
+				{
+					endGameResults.text = "YOU WIN!";
+				}
+				else
+				{
+					endGameResults.text = "YOU LOSE!";
+				}
+
+				//Stats
+				Team t1 = game.teamOne, t2 = game.teamTwo;
+				string t1c = ColorUtility.ToHtmlStringRGB(t1.color);
+				string t2c = ColorUtility.ToHtmlStringRGB(t2.color);
+				endGameStats.text = "Stats\n" +
+					$"<color=#{t1c}>{t1.wins}</color> Goals <color=#{t2c}>{t2.wins}</color>\n" +
+					$"<color=#{t1c}>{t2.wins}</color> Losses <color=#{t2c}>{t1.wins}</color>\n" +
+					$"<color=#{t1c}>{t1.draws}</color> Draws <color=#{t2c}>{t2.draws}</color>\n" +
+					$"<color=#{t1c}>{t1.tags}</color> Tags <color=#{t2c}>{t2.tags}</color>\n" +
+					$"<color=#{t1c}>{t1.outs}</color> Outs <color=#{t2c}>{t2.outs}</color>\n" +
+					$"<color=#{t1c}>{t1.passes}</color> Passes <color=#{t2c}>{t2.passes}</color>\n" +
+					$"<color=#{t1c}>{t1.despawns}</color> Despawns <color=#{t2c}>{t2.despawns}</color>";
+			}
 		}
 
 		void Update()
 		{
-			if (c.enabled)  //If canvas is enabled means the game is running
+			if (!c.enabled) return; //If canvas is enabled means the game is running
+									// if (game.isPlaying) return;
+
+			//Control timer
+			if (game.currentRoundRemainingTime > 15f)
 			{
-				//Control timer
-				if (game.currentRoundRemainingTime > 15f)
-				{
-					timeLeft.color = Color.white;
-					timeLeft.text = string.Format("{0:000}", game.currentRoundRemainingTime);
-				}
-				else if (game.currentRoundRemainingTime > 0f && game.currentRoundRemainingTime <= 15f)
-				{
-					timeLeft.color = Color.red;
-					int fraction = (int)game.currentRoundRemainingTime * 10;
-					fraction %= 10;
-					timeLeft.text = string.Format("{0:000}", game.currentRoundRemainingTime);
-					timeLeft.text = game.currentRoundRemainingTime.ToString();
-				}
-				else if (game.currentRound <= 0f)
-				{
-					timeLeft.color = Color.red;
-					timeLeft.text = "00:00";
-				}
+				timeLeft.color = Color.white;
+				timeLeft.text = string.Format("{0:000}", game.currentRoundRemainingTime);
+			}
+			else if (game.currentRoundRemainingTime > 0f && game.currentRoundRemainingTime <= 15f)
+			{
+				timeLeft.color = Color.red;
+				int fraction = (int)game.currentRoundRemainingTime * 10;
+				fraction %= 10;
+				timeLeft.text = string.Format("{0:000}", game.currentRoundRemainingTime);
+				timeLeft.text = game.currentRoundRemainingTime.ToString();
+			}
+			else if (game.currentRound <= 0f)
+			{
+				timeLeft.color = Color.red;
+				timeLeft.text = "00:00";
 			}
 		}
 	}

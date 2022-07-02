@@ -13,8 +13,6 @@ namespace LeMinhHuy
 	public class Team
 	{
 		//Inspector
-		// [field: SerializeField] public float currentEnergy { get; set; }
-		// [field: SerializeField] public float currentDowntime { get; set; }
 		const float RAYCAST_MAXDISTANCE = 100f;
 
 		//Inspector
@@ -59,8 +57,8 @@ namespace LeMinhHuy
 		int? activeUnits => unitPool?.countActive;
 
 		//Members
-		GameController gc;
-		ARRaycastManager arRaycastManager;
+		GameController game;
+		ARRaycastManager arRaycaster;
 		List<ARRaycastHit> arHitResults = new List<ARRaycastHit>();
 		internal Team opponent;
 
@@ -94,9 +92,12 @@ namespace LeMinhHuy
 		//INITS
 		public void Awake()
 		{
-			this.gc = GameController.current;
-			if (gc.isARMode)
-				arRaycastManager = this.gc.arRaycastManager;
+			game = GameController.current;
+			if (game.isARMode)
+			{
+				arRaycaster = GameObject.FindObjectOfType<ARRaycastManager>();
+				Debug.Assert(arRaycaster is object, "AR raycast manager not found!");
+			}
 		}
 
 		public void Initialize(TeamSettings settings)
@@ -126,10 +127,10 @@ namespace LeMinhHuy
 			switch (strategy.stance)
 			{
 				case Stance.Offensive:
-					this.strategy = gc.settings.offensiveStrategy;
+					this.strategy = game.settings.offensiveStrategy;
 					break;
 				case Stance.Defensive:
-					this.strategy = gc.settings.defensiveStrategy;
+					this.strategy = game.settings.defensiveStrategy;
 					break;
 				default:
 					throw new ArgumentException("Invalid stance!");
@@ -152,7 +153,7 @@ namespace LeMinhHuy
 		}
 		Unit CreateUnit()   //THIS IS NOT SPAWNING! It's for preloading
 		{
-			var u = GameObject.Instantiate<Unit>(gc.unitPrefab, field.transform);
+			var u = GameObject.Instantiate<Unit>(game.unitPrefab, field.transform);
 			units.Add(u);
 
 			//Register unit events
@@ -184,13 +185,13 @@ namespace LeMinhHuy
 
 			void handleEnergy()
 			{
-				if (energy < gc.settings.maxEnergy)
+				if (energy < game.settings.maxEnergy)
 				{
 					energy += Time.deltaTime * strategy.energyRegenRate;
 					onEnergyChange.Invoke(energy);
 
-					if (energy > gc.settings.maxEnergy)
-						energy = gc.settings.maxEnergy;
+					if (energy > game.settings.maxEnergy)
+						energy = game.settings.maxEnergy;
 				}
 			}
 		}
@@ -338,10 +339,10 @@ namespace LeMinhHuy
 			}
 
 			//Raycast to point
-			if (gc.isARMode)
+			if (game.isARMode)
 			{
 				//AR Raycast
-				if (arRaycastManager.Raycast(screenPoint, arHitResults, UnityEngine.XR.ARSubsystems.TrackableType.Planes))
+				if (arRaycaster.Raycast(screenPoint, arHitResults, UnityEngine.XR.ARSubsystems.TrackableType.Planes))
 				{
 					return SpawnUnit(arHitResults[0].pose.position);
 				}

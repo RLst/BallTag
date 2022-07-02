@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -31,6 +32,22 @@ namespace LeMinhHuy
 		void Start()
 		{
 			tapToStart.onClick.AddListener(() => game.BeginMatch());
+			game.onEndMatch.AddListener(OnEndMatch);
+		}
+
+		//Events
+		void OnEndMatch((Team team, Result results) teamResults)
+		{
+			//Turn self back on after a successfully executed match including any penalties
+			switch (teamResults.results)
+			{
+				case Result.Wins:
+				case Result.Lose:
+					// case Result.WinsPenalty:
+					// case Result.LosePenalty:
+					//Turn main menu back on unless there's a penalty match as the'll be another screen and sequence
+					break;
+			}
 		}
 
 		public void SetActiveTapToStart(bool active) => tapToStart.enabled = (active);
@@ -62,6 +79,18 @@ namespace LeMinhHuy
 				SceneManager.LoadScene(mainSceneName);
 
 				arToggleButtonText.text = "AR";
+			}
+		}
+
+		public void ReloadGameScene()
+		{
+			if (game.isARMode)
+			{
+				SceneManager.LoadScene(ARSceneName);
+			}
+			else
+			{
+				SceneManager.LoadScene(mainSceneName);
 			}
 		}
 

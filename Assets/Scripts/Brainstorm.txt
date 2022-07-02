@@ -2,9 +2,17 @@ Brainstorm
 ==========
 
 --------
+AR scene connections
+-------
+GameController
+	isARMode = true
+ARGamePlace
+	gameAssembly = the main world gameplay object ie. "--- World"
+
+--------
 Intro
 --------
-Just let the game run by itself while a cinemachine camera flys around the stadium at medium distance while focusing on the ball
+Just let the game run by itself while a cinemachine camera flies around the stadium at medium distance while focusing on the ball
 
 
 --------
@@ -12,6 +20,8 @@ End Match
 --------
 On Win / Lose
 	Display screen showing who won
+		"Team one WINS!"
+		"Team one LOSES!"
 	Stats
 		Wins / losses
 		Draws
@@ -23,7 +33,19 @@ On Win / Lose
 		Button: Sound
 		Button: Info?
 
+On Draw
+	Display screen showing it's a draw
+	and that you need to play a penalty match
+		Text; the match was draw!
+		Button: Play penalty match!
+			=> GameController.BeginPenaltyMatch()
 
+GameController.OnEndPenaltyMatch((Team, Result))
+	Display penalty result screen
+		You won
+
+on game over
+	"Game Over!"
 
 
 ----------
@@ -56,6 +78,7 @@ Tap the AR mode toggle button on the home screen
 
 Switching back to normal mode
 	No changes to main menu
+	There must not be any duplicate main menus! hopefully the singleon code should deal with taht
 
 
 ---------------------------
