@@ -2,12 +2,16 @@ Brainstorm
 ==========
 
 --------
-AR scene connections
+Scene setups
 -------
-GameController
-	isARMode = true
-ARGamePlace
-	gameAssembly = the main world gameplay object ie. "--- World"
+All
+	EndGameScreen.Button (GameOver)
+		onClick = MainMenu.ReloadGameScene()
+AR
+	GameController
+		isARMode = true
+	ARGamePlace
+		gameAssembly = the main world gameplay object ie. "--- World"
 
 --------
 Intro

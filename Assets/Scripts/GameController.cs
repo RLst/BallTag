@@ -34,10 +34,6 @@ namespace LeMinhHuy
 		[SerializeField] Ball ballPrefab = null;
 		[SerializeField] float ballReleaseHeight = 10f;
 
-		[Header("AR")]
-		public ARRaycastManager arRaycastManager;
-		public ARGamePlacer arGamePlacer => FindObjectOfType<ARGamePlacer>();
-
 		//Make these an array if you ever need more than two teams
 		[Header("Teams")]
 		public Team teamOne;    //This is the player
@@ -57,6 +53,9 @@ namespace LeMinhHuy
 		bool isPlayingDemo = false;
 		Ball ball;
 		WaitForSeconds waitOneSecond;
+		//AR
+		ARRaycastManager arRaycastManager;
+		ARGamePlacer arGamePlacer;
 
 		//INITS
 		void OnValidate() => CalculateAttackDirectionForEachTeam();
@@ -68,8 +67,10 @@ namespace LeMinhHuy
 
 			if (isARMode)
 			{
-				Debug.Assert(arRaycastManager != null, "No ARRaycastManager found!");
+				arRaycastManager = FindObjectOfType<ARRaycastManager>();
+				arGamePlacer = FindObjectOfType<ARGamePlacer>();
 				Debug.Assert(arGamePlacer != null, "No ARGamePlacer found!");
+				Debug.Assert(arRaycastManager != null, "No ARRaycastManager found!");
 			}
 		}
 		void Start()
