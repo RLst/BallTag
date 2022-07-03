@@ -34,11 +34,13 @@ namespace LeMinhHuy
 		ARRaycastManager arRaycaster;
 		Camera cam;
 		List<ARRaycastHit> arRayHits = new List<ARRaycastHit>();
+		MainMenuController mm;
 
 		void Awake()
 		{
 			arRaycaster = FindObjectOfType<ARRaycastManager>();
 			cam = FindObjectOfType<Camera>();
+			mm = MainMenuController.current;
 
 			Debug.Assert(gameAssembly is object, "Game Assembly Object required");
 			Debug.Assert(arRaycaster is object, "AR Raycast manager not found");
@@ -50,8 +52,9 @@ namespace LeMinhHuy
 		{
 			assemblyPlaced = false;
 
-			//Prevent game from starting etc
-			MainMenuController.current.SetActiveTapToStart(false);
+			//Hide main menu titles and tap to start stuff
+			mm.SetActiveTitles(false);
+			mm.SetActiveStartSensor(false);
 		}
 
 		void Update()
@@ -77,8 +80,9 @@ namespace LeMinhHuy
 				gameAssembly.transform.SetPositionAndRotation(pose.position, pose.rotation);
 
 				//Place assembly
-				// if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Ended)
-				// 	PlaceAssembly();
+				//NOTE: with this I can still tap the AR toggle button
+				if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Ended)
+					PlaceAssembly();
 			}
 			else
 			{
@@ -104,7 +108,8 @@ namespace LeMinhHuy
 			arUIAssembly.SetActive(false);
 
 			//Re-enable and resume normal main menu functions
-			MainMenuController.current.SetActiveTapToStart(true);
+			mm.SetActiveTitles(true);
+			mm.SetActiveStartSensor(true);
 
 			//Disable plane manager so the dots don't keep showing up
 			arPlane.enabled = false;

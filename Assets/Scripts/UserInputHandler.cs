@@ -5,14 +5,14 @@ namespace LeMinhHuy
 	[RequireComponent(typeof(UserInput))]
 	public class UserInputHandler : MonoBehaviour
 	{
+		[SerializeField] GameController game;
+
 		//Members
 		UserInput uIn;
-		GameController game;
 
 		void Awake()
 		{
 			uIn = GetComponent<UserInput>();
-			game = GameController.current;
 		}
 
 		void Start()

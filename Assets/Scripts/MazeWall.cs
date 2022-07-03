@@ -7,10 +7,12 @@ namespace LeMinhHuy
 		[SerializeField] float minDistanceFromGoal = 3f;
 		[SerializeField] Goal[] goals = new Goal[2];
 		[SerializeField] new Renderer renderer;
+		GameController game;
 		void Awake()
 		{
 			//Get all goals
 			goals = FindObjectsOfType<Goal>();
+			game = FindObjectOfType<GameController>();
 		}
 
 		void Start()
@@ -30,7 +32,7 @@ namespace LeMinhHuy
 			}
 
 			//Color
-			renderer.material.color = GameController.current.teamOne.color;
+			renderer.material.color = game.teamOne.color;
 		}
 	}
 }

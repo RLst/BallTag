@@ -10,10 +10,11 @@ namespace LeMinhHuy
 	[RequireComponent(typeof(CapsuleCollider))]
 	public class LongRangeDetector : MonoBehaviour
 	{
+		[SerializeField] GameSettings settings;
+		[Space]
 		[SerializeField] Unit owner;
 		[SerializeField] MeshRenderer mr;
 		[SerializeField] float scaleUpTime = 0.6f;
-		[SerializeField] float rotationSpeed = 40f;
 
 		[Header("Detection method")]
 		[SerializeField] bool onTriggerEnter = true;
@@ -21,18 +22,17 @@ namespace LeMinhHuy
 		[SerializeField] bool onTriggerExit = false;
 
 		private CapsuleCollider col;
-		GameSettings settings;
 		Vector3 origScale;
 
 		void Awake()
 		{
 			col = GetComponent<CapsuleCollider>();
-			settings = GameController.current.settings;
 			origScale = transform.localScale;
 		}
 		void Start()
 		{
 			Debug.Assert(owner is object, "Detector has no owner");
+			Debug.Assert(settings is object, "Game settings not assigned!");
 
 			col.isTrigger = true;
 		}
@@ -50,11 +50,6 @@ namespace LeMinhHuy
 
 			//Try to set the team color of the radar
 			SetColor();
-		}
-
-		void Update()
-		{
-			this.transform.Rotate(Vector3.up, rotationSpeed * Time.deltaTime);
 		}
 
 		void SetColor()

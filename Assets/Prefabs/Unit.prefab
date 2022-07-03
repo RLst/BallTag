@@ -418,6 +418,7 @@ GameObject:
   - component: {fileID: 8916303668493727055}
   - component: {fileID: 4533973550452286309}
   - component: {fileID: 2017624599364987616}
+  - component: {fileID: 7668584124713676087}
   m_Layer: 10
   m_Name: Radar
   m_TagString: Untagged
@@ -486,6 +487,19 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!114 &7668584124713676087
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3915253563850024939}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58f4d44e5e6a62b41913148b58ad5815, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rotationSpeed: -75
 --- !u!1 &5794690817563120215
 GameObject:
   m_ObjectHideFlags: 0
@@ -1211,6 +1225,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b570497fff5e644468ffda9223c3fff9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  settings: {fileID: 11400000, guid: 555d847056c14456ab562177dfec82fd, type: 2}
   owner: {fileID: 6839786742684477955}
   mr: {fileID: 2017624599364987616}
   scaleUpTime: 0.6

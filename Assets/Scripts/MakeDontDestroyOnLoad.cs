@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace LeMinhHuy
 {
-	public class DebugUI : MonoBehaviour
+	public class MakeDontDestroyOnLoad : MonoBehaviour
 	{
 		void Awake()
 		{

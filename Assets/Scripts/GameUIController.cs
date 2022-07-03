@@ -12,6 +12,8 @@ namespace LeMinhHuy
 	[RequireComponent(typeof(Canvas))]
 	public class GameUIController : MonoBehaviour
 	{
+		[SerializeField] GameController game;
+		[Space]
 		[SerializeField] TextMeshProUGUI timeLeft = null;
 		[Header("Team One")]
 		[SerializeField] TextMeshProUGUI teamOneDetails = null;
@@ -38,15 +40,13 @@ namespace LeMinhHuy
 		[SerializeField] TextMeshProUGUI endGameResults;
 		[SerializeField] TextMeshProUGUI endGameStats;
 
-
 		//Members
-		GameController game;
 		Canvas c;
 
 		void Awake()
 		{
-			game = GameController.current;
 			c = GetComponent<Canvas>();
+			Debug.Assert(game is object, "Must assign the local Game Controller");
 		}
 
 		void Start()
@@ -162,7 +162,7 @@ namespace LeMinhHuy
 				Team t1 = game.teamOne, t2 = game.teamTwo;
 				string t1c = ColorUtility.ToHtmlStringRGB(t1.color);
 				string t2c = ColorUtility.ToHtmlStringRGB(t2.color);
-				endGameStats.text = "Stats\n" +
+				endGameStats.text = "<style=\"Title\"><b>Stats</b>\n</style>" +
 					$"<color=#{t1c}>{t1.wins}</color> Goals <color=#{t2c}>{t2.wins}</color>\n" +
 					$"<color=#{t1c}>{t2.wins}</color> Losses <color=#{t2c}>{t1.wins}</color>\n" +
 					$"<color=#{t1c}>{t1.draws}</color> Draws <color=#{t2c}>{t2.draws}</color>\n" +

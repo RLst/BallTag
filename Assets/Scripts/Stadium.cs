@@ -11,7 +11,7 @@ namespace LeMinhHuy
 
 		MazeBuilder mb;
 
-		void Awake()
+		protected override void Init()
 		{
 			mb = GetComponent<MazeBuilder>();
 		}

@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace LeMinhHuy
 {
-	public partial class GameController : Singleton<GameController>
+	public partial class GameController : MonoBehaviour
 	{
 		/// <summary>
 		/// NOTE: The logic in here should be as self-contained, bespoke and complete isolated from the rest of GameController

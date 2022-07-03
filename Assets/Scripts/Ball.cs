@@ -20,7 +20,7 @@ namespace LeMinhHuy
 		// NavMeshAgent agent;     //This is only so the ball stays within the playing boundaries
 		Stadium stadium;
 
-		void Awake()
+		protected override void Init()
 		{
 			r = GetComponent<Renderer>();
 			col = GetComponent<Collider>();

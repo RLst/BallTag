@@ -18,9 +18,7 @@ namespace LeMinhHuy
 				return _current;
 			}
 		}
-		/// <summary>
 		/// Finds an existing instance of this singleton in the scene.
-		/// </summary>
 		static T FindExistingSingleton()
 		{
 			T[] existingInstances = FindObjectsOfType<T>();
@@ -31,37 +29,39 @@ namespace LeMinhHuy
 			return existingInstances[0];
 		}
 
-		/// <summary>
-		/// If no instance of the T MonoBehaviour exists,
-		/// creates a new GameObject in the scene and adds T to it.
-		/// </summary>
+		/// If no instance of the T MonoBehaviour exists, creates a new GameObject in the scene and adds T to it.
 		static T CreateNewSingleton()
 		{
 			GameObject container = new GameObject(typeof(T).Name + " (Singleton)");
 			return container.AddComponent<T>();
 		}
 
-		/// <summary>
-		/// This MUST run and will ALWAYS run regardless of whether
-		/// it's intentionally hidden or overridden (because of reflection)
-		/// </summary>
+		/// This MUST run and will ALWAYS run regardless of whether it's intentionally hidden or overridden (because of reflection)
 		void Awake()
 		{
 			T thisSingleton = this.GetComponent<T>();
 
 			if (_current == null)
 			{
+				//Assign this object as the main singleton if there is none
 				_current = thisSingleton;
-				// DontDestroyOnLoad(_singleton);
+				gameObject.name = gameObject.name + "I"; //Show which instance it is
+				if (this.transform.parent == null)
+					DontDestroyOnLoad(this.gameObject);
 			}
-			else if (thisSingleton != _current)
+			//Otherwise if this singleton is not the current one then delete the entire object it's on
+			//NOTE: This is very sporadic!
+			else if (!thisSingleton.Equals(_current))
 			{
-				Debug.LogWarningFormat("Duplicate singleton found with type {0} in GameObject {1}",
-					this.GetType(), this.gameObject.name);
-
-				Component.Destroy(this.GetComponent<T>());
+				Debug.LogWarningFormat("Duplicate singleton found with type {0} in GameObject {1}", this.GetType(), this.gameObject.name);
+				Destroy(this.gameObject);    //Doesn't work well
+											 // Component.Destroy(this.GetComponent<T>());
 				return;
+
 			}
+			Init();
 		}
+
+		protected virtual void Init() { }
 	}
 }

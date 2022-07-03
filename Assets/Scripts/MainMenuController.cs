@@ -16,12 +16,27 @@ namespace LeMinhHuy
 
 		[SerializeField] string mainSceneName = "Main";
 		[SerializeField] string ARSceneName = "AR";
+
+		[Space]
 		[SerializeField] TextMeshProUGUI arToggleButtonText;
-		[SerializeField] Button tapToStart;
+		[SerializeField] GameObject titles;     //The gameobject that holds all of the titls and prompts etc
+		[SerializeField] Button tapToStartSensor;
 
+		//Members
 		Canvas canvas;
-		GameController game => GameController.current;
+		GameController game
+		{
+			//Will try to always find the current GameController depending on the scene
+			get
+			{
+				if (_game is null)
+					_game = FindObjectOfType<GameController>();
+				return _game;
+			}
+		}
+		private GameController _game;
 
+		// protected override void Init()
 		void Awake()
 		{
 			DontDestroyOnLoad(this);
@@ -31,26 +46,12 @@ namespace LeMinhHuy
 
 		void Start()
 		{
-			tapToStart.onClick.AddListener(() => game.BeginMatch());
-			game.onEndMatch.AddListener(OnEndMatch);
+			tapToStartSensor.onClick.AddListener(() => game.BeginMatch());
 		}
 
-		//Events
-		void OnEndMatch((Team team, Result results) teamResults)
-		{
-			//Turn self back on after a successfully executed match including any penalties
-			switch (teamResults.results)
-			{
-				case Result.Wins:
-				case Result.Lose:
-					// case Result.WinsPenalty:
-					// case Result.LosePenalty:
-					//Turn main menu back on unless there's a penalty match as the'll be another screen and sequence
-					break;
-			}
-		}
+		public void SetActiveStartSensor(bool active) => tapToStartSensor.enabled = (active);
+		public void SetActiveTitles(bool active) => titles.SetActive(active);
 
-		public void SetActiveTapToStart(bool active) => tapToStart.enabled = (active);
 		public void Show() => canvas.enabled = true;
 		public void Hide() => canvas.enabled = false;
 
@@ -68,8 +69,6 @@ namespace LeMinhHuy
 				SceneManager.LoadScene(ARSceneName);
 
 				arToggleButtonText.text = "AR\nOFF";
-
-				tapToStart.enabled = (false);
 			}
 			else
 			{

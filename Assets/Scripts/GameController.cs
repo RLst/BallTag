@@ -12,7 +12,7 @@ namespace LeMinhHuy
 	/// Basically the game manager; Registers details and starts the match
 	/// Is the only one that is a monobehaviour and is in the scene so it can pass in objects etc
 	/// </summary>
-	public partial class GameController : Singleton<GameController>     //Rename to GameManager or GameController?
+	public partial class GameController : MonoBehaviour     //Rename to GameManager or GameController?
 	{
 		//Inspector
 		[SerializeField] bool playDemoOnStart = true;
@@ -61,6 +61,7 @@ namespace LeMinhHuy
 
 		//INITS
 		void OnValidate() => CalculateAttackDirectionForEachTeam();
+		// protected override void Init()
 		void Awake()
 		{
 			Debug.Assert(settings != null, "No game parameters found!");
@@ -194,7 +195,7 @@ namespace LeMinhHuy
 			//Guard
 			if (isPenaltyRound)
 			{
-				return;
+				throw new InvalidOperationException("Cannot begin penalty round using BeginRound()");
 			}
 			if (currentRound >= settings.roundsPerMatch)
 			{
@@ -389,8 +390,11 @@ namespace LeMinhHuy
 			{
 				// Debug.Log("TickTeams()");
 				teamOne.Tick();
-				if (!isPenaltyRound)    //TEMP
+
+				//Don't run player two AI if it's the penalty round
+				if (!isPenaltyRound)
 					teamTwo.Tick();
+
 				yield return waitOneSecond;
 			}
 		}
@@ -412,14 +416,18 @@ namespace LeMinhHuy
 		//TESTS
 		public void TestDraw()
 		{
+			teamOne.wins = 1;
+			teamTwo.wins = 1;
 			EndRound((teamOne, Result.Draw));
 		}
 		public void TestWin()
 		{
+			teamOne.wins++;
 			EndRound((teamOne, Result.Wins));
 		}
 		public void TestLose()
 		{
+			teamTwo.wins++;
 			EndRound((teamOne, Result.Lose));
 		}
 	}

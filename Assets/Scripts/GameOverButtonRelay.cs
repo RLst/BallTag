@@ -4,9 +4,12 @@ namespace LeMinhHuy
 {
 	public class GameOverButtonRelay : MonoBehaviour
 	{
+		MainMenuController mm;
+		void Awake() => mm = MainMenuController.current;
 		public void GameOver()
 		{
-			MainMenuController.current.ReloadGameScene();
+			mm.ReloadGameScene();
+			// mm.Show();
 		}
 	}
 }

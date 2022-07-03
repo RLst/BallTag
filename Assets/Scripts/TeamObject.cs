@@ -11,13 +11,20 @@ namespace LeMinhHuy
 		//Properties
 		public virtual Collider col { get; protected set; }
 		public Team team { get; protected set; }
-		protected GameController game { get; set; }
-
+		protected GameController game
+		{
+			get
+			{
+				if (_game is null)
+					_game = FindObjectOfType<GameController>();
+				return _game;
+			}
+		}
+		private GameController _game;
 
 		protected virtual void Awake()
 		{
 			col = GetComponent<Collider>();
-			game = GameController.current;
 			if (renderer is null) GetComponentInChildren<Renderer>(includeInactive: true);
 
 			Init();

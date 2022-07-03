@@ -16,6 +16,8 @@ namespace LeMinhHuy
 		const float RAYCAST_MAXDISTANCE = 100f;
 
 		//Inspector
+		[SerializeField] GameController game;
+
 		public string name = "Team Name";
 		public Color color = Color.blue;
 		public UserType userType = UserType.CPU;
@@ -57,7 +59,6 @@ namespace LeMinhHuy
 		int? activeUnits => unitPool?.countActive;
 
 		//Members
-		GameController game;
 		ARRaycastManager arRaycaster;
 		List<ARRaycastHit> arHitResults = new List<ARRaycastHit>();
 		internal Team opponent;
@@ -84,9 +85,10 @@ namespace LeMinhHuy
 		}
 		public void ScoreGoal(int amount = 1)
 		{
-			//TEMP: deal with penalty
+			//Handle penalty match
 			if (game.isPenaltyRound)
 			{
+				//Go directly to end screen
 				game.onEndMatch.Invoke((this, Result.Wins));
 				return;
 			}
@@ -98,7 +100,7 @@ namespace LeMinhHuy
 		//INITS
 		public void Awake()
 		{
-			game = GameController.current;
+			Debug.Assert(game is object, "No GameController assigned!");
 			if (game.isARMode)
 			{
 				arRaycaster = GameObject.FindObjectOfType<ARRaycastManager>();

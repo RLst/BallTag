@@ -3,7 +3,7 @@ using UnityEngine;
 namespace LeMinhHuy
 {
 	//This just spins this at a set speed when it's active
-	public class Halo : MonoBehaviour
+	public class RotateAroundYAxis : MonoBehaviour
 	{
 		[SerializeField] float rotationSpeed = 120f;
 

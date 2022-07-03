@@ -54,6 +54,7 @@ MonoBehaviour:
     type: 3}
   ballReleaseHeight: 10
   teamOne:
+    game: {fileID: 0}
     name: AI One
     color: {r: 0.8941177, g: 0.30980393, b: 0.3137255, a: 1}
     userType: 1
@@ -121,6 +122,7 @@ MonoBehaviour:
       m_PersistentCalls:
         m_Calls: []
   teamTwo:
+    game: {fileID: 0}
     name: AI Two
     color: {r: 0.13725491, g: 0.6156863, b: 0.8941177, a: 1}
     userType: 1
@@ -367,3 +369,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc97e96fcee31414bbcc6e1ee81548a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  game: {fileID: 6852594140958801551}
