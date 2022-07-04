@@ -128,6 +128,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 8625095067407667827, guid: 7d8ec7e04a7793b4ea31a5ce243de0a1,
+        type: 3}
+      propertyPath: m_text
+      value: by Tony Le
+      objectReference: {fileID: 0}
     - target: {fileID: 8625095068277956326, guid: 7d8ec7e04a7793b4ea31a5ce243de0a1,
         type: 3}
       propertyPath: m_Name

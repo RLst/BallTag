@@ -1,6 +1,83 @@
 Brainstorm
 ==========
 
+-----------------------------
+Project debrief
+------------------------------
+I hope you see the effort I put into this project
+• Passion, determination and drive
+• At least 9000 minutes or 150 hours put into this
+• Object pooling to reduce garbage collection
+• AI tick system that ticks at a lower FPS to reduce CPU usage
+• Basically had to learn AR on the fly
+• Menu systems completed
+• All AR criteria met: detect surface, place game, rotate, zoom
+
+Techniques I used
+• Patterns:
+	• Use of singletons. I used it on the game controller initially but it caused issue when going back to normal mode from Ar mode. Thankfully it was easy to de-singleton them thanks to the way I wrote my code
+• Object Pooling:
+	• Use of object pool to basically eliminate garbage collection
+	• Because of the implementation I can very easily implement efficient particle systems into it as well
+• Augmented Reality
+	I basically was a beginner with this technology and had to learn it from scratch. It took 2-3 days for me to get used to it.
+	I modeled my game's implementation after Stack and Angry birds, hopefully it looks nice
+• Optimizations
+	• Always cache objects at startup as much as I can to save CPU
+• Coding practices
+	• Used expression body methods where it made sense so the code looks cleaner
+	• Lambda expressions where it made sense
+	• Properties where required
+	• Extension functions. I know and can do them
+	• Extensive use of events to decouple objects. I use unity events because they can also show up in the inspector
+	• I try to write self commenting code where appropriate
+	• I try to write clean, clear and organized code that's easy to understand, not just for myself but for others as well
+• GameController:
+	• Maybe I should've used an array or list to hold the teams in the gameController, but that might complicate things in other ways
+	• I calculated each teams attacking direction in case the playing field had to be rotated, which it did
+• AI:
+	• I used coroutines and repeating invokes to create a separate loop to tick the AI systems separately and at a refresh rate to reduce the CPU usage
+	• Basic AI system was just based on a simple states based on enums and running on the tick system, as that was really all that was needed. I wanted to use my own behaviour tree editor but I hadn't used it in a while and would have to relearn how to use it again
+	• Used unity engine's navmesh system and navmesh components for the maze system
+• Fields:
+	• have functions that let you know if a point is located on them, and also a return a random point on them. This came in quite handy when spawning
+• Stadium:
+	• The stadium had functionality to generate a maze. It shouldn't have been a singleton but I was in a rush
+• Maze:
+	I was in a rush so I used somebody else's maze code. However it wasn't without trouble and was very problematic at the start. I had to somehow try to make it work correctly and fit onto the field properly. This was very buggy. But it works ok most of the time. I will have to go back and fix it sometime
+• Architecture
+	• Used SendMessage to relay OnTrigger messages up thru the object. Allows me to put a completely separate and uncoupled object downstream, relieving stress on the parent objects upstream
+	• OOP: Made Walls, Goals and Units inherited from TeamObjects as they shared some similar properties
+• Input
+	• Just used the default old input system as the new one I'm not familiar with and also I think it's still in preview or beta in this version of unity
+	• Used a separate help class to register and deregister from the main Input controller/relay
+• Scriptable Objects
+	• Used it to hold game settings
+	• Was planning to create SO variables to hold values shared between systems such as Team stats, strategies etc. But didn't feel the need or had the time to do it.
+	• I am very much capable of doing it though :P
+• UI and menu systems
+	• Used sliders for the gauges as they had inbuilt integer mode
+	• Menu systems can be quite difficult to implement properly, especially with nested prefabs. The Main and AR scenes had slightly different hookups
+• Tweening
+	• Used DoTween as it's great, easy to use and performant
+	• I can write my own tweening library sure, but its better to use existing technology that is tried and true
+	• Ball passing looks surprisingly great
+• Touch
+	• Used LeanTween as I had it on hand
+	• I could've implemented it myself but again why try to reinvent the wheel when someone has already done it and done it well
+• Team:
+	• Had convenient functions to handle the common team running task such as spawning units and pointer locations or randomly, controlling the lifecycle of the units, finding good locations for defense
+	• Colors the entire team
+	• Held team stats, stances as that made the most sense
+• Unit:
+	• Used an established animated character
+	• The most complicated object prefab
+	• AI system simple and relatively easy to work with
+
+• Known bugs:
+	• Switching back from AR mode to normal mode reloads the Main scene causing an extra MainMenu object to be generated. I have tried resolving this by trying to make it self delete but it always seems to delete the wrong one. Potential solution is to maybe
+	• You can still click to spawn during penalty mode :P An easy fix
+	• When pinching to zoom to scale world up, it causes anchoring issues
 
 Bug: if there are two chasers, one will have caught and the other would have not and doesn't hence doesn't get cancelled and will keep trying to chase after an attacker
 
