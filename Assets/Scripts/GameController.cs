@@ -267,29 +267,39 @@ namespace LeMinhHuy
 		/// </summary>
 		void Update()
 		{
-			if (!isPlaying)
+			if (!isPlaying || isPaused)
 				return;
 
-			//Handle round timer IF a round is currently going on
-			if (currentRoundRemainingTime > 0)
-			{
-				currentRoundRemainingTime -= Time.deltaTime;
-
-				if (currentRoundRemainingTime <= 0)
-				{
-					//TEMP: Deal with penalty
-					if (isPenaltyRound)
-					{
-						onEndMatch.Invoke((teamOne, Result.Lose));
-						return;
-					}
-					EndRound((null, Result.Draw));
-				}
-			}
+			HandleCountdownTimer();
+			HandleTimeOutConditions();
 
 			//Update teams
 			teamOne.Update();
 			teamTwo.Update();
+		}
+		void HandleCountdownTimer()
+		{
+			//Handle round timer IF a round is currently going on
+			if (currentRoundRemainingTime > 0)
+				currentRoundRemainingTime -= Time.deltaTime;
+		}
+		void HandleTimeOutConditions()
+		{
+			//Ran out of time
+			if (currentRoundRemainingTime <= 0)
+			{
+				//NOTE: Penalty round LOSE
+				if (isPenaltyRound)
+				{
+					isPlaying = false;
+					onEndMatch.Invoke((teamOne, Result.Lose));
+				}
+				//Normal round DRAW
+				else
+				{
+					EndRound((null, Result.Draw));
+				}
+			}
 		}
 
 		/// <summary>
@@ -413,6 +423,7 @@ namespace LeMinhHuy
 			onUnpause.Invoke();
 		}
 
+#if UNITY_EDITOR
 		//TESTS
 		public void TestDraw()
 		{
@@ -431,4 +442,5 @@ namespace LeMinhHuy
 			EndRound((teamOne, Result.Lose));
 		}
 	}
+#endif
 }
