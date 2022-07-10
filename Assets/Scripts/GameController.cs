@@ -34,20 +34,20 @@ namespace LeMinhHuy
 		[SerializeField] Ball ballPrefab = null;
 		[SerializeField] float ballReleaseHeight = 10f;
 
-		//Make these an array if you ever need more than two teams
-		[Header("Teams")]
-		public Team teamOne;    //This is the player
-		public Team teamTwo;
-
 		//Events
-		// [Header("Events")]
-		[HideInInspector] public UnityEvent onBeginMatch;
-		[HideInInspector] public UnityEvent onBeginRound;
+		[Header("Events")]
+		public UnityEvent onBeginMatch;
+		public UnityEvent onBeginRound;
 		[HideInInspector] public UnityEvent onPause;
 		[HideInInspector] public UnityEvent onUnpause;
 		[HideInInspector] public ResultEvent onEndRound;
 		[HideInInspector] public ResultEvent onEndMatch;
 		[HideInInspector] public UnityEvent onBeginPenaltyRound;
+
+		//Make these an array if you ever need more than two teams
+		[Header("Teams")]
+		public Team teamOne;    //This is the player
+		public Team teamTwo;
 
 		public bool isPenaltyRound = false;
 
@@ -381,15 +381,6 @@ namespace LeMinhHuy
 				onEndMatch.Invoke((teamOne, Result.Lose));
 			}
 		}
-
-		/// <summary>
-		/// Completely end all rounds, matches and game
-		/// </summary>
-		public void GameOver()
-		{
-			//Reload the main scene (slight slack)
-			MainMenuController.current.ReloadGameScene();
-		}
 		#endregion
 
 
@@ -441,6 +432,6 @@ namespace LeMinhHuy
 			teamTwo.wins++;
 			EndRound((teamOne, Result.Lose));
 		}
-	}
 #endif
+	}
 }

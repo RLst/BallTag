@@ -47,12 +47,12 @@ MonoBehaviour:
     detectionRange: 0.35
     minSpawnDistanceFromOwnGoal: 2
   teamOneSettings:
-    name: Southerners
+    name: Saigon
     color: {r: 1, g: 0.682302, b: 0.2216981, a: 1}
     userType: 0
     stance: 1
   teamTwoSettings:
-    name: Northerners
+    name: Hanoi
     color: {r: 1, g: 0.27269888, b: 0.1372549, a: 1}
     userType: 1
     stance: 0

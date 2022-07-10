@@ -9,7 +9,7 @@ namespace LeMinhHuy
 		public void GameOver()
 		{
 			mm.ReloadGameScene();
-			// mm.Show();
+			mm.Show();
 		}
 	}
 }

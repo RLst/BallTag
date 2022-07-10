@@ -7,20 +7,19 @@ using UnityEngine.UI;
 namespace LeMinhHuy
 {
 	/// <summary>
-	/// Handle menus etc
+	/// Handle main menus
 	/// </summary>
 	[RequireComponent(typeof(Canvas))]
 	public class MainMenuController : Singleton<MainMenuController>
 	{
 		//Since this is a floating dont destroy on load class it shouldn't directly reference anything else other than itself
-
 		[SerializeField] string mainSceneName = "Main";
 		[SerializeField] string ARSceneName = "AR";
 
 		[Space]
 		[SerializeField] TextMeshProUGUI arToggleButtonText;
 		[SerializeField] GameObject titles;     //The gameobject that holds all of the titls and prompts etc
-		[SerializeField] Button tapToStartSensor;
+		[SerializeField] Button startSensor;
 
 		//Members
 		Canvas canvas;
@@ -46,10 +45,10 @@ namespace LeMinhHuy
 
 		void Start()
 		{
-			tapToStartSensor.onClick.AddListener(() => game.BeginMatch());
+			startSensor.onClick.AddListener(() => game.BeginMatch());
 		}
 
-		public void SetActiveStartSensor(bool active) => tapToStartSensor.enabled = (active);
+		public void SetActiveStartSensor(bool active) => startSensor.enabled = (active);
 		public void SetActiveTitles(bool active) => titles.SetActive(active);
 
 		public void Show() => canvas.enabled = true;

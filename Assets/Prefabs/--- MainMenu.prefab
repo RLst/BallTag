@@ -544,7 +544,7 @@ GameObject:
   - component: {fileID: 8625095067839193464}
   - component: {fileID: 4312191022971228048}
   m_Layer: 5
-  m_Name: SensorFull
+  m_Name: SensorStart
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -845,6 +845,7 @@ GameObject:
   - component: {fileID: 8625095068277956325}
   - component: {fileID: 8625095068277956329}
   - component: {fileID: 933611997970542132}
+  - component: {fileID: 5051751685501646833}
   m_Layer: 5
   m_Name: --- MainMenu
   m_TagString: Untagged
@@ -948,7 +949,7 @@ MonoBehaviour:
   ARSceneName: AR
   arToggleButtonText: {fileID: 8625095067894888391}
   titles: {fileID: 8699644940185576879}
-  tapToStartSensor: {fileID: 4312191022971228048}
+  startSensor: {fileID: 4312191022971228048}
 --- !u!114 &933611997970542132
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -962,6 +963,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneName: Main
+--- !u!114 &5051751685501646833
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8625095068277956326}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c976dd7051e2845afb930aacb90c4425, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enableARSwitching: 1
+  arToggleButton: {fileID: 8625095067096673455}
 --- !u!1 &8625095068704931851
 GameObject:
   m_ObjectHideFlags: 0
