@@ -40,7 +40,7 @@ namespace LeMinhHuy
 		public UnityEvent onBeginRound;
 		[HideInInspector] public UnityEvent onPause;
 		[HideInInspector] public UnityEvent onUnpause;
-		[HideInInspector] public ResultEvent onEndRound;
+		public ResultEvent onEndRound;
 		[HideInInspector] public ResultEvent onEndMatch;
 		[HideInInspector] public UnityEvent onBeginPenaltyRound;
 
