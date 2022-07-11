@@ -1,6 +1,7 @@
 using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -21,6 +22,10 @@ namespace LeMinhHuy
 		[SerializeField] GameObject titles;     //The gameobject that holds all of the titls and prompts etc
 		[SerializeField] Button startSensor;
 
+		[Space]
+		[Tooltip("On switching between normal and AR mode")]
+		public UnityEvent onSwitchMode;
+
 		//Members
 		Canvas canvas;
 		GameController game
@@ -28,14 +33,13 @@ namespace LeMinhHuy
 			//Will try to always find the current GameController depending on the scene
 			get
 			{
-				if (_game is null)
-					_game = FindObjectOfType<GameController>();
+				// if (_game is null)
+				_game = FindObjectOfType<GameController>();
 				return _game;
 			}
 		}
 		private GameController _game;
 
-		// protected override void Init()
 		void Awake()
 		{
 			DontDestroyOnLoad(this);
@@ -45,7 +49,7 @@ namespace LeMinhHuy
 
 		void Start()
 		{
-			startSensor.onClick.AddListener(() => game.BeginMatch());
+			startSensor.onClick.AddListener(OnStart);
 		}
 
 		public void SetActiveStartSensor(bool active) => startSensor.enabled = (active);
@@ -53,6 +57,11 @@ namespace LeMinhHuy
 
 		public void Show() => canvas.enabled = true;
 		public void Hide() => canvas.enabled = false;
+
+		public void OnStart()
+		{
+			game.BeginMatch();
+		}
 
 		public void ToggleARMode()
 		{
@@ -78,6 +87,8 @@ namespace LeMinhHuy
 
 				arToggleButtonText.text = "AR";
 			}
+
+			onSwitchMode.Invoke();
 		}
 
 		public void ReloadGameScene()
