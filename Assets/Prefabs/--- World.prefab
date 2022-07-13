@@ -639,7 +639,6 @@ MonoBehaviour:
       plane:
         normal_: {x: 0, y: 0, z: 0}
         distance_: 0
-      backup: 0
     uvIslandManager_:
       uvislands_: []
       uvislandsStream_: 
@@ -651,19 +650,12 @@ MonoBehaviour:
   materials:
   - {fileID: 2100000, guid: 806ce92306fd142c79cd0f71d773166c, type: 2}
   - {fileID: 2100000, guid: b353c3edd456b479c84499ce58ad5add, type: 2}
-  originalMaterials: []
   editMode: 1
   recalculateTangents: 1
   serializedGuid: 
   assetPath: 
   isInvisibleObject: 0
   mainRenderableMesh: {fileID: 0}
-  hotspotLayout: {fileID: 0}
-  hotspotScale: 1
-  hotspotPadding: 0
-  hotspotPriority: 0.5
-  autoHotspotLayout: 0
-  hotspotGroup: 0
 --- !u!33 &5432454918184037908
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -1505,7 +1497,6 @@ MonoBehaviour:
       plane:
         normal_: {x: 0, y: 0, z: 0}
         distance_: 0
-      backup: 0
     uvIslandManager_:
       uvislands_: []
       uvislandsStream_: 
@@ -1517,19 +1508,12 @@ MonoBehaviour:
   materials:
   - {fileID: 2100000, guid: 806ce92306fd142c79cd0f71d773166c, type: 2}
   - {fileID: 2100000, guid: b353c3edd456b479c84499ce58ad5add, type: 2}
-  originalMaterials: []
   editMode: 1
   recalculateTangents: 1
   serializedGuid: 
   assetPath: 
   isInvisibleObject: 0
   mainRenderableMesh: {fileID: 0}
-  hotspotLayout: {fileID: 0}
-  hotspotScale: 1
-  hotspotPadding: 0
-  hotspotPriority: 0.5
-  autoHotspotLayout: 0
-  hotspotGroup: 0
 --- !u!33 &2086806772949049427
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -2187,7 +2171,6 @@ MonoBehaviour:
       plane:
         normal_: {x: 0, y: 0, z: 0}
         distance_: 0
-      backup: 0
     uvIslandManager_:
       uvislands_: []
       uvislandsStream_: 
@@ -2199,19 +2182,12 @@ MonoBehaviour:
   materials:
   - {fileID: 2100000, guid: 806ce92306fd142c79cd0f71d773166c, type: 2}
   - {fileID: 2100000, guid: b353c3edd456b479c84499ce58ad5add, type: 2}
-  originalMaterials: []
   editMode: 1
   recalculateTangents: 1
   serializedGuid: 
   assetPath: 
   isInvisibleObject: 0
   mainRenderableMesh: {fileID: 0}
-  hotspotLayout: {fileID: 0}
-  hotspotScale: 1
-  hotspotPadding: 0
-  hotspotPriority: 0.5
-  autoHotspotLayout: 0
-  hotspotGroup: 0
 --- !u!33 &3914029494724727880
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -8763,7 +8739,7 @@ Light:
     m_Type: 2
     m_Resolution: -1
     m_CustomResolution: -1
-    m_Strength: 0.707
+    m_Strength: 0.5
     m_Bias: 0.05
     m_NormalBias: 0.4
     m_NearPlane: 2
@@ -11834,7 +11810,6 @@ MonoBehaviour:
       plane:
         normal_: {x: 0, y: 0, z: 0}
         distance_: 0
-      backup: 0
     uvIslandManager_:
       uvislands_: []
       uvislandsStream_: 
@@ -11848,19 +11823,12 @@ MonoBehaviour:
   - {fileID: 2100000, guid: fee951a0a1ea04a20ad664ab9018771f, type: 2}
   - {fileID: 2100000, guid: b353c3edd456b479c84499ce58ad5add, type: 2}
   - {fileID: 2100000, guid: 2f6d5907f9bd4485380d7488f3577c31, type: 2}
-  originalMaterials: []
   editMode: 1
   recalculateTangents: 1
   serializedGuid: 
   assetPath: 
   isInvisibleObject: 0
   mainRenderableMesh: {fileID: 0}
-  hotspotLayout: {fileID: 0}
-  hotspotScale: 1
-  hotspotPadding: 0
-  hotspotPriority: 0.5
-  autoHotspotLayout: 0
-  hotspotGroup: 0
 --- !u!33 &1715314538609216985
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -12520,7 +12488,6 @@ MonoBehaviour:
       plane:
         normal_: {x: 0, y: 0, z: 0}
         distance_: 0
-      backup: 0
     uvIslandManager_:
       uvislands_: []
       uvislandsStream_: 
@@ -12532,19 +12499,12 @@ MonoBehaviour:
   materials:
   - {fileID: 2100000, guid: 806ce92306fd142c79cd0f71d773166c, type: 2}
   - {fileID: 2100000, guid: b353c3edd456b479c84499ce58ad5add, type: 2}
-  originalMaterials: []
   editMode: 1
   recalculateTangents: 1
   serializedGuid: 
   assetPath: 
   isInvisibleObject: 0
   mainRenderableMesh: {fileID: 0}
-  hotspotLayout: {fileID: 0}
-  hotspotScale: 1
-  hotspotPadding: 0
-  hotspotPriority: 0.5
-  autoHotspotLayout: 0
-  hotspotGroup: 0
 --- !u!33 &2485030030987454414
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -13407,7 +13367,6 @@ MonoBehaviour:
       plane:
         normal_: {x: 0, y: 0, z: 0}
         distance_: 0
-      backup: 0
     uvIslandManager_:
       uvislands_: []
       uvislandsStream_: 
@@ -13419,19 +13378,12 @@ MonoBehaviour:
   materials:
   - {fileID: 2100000, guid: e59bdbb40979644c4a267feb3662745e, type: 2}
   - {fileID: 2100000, guid: 28f967a89b7b949aea4969aef3d5712e, type: 2}
-  originalMaterials: []
   editMode: 1
   recalculateTangents: 1
   serializedGuid: 
   assetPath: 
   isInvisibleObject: 0
   mainRenderableMesh: {fileID: 0}
-  hotspotLayout: {fileID: 0}
-  hotspotScale: 1
-  hotspotPadding: 0
-  hotspotPriority: 0.5
-  autoHotspotLayout: 0
-  hotspotGroup: 0
 --- !u!33 &4399591090216762881
 MeshFilter:
   m_ObjectHideFlags: 0

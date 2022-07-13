@@ -10,7 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 2818327446902076288}
   - component: {fileID: 8819734051044059398}
-  - component: {fileID: 1261805747668339764}
+  - component: {fileID: 9116058533833304598}
+  - component: {fileID: 155336699216713203}
   m_Layer: 5
   m_Name: Music
   m_TagString: Untagged
@@ -52,7 +53,7 @@ AudioSource:
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
-  Loop: 1
+  Loop: 0
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
@@ -134,7 +135,7 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &1261805747668339764
+--- !u!114 &9116058533833304598
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -143,9 +144,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 5196007688612755505}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b08904814430b453b8e8af90f4fb40cf, type: 3}
+  m_Script: {fileID: 11500000, guid: 9de7a272b64096048b60a40a25af214c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  soundEnabled: {fileID: 24500006, guid: 7efd517f91d1341d49f0ce187ddf3b46, type: 2}
+  soundDisabled: {fileID: -8636617562722189091, guid: 7efd517f91d1341d49f0ce187ddf3b46,
+    type: 2}
+  transitionTime: 0.3
   onSoundOn:
     m_PersistentCalls:
       m_Calls:
@@ -176,6 +181,21 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &155336699216713203
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5196007688612755505}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d00692fa1ba274b2182dab80dd25310d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  description: 
+  chance: 100
+  set: {fileID: 11400000, guid: 38a10789cf5b63e42aa985b2a2503898, type: 2}
 --- !u!1 &6785158989282783330
 GameObject:
   m_ObjectHideFlags: 0
@@ -294,7 +314,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1261805747668339764}
+      - m_Target: {fileID: 9116058533833304598}
         m_MethodName: Toggle
         m_Mode: 1
         m_Arguments:
@@ -1237,19 +1257,18 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 8819734051044059398}
-        m_MethodName: set_clip
-        m_Mode: 2
+        m_MethodName: Stop
+        m_Mode: 1
         m_Arguments:
-          m_ObjectArgument: {fileID: 8300000, guid: c57ab2ca7bb514f0ba980ffee2bc3509,
-            type: 3}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.AudioClip, UnityEngine
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 8819734051044059398}
-        m_MethodName: Play
+      - m_Target: {fileID: 155336699216713203}
+        m_MethodName: PlayByChance
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

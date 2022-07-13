@@ -999,9 +999,10 @@ GameObject:
   m_Component:
   - component: {fileID: 7166912886410497541}
   - component: {fileID: 6839786742684477955}
-  - component: {fileID: 6946069982364424111}
   - component: {fileID: 490496329399485630}
   - component: {fileID: 6556001494181699633}
+  - component: {fileID: 5246874720344044654}
+  - component: {fileID: 6946069982364424111}
   - component: {fileID: 2358086959517708842}
   - component: {fileID: 4505413601045317807}
   - component: {fileID: -1585036364189736884}
@@ -1059,13 +1060,13 @@ MonoBehaviour:
   onTag:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 6946069982364424111}
-        m_MethodName: PlayOneShot
+      - m_Target: {fileID: 5246874720344044654}
+        m_MethodName: PlaySetByChance
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 8300000, guid: d69dfe728f33c428191d8a4931db1953,
-            type: 3}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.AudioClip, UnityEngine
+          m_ObjectArgument: {fileID: 11400000, guid: be741d987923e314ab5ed50417c55bff,
+            type: 2}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -1077,13 +1078,13 @@ MonoBehaviour:
   onPass:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 6946069982364424111}
-        m_MethodName: PlayOneShot
+      - m_Target: {fileID: 5246874720344044654}
+        m_MethodName: PlaySetByChance
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 8300000, guid: ae41b27eb128d4c97a4ebe21044684bb,
-            type: 3}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.AudioClip, UnityEngine
+          m_ObjectArgument: {fileID: 11400000, guid: 10c0531deac85cc4ba0282f21437efa4,
+            type: 2}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -1092,6 +1093,68 @@ MonoBehaviour:
   onChangedState:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &490496329399485630
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7166912886410497540}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce7a80d520cacc042b5fe14f373d8173, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_MovingTurnSpeed: 360
+  m_StationaryTurnSpeed: 180
+  m_JumpPower: 12
+  m_GravityMultiplier: 2
+  m_RunCycleLegOffset: 0.2
+  m_MoveSpeedMultiplier: 1
+  m_AnimSpeedMultiplier: 0.8
+  m_GroundCheckDistance: 2
+--- !u!114 &6556001494181699633
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7166912886410497540}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1cb3198ab4c74c9eba07c20b3fdf301, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onStep:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 5246874720344044654}
+        m_MethodName: PlaySetByChance
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 11400000, guid: 2cd285c9585835048909f1ddc18113e3,
+            type: 2}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &5246874720344044654
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7166912886410497540}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d00692fa1ba274b2182dab80dd25310d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  description: 
+  chance: 100
+  set: {fileID: 0}
 --- !u!82 &6946069982364424111
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1189,53 +1252,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &490496329399485630
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7166912886410497540}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ce7a80d520cacc042b5fe14f373d8173, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_MovingTurnSpeed: 360
-  m_StationaryTurnSpeed: 180
-  m_JumpPower: 12
-  m_GravityMultiplier: 2
-  m_RunCycleLegOffset: 0.2
-  m_MoveSpeedMultiplier: 1
-  m_AnimSpeedMultiplier: 0.8
-  m_GroundCheckDistance: 2
---- !u!114 &6556001494181699633
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7166912886410497540}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e1cb3198ab4c74c9eba07c20b3fdf301, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  onStep:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 6946069982364424111}
-        m_MethodName: PlayOneShot
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 8300000, guid: 63deb87d3d1374cb1aad844f242286c8,
-            type: 3}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.AudioClip, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!95 &2358086959517708842
 Animator:
   serializedVersion: 3
@@ -1517,15 +1533,15 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 9500000, guid: 7e15121f5f042ed46aba81406403f2d2, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 7e15121f5f042ed46aba81406403f2d2, type: 3}
---- !u!4 &490560774708342499 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 400002, guid: 7e15121f5f042ed46aba81406403f2d2,
-    type: 3}
-  m_PrefabInstance: {fileID: 490560774708474977}
-  m_PrefabAsset: {fileID: 0}
 --- !u!137 &490560774719946689 stripped
 SkinnedMeshRenderer:
   m_CorrespondingSourceObject: {fileID: 13700000, guid: 7e15121f5f042ed46aba81406403f2d2,
+    type: 3}
+  m_PrefabInstance: {fileID: 490560774708474977}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &490560774708342499 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 400002, guid: 7e15121f5f042ed46aba81406403f2d2,
     type: 3}
   m_PrefabInstance: {fileID: 490560774708474977}
   m_PrefabAsset: {fileID: 0}

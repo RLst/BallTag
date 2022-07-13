@@ -13,7 +13,7 @@ namespace LeMinhHuy
 
 		[Tooltip("Chance of clip playing. OVERRIDES the magazine's chance")]
 		[Range(0, 100), SerializeField] int chance = 50;
-		[SerializeField] AudioSet magazine = null;
+		[SerializeField] AudioSet set = null;
 
 		//Members
 		AudioSource audioSource;
@@ -33,21 +33,21 @@ namespace LeMinhHuy
 		/// <summary>
 		/// Plays the current loaded magazine according to the chance setting on this audio system
 		/// </summary>
-		public void ChancePlay()
+		public void PlayByChance()
 		{
-			if (!magazine) return;
+			if (!set) return;
 
 			//Don't play the same sound over and over again
 			while (true)
 			{
-				AudioClip clipToPlay = magazine.clips[UnityEngine.Random.Range(0, magazine.clips.Count)];
-				if (clipToPlay == magazine.lastPlayed) continue;
+				AudioClip clipToPlay = set.clips[UnityEngine.Random.Range(0, set.clips.Count)];
+				if (clipToPlay == set.lastPlayed) continue;
 
 				//Play by chance
-				if (UnityEngine.Random.Range(0, 100) < magazine.chance)
+				if (UnityEngine.Random.Range(0, 100) < set.chance)
 				{
-					audioSource.PlayOneShot(clipToPlay, magazine.volume);
-					magazine.lastPlayed = clipToPlay;
+					audioSource.PlayOneShot(clipToPlay, set.volume);
+					set.lastPlayed = clipToPlay;
 				}
 				break;
 			}
@@ -56,7 +56,7 @@ namespace LeMinhHuy
 		/// Plays the selected clip according to the chance setting of this audio system
 		/// </summary>
 		/// <param name="clip">The audio clip to play based on chance</param>
-		public void ChancePlay(AudioClip clip)
+		public void PlayByChance(AudioClip clip)
 		{
 			if (Random.Range(0, 100) < chance)
 				audioSource.PlayOneShot(clip);
@@ -64,7 +64,7 @@ namespace LeMinhHuy
 		#endregion
 
 		#region Animation Event Handlers
-		public void ChancePlayClip(Object audioClip)
+		public void PlayClipByChance(Object audioClip)
 		{
 			AudioClip ac = audioClip as AudioClip;
 			if (Random.Range(0, 100) < chance)
@@ -72,14 +72,14 @@ namespace LeMinhHuy
 		}
 
 		/// <summary> Play one audio clip out of a magazine according to chance </summary>
-		/// <param name="audioMagazine">AudioMagazine scriptable object</param>
-		public void ChancePlayMagazine(Object audioMagazine)
+		/// <param name="audioSet">AudioMagazine scriptable object</param>
+		public void PlaySetByChance(Object audioSet)
 		{
 			//Cast
-			AudioSet am = audioMagazine as AudioSet;
-			if (!am)
+			AudioSet set = audioSet as AudioSet;
+			if (!set)
 			{
-				print("Not an audio magazine!");
+				print("Not an audio set!");
 				return;
 			}
 
@@ -87,16 +87,17 @@ namespace LeMinhHuy
 			//NOTE: With brief testing, the max iterations was 3. Usually 1 or 2. Performance is fine
 			while (true)
 			{
-				AudioClip clipToPlay = am.clips[Random.Range(0, am.clips.Count)];
-				if (am.avoidRepetitions &&
-					am.clips.Count > 1 &&     //Need at least 2 clips to avoid repetitions
-					clipToPlay == am.lastPlayed) continue;
+				AudioClip clipToPlay = set.clips[Random.Range(0, set.clips.Count)];
+				if (set.avoidRepetitions &&
+					set.clips.Count > 1 &&     //Need at least 2 clips to avoid repetitions
+					clipToPlay == set.lastPlayed) continue;
 
 				//Play by chance
-				if (Random.Range(0, 100) < am.chance)
+				if (Random.Range(0, 100) < set.chance)
 				{
-					audioSource.PlayOneShot(clipToPlay, am.volume);
-					am.lastPlayed = clipToPlay;
+					audioSource.outputAudioMixerGroup = set.mixerGroup;
+					audioSource.PlayOneShot(clipToPlay, set.volume);
+					set.lastPlayed = clipToPlay;
 				}
 				break;
 			}
@@ -106,22 +107,23 @@ namespace LeMinhHuy
 		/// Play a random clip in a magazine by chance using passed in audiosource
 		/// ie. in case the sounds need to be routed through a different mixer
 		/// </summary>
-		public void ChancePlayMagazineByAudioSource(AudioSet am, AudioSource source)
+		public void PlaySetByChance(AudioSet set, AudioSource source)
 		{
 			//Don't play the same sound over and over again
 			//NOTE: With brief testing, the max iterations was 3. Usually 1 or 2. Performance is fine
 			while (true)
 			{
-				AudioClip clipToPlay = am.clips[Random.Range(0, am.clips.Count)];
-				if (am.avoidRepetitions &&
-					am.clips.Count > 1 &&       //Need at least 2 clips to avoid repetitions, otherwise infinity loop
-					clipToPlay == am.lastPlayed) continue;
+				AudioClip clipToPlay = set.clips[Random.Range(0, set.clips.Count)];
+				if (set.avoidRepetitions &&
+					set.clips.Count > 1 &&       //Need at least 2 clips to avoid repetitions, otherwise infinity loop
+					clipToPlay == set.lastPlayed) continue;
 
 				//Play by chance
-				if (Random.Range(0, 100) < am.chance)
+				if (Random.Range(0, 100) < set.chance)
 				{
-					source.PlayOneShot(clipToPlay, am.volume);
-					am.lastPlayed = clipToPlay;
+					source.outputAudioMixerGroup = set.mixerGroup;
+					source.PlayOneShot(clipToPlay, set.volume);
+					set.lastPlayed = clipToPlay;
 				}
 				break;
 			}

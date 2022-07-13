@@ -27,6 +27,8 @@ namespace LeMinhHuy
 
 		public void OnBeginRound()
 		{
+			if (game.isPlayingDemo) return;  //Don't play if it's the demo
+
 			audioSource.Stop();
 
 			audioSource.clip = crowdGeneral;

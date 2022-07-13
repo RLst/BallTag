@@ -341,11 +341,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: -0.00037778658
       objectReference: {fileID: 0}
-    - target: {fileID: 1715314538609216985, guid: 8374f381ec6e58042a82f5a6e30585d0,
-        type: 3}
-      propertyPath: m_Mesh
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 2086806772949049427, guid: 8374f381ec6e58042a82f5a6e30585d0,
         type: 3}
       propertyPath: m_Mesh
@@ -358,9 +353,94 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2647373001959181881, guid: 8374f381ec6e58042a82f5a6e30585d0,
         type: 3}
+      propertyPath: materials.Array.size
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2647373001959181881, guid: 8374f381ec6e58042a82f5a6e30585d0,
+        type: 3}
       propertyPath: mainRenderableMesh
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 2647373001959181881, guid: 8374f381ec6e58042a82f5a6e30585d0,
+        type: 3}
+      propertyPath: editableMesh_.mainPolygons_.Array.data[22].matID_
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2647373001959181881, guid: 8374f381ec6e58042a82f5a6e30585d0,
+        type: 3}
+      propertyPath: editableMesh_.mainPolygons_.Array.data[26].matID_
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2647373001959181881, guid: 8374f381ec6e58042a82f5a6e30585d0,
+        type: 3}
+      propertyPath: editableMesh_.mainPolygons_.Array.data[29].matID_
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2647373001959181881, guid: 8374f381ec6e58042a82f5a6e30585d0,
+        type: 3}
+      propertyPath: editableMesh_.mainPolygons_.Array.data[32].matID_
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2647373001959181881, guid: 8374f381ec6e58042a82f5a6e30585d0,
+        type: 3}
+      propertyPath: editableMesh_.mainPolygons_.Array.data[35].matID_
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2647373001959181881, guid: 8374f381ec6e58042a82f5a6e30585d0,
+        type: 3}
+      propertyPath: editableMesh_.mainPolygons_.Array.data[38].matID_
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2647373001959181881, guid: 8374f381ec6e58042a82f5a6e30585d0,
+        type: 3}
+      propertyPath: editableMesh_.mainPolygons_.Array.data[41].matID_
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2647373001959181881, guid: 8374f381ec6e58042a82f5a6e30585d0,
+        type: 3}
+      propertyPath: editableMesh_.mainPolygons_.Array.data[46].matID_
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2647373001959181881, guid: 8374f381ec6e58042a82f5a6e30585d0,
+        type: 3}
+      propertyPath: editableMesh_.mainPolygons_.Array.data[49].matID_
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2647373001959181881, guid: 8374f381ec6e58042a82f5a6e30585d0,
+        type: 3}
+      propertyPath: editableMesh_.mainPolygons_.Array.data[52].matID_
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2647373001959181881, guid: 8374f381ec6e58042a82f5a6e30585d0,
+        type: 3}
+      propertyPath: editableMesh_.mainPolygons_.Array.data[59].matID_
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2647373001959181881, guid: 8374f381ec6e58042a82f5a6e30585d0,
+        type: 3}
+      propertyPath: editableMesh_.mainPolygons_.Array.data[61].matID_
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2647373001959181881, guid: 8374f381ec6e58042a82f5a6e30585d0,
+        type: 3}
+      propertyPath: editableMesh_.mainPolygons_.Array.data[69].matID_
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2647373001959181881, guid: 8374f381ec6e58042a82f5a6e30585d0,
+        type: 3}
+      propertyPath: editableMesh_.mainPolygons_.Array.data[71].matID_
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2647373001959181881, guid: 8374f381ec6e58042a82f5a6e30585d0,
+        type: 3}
+      propertyPath: editableMesh_.mainPolygons_.Array.data[73].matID_
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2647373001959181881, guid: 8374f381ec6e58042a82f5a6e30585d0,
+        type: 3}
+      propertyPath: materials.Array.data[4]
+      value: 
+      objectReference: {fileID: 2100000, guid: f826f9b3173f43247a3174a01308b3c4, type: 2}
     - target: {fileID: 2872825590134544043, guid: 8374f381ec6e58042a82f5a6e30585d0,
         type: 3}
       propertyPath: m_Mesh
@@ -661,11 +741,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3120716180136846543, guid: 8374f381ec6e58042a82f5a6e30585d0,
-        type: 3}
-      propertyPath: m_Intensity
-      value: 0.5
-      objectReference: {fileID: 0}
     - target: {fileID: 3152078383380353361, guid: 8374f381ec6e58042a82f5a6e30585d0,
         type: 3}
       propertyPath: mainRenderableMesh
@@ -705,6 +780,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Mesh
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 6445623040219014224, guid: 8374f381ec6e58042a82f5a6e30585d0,
+        type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6445623040219014224, guid: 8374f381ec6e58042a82f5a6e30585d0,
+        type: 3}
+      propertyPath: m_Materials.Array.data[4]
+      value: 
+      objectReference: {fileID: 2100000, guid: f826f9b3173f43247a3174a01308b3c4, type: 2}
+    - target: {fileID: 6445623040219014224, guid: 8374f381ec6e58042a82f5a6e30585d0,
+        type: 3}
+      propertyPath: m_SelectedEditorRenderState
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7853383445722132821, guid: 8374f381ec6e58042a82f5a6e30585d0,
         type: 3}

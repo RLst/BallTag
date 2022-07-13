@@ -25,6 +25,7 @@ namespace LeMinhHuy
 
 			//Start penalty match
 			isPlaying = true;
+			isPenaltyRound = true;
 			Time.timeScale = 1f;
 			currentRoundRemainingTime = settings.startingRoundRemainingTime;
 

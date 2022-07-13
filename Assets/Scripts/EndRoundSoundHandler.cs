@@ -25,17 +25,26 @@ namespace LeMinhHuy
 
 		public void OnEndRound((Team team, Result result) teamResults)
 		{
-			switch (teamResults.result)
+			if (teamResults.result == Result.Draw)
 			{
-				case Result.Wins:
+				//You draw
+				audioSource.PlayOneShot(draw);
+			}
+			else if (teamResults.team == game.teamOne)
+			{
+				//You win
+				if (teamResults.result == Result.Wins)
 					audioSource.PlayOneShot(win);
-					break;
-				case Result.Lose:
+				else
 					audioSource.PlayOneShot(lose);
-					break;
-				case Result.Draw:
-					audioSource.PlayOneShot(draw);
-					break;
+			}
+			else if (teamResults.team == game.teamTwo)
+			{
+				//You lose
+				if (teamResults.result == Result.Wins)
+					audioSource.PlayOneShot(lose);
+				else
+					audioSource.PlayOneShot(win);
 			}
 		}
 	}

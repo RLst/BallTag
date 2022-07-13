@@ -16,6 +16,8 @@ namespace LeMinhHuy
 	{
 		//Inspector
 		[SerializeField] bool playDemoOnStart = true;
+		public bool isPlayingDemo { get; set; } = false;
+
 		[Space]
 		[Tooltip("Tick this if this scene is for AR")]
 		public bool isARMode = false;
@@ -52,7 +54,6 @@ namespace LeMinhHuy
 		public bool isPenaltyRound = false;
 
 		//Members
-		bool isPlayingDemo = false;
 		Ball ball;
 		WaitForSeconds waitOneSecond;
 		//AR
@@ -320,7 +321,7 @@ namespace LeMinhHuy
 
 			ball.ResetParentToStadium();
 
-			//Don't let demo mess things up like the score and team stances
+			//Demo logic; Don't let demo mess things up like the score and team stances
 			if (isPlayingDemo)
 			{
 				//Keep restarting the demo
