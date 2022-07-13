@@ -1,0 +1,884 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<SettingsGroup xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <shortcutItems>
+    <ShortcutItems>
+      <items>
+        <ShortcutItem>
+          <modifiers>Shift Control</modifiers>
+          <code>D</code>
+          <toolGroup>Add</toolGroup>
+          <toolName>Duplicate</toolName>
+          <type>Modeling</type>
+        </ShortcutItem>
+        <ShortcutItem>
+          <modifiers>None</modifiers>
+          <code>I</code>
+          <toolGroup>Add</toolGroup>
+          <toolName>Inset</toolName>
+          <type>Modeling</type>
+        </ShortcutItem>
+        <ShortcutItem>
+          <modifiers>Shift</modifiers>
+          <code>E</code>
+          <toolGroup>Add</toolGroup>
+          <toolName>PushPull</toolName>
+          <type>Modeling</type>
+        </ShortcutItem>
+        <ShortcutItem>
+          <modifiers>Shift Control</modifiers>
+          <code>Q</code>
+          <toolGroup>Drawing</toolGroup>
+          <toolName>Arc</toolName>
+          <type>Modeling</type>
+        </ShortcutItem>
+        <ShortcutItem>
+          <modifiers>Shift</modifiers>
+          <code>R</code>
+          <toolGroup>Drawing</toolGroup>
+          <toolName>RoundedRectangle</toolName>
+          <type>Modeling</type>
+        </ShortcutItem>
+        <ShortcutItem>
+          <modifiers>Shift</modifiers>
+          <code>Alpha2</code>
+          <toolGroup>Elements</toolGroup>
+          <toolName>Edge</toolName>
+          <type>Modeling</type>
+        </ShortcutItem>
+        <ShortcutItem>
+          <modifiers>None</modifiers>
+          <code>Alpha4</code>
+          <toolGroup>Elements</toolGroup>
+          <toolName>Object</toolName>
+          <type>Modeling</type>
+        </ShortcutItem>
+        <ShortcutItem>
+          <modifiers>Shift</modifiers>
+          <code>Alpha3</code>
+          <toolGroup>Elements</toolGroup>
+          <toolName>Polygon</toolName>
+          <type>Modeling</type>
+        </ShortcutItem>
+        <ShortcutItem>
+          <modifiers>Shift Control</modifiers>
+          <code>W</code>
+          <toolGroup>Elements</toolGroup>
+          <toolName>RectSelectModeToggle</toolName>
+          <type>Modeling</type>
+        </ShortcutItem>
+        <ShortcutItem>
+          <modifiers>Shift</modifiers>
+          <code>Alpha1</code>
+          <toolGroup>Elements</toolGroup>
+          <toolName>Vertex</toolName>
+          <type>Modeling</type>
+        </ShortcutItem>
+        <ShortcutItem>
+          <modifiers>Shift Control</modifiers>
+          <code>G</code>
+          <toolGroup>Misc</toolGroup>
+          <toolName>ChangePositionDisplayMode</toolName>
+          <type>Modeling</type>
+        </ShortcutItem>
+        <ShortcutItem>
+          <modifiers>Shift</modifiers>
+          <code>X</code>
+          <toolGroup>Misc</toolGroup>
+          <toolName>Cursor</toolName>
+          <type>Modeling</type>
+        </ShortcutItem>
+        <ShortcutItem>
+          <modifiers>Shift Control</modifiers>
+          <code>O</code>
+          <toolGroup>Misc</toolGroup>
+          <toolName>ExportSelectedPosition</toolName>
+          <type>Modeling</type>
+        </ShortcutItem>
+        <ShortcutItem>
+          <modifiers>Shift Control</modifiers>
+          <code>Alpha8</code>
+          <toolGroup>Misc</toolGroup>
+          <toolName>MenuAndPropertyPanelsToggle</toolName>
+          <type>Modeling</type>
+        </ShortcutItem>
+        <ShortcutItem>
+          <modifiers>Shift Control</modifiers>
+          <code>Alpha3</code>
+          <toolGroup>Misc</toolGroup>
+          <toolName>MoveCursor</toolName>
+          <type>Modeling</type>
+        </ShortcutItem>
+        <ShortcutItem>
+          <modifiers>Shift Control</modifiers>
+          <code>M</code>
+          <toolGroup>Misc</toolGroup>
+          <toolName>NewUModelerObject</toolName>
+          <type>Modeling</type>
+        </ShortcutItem>
+        <ShortcutItem>
+          <modifiers>Shift Control</modifiers>
+          <code>E</code>
+          <toolGroup>Misc</toolGroup>
+          <toolName>RefreshAll</toolName>
+          <type>Modeling</type>
+        </ShortcutItem>
+        <ShortcutItem>
+          <modifiers>Shift Control</modifiers>
+          <code>R</code>
+          <toolGroup>Misc</toolGroup>
+          <toolName>RefreshObject</toolName>
+          <type>Modeling</type>
+        </ShortcutItem>
+        <ShortcutItem>
+          <modifiers>Shift Control</modifiers>
+          <code>X</code>
+          <toolGroup>Misc</toolGroup>
+          <toolName>RestrictToAngleSettings</toolName>
+          <type>Modeling</type>
+        </ShortcutItem>
+        <ShortcutItem>
+          <modifiers>Shift Control</modifiers>
+          <code>DownArrow</code>
+          <toolGroup>Misc</toolGroup>
+          <toolName>SelectNextSnapInModel</toolName>
+          <type>Modeling</type>
+        </ShortcutItem>
+        <ShortcutItem>
+          <modifiers>Shift Control</modifiers>
+          <code>RightArrow</code>
+          <toolGroup>Misc</toolGroup>
+          <toolName>SelectNextSnapTypeInModel</toolName>
+          <type>Modeling</type>
+        </ShortcutItem>
+        <ShortcutItem>
+          <modifiers>Shift Control</modifiers>
+          <code>V</code>
+          <toolGroup>Misc</toolGroup>
+          <toolName>SelectOnlyVisibleToggle</toolName>
+          <type>Modeling</type>
+        </ShortcutItem>
+        <ShortcutItem>
+          <modifiers>Shift Control</modifiers>
+          <code>UpArrow</code>
+          <toolGroup>Misc</toolGroup>
+          <toolName>SelectPreviousSnapInModel</toolName>
+          <type>Modeling</type>
+        </ShortcutItem>
+        <ShortcutItem>
+          <modifiers>Shift Control</modifiers>
+          <code>LeftArrow</code>
+          <toolGroup>Misc</toolGroup>
+          <toolName>SelectPreviousSnapTypeInModel</toolName>
+          <type>Modeling</type>
+        </ShortcutItem>
+        <ShortcutItem>
+          <modifiers>Shift Control</modifiers>
+          <code>Z</code>
+          <toolGroup>Misc</toolGroup>
+          <toolName>Settings</toolName>
+          <type>Modeling</type>
+        </ShortcutItem>
+        <ShortcutItem>
+          <modifiers>Shift Control</modifiers>
+          <code>Alpha6</code>
+          <toolGroup>Misc</toolGroup>
+          <toolName>SmoothingGroupAutoSmoothToggle</toolName>
+          <type>Modeling</type>
+        </ShortcutItem>
+        <ShortcutItem>
+          <modifiers>Shift Control</modifiers>
+          <code>Alpha9</code>
+          <toolGroup>Misc</toolGroup>
+          <toolName>SmoothingGroupRemoveAllToggle</toolName>
+          <type>Modeling</type>
+        </ShortcutItem>
+        <ShortcutItem>
+          <modifiers>Shift Control</modifiers>
+          <code>Alpha1</code>
+          <toolGroup>Misc</toolGroup>
+          <toolName>TriangluationToggle</toolName>
+          <type>Modeling</type>
+        </ShortcutItem>
+        <ShortcutItem>
+          <modifiers>Shift Control</modifiers>
+          <code>Alpha0</code>
+          <toolGroup>Misc</toolGroup>
+          <toolName>UModelerEditModeToggle</toolName>
+          <type>Modeling</type>
+        </ShortcutItem>
+        <ShortcutItem>
+          <modifiers>Shift Control</modifiers>
+          <code>U</code>
+          <toolGroup>Misc</toolGroup>
+          <toolName>UVEditorToggle</toolName>
+          <type>Modeling</type>
+        </ShortcutItem>
+        <ShortcutItem>
+          <modifiers>Shift</modifiers>
+          <code>B</code>
+          <toolGroup>PrimitiveShapes</toolGroup>
+          <toolName>Box</toolName>
+          <type>Modeling</type>
+        </ShortcutItem>
+        <ShortcutItem>
+          <modifiers>Shift</modifiers>
+          <code>Q</code>
+          <toolGroup>PrimitiveShapes</toolGroup>
+          <toolName>Cylinder</toolName>
+          <type>Modeling</type>
+        </ShortcutItem>
+        <ShortcutItem>
+          <modifiers>Control</modifiers>
+          <code>T</code>
+          <toolGroup>PrimitiveShapes</toolGroup>
+          <toolName>Stair</toolName>
+          <type>Modeling</type>
+        </ShortcutItem>
+        <ShortcutItem>
+          <modifiers>None</modifiers>
+          <code>Delete</code>
+          <toolGroup>Remove</toolGroup>
+          <toolName>Eraser</toolName>
+          <type>Modeling</type>
+        </ShortcutItem>
+        <ShortcutItem>
+          <modifiers>Alt</modifiers>
+          <code>Alpha1</code>
+          <toolGroup>Surface</toolGroup>
+          <toolName>AssignMaterial01</toolName>
+          <type>Modeling</type>
+        </ShortcutItem>
+        <ShortcutItem>
+          <modifiers>Alt</modifiers>
+          <code>Alpha2</code>
+          <toolGroup>Surface</toolGroup>
+          <toolName>AssignMaterial02</toolName>
+          <type>Modeling</type>
+        </ShortcutItem>
+        <ShortcutItem>
+          <modifiers>Alt</modifiers>
+          <code>Alpha3</code>
+          <toolGroup>Surface</toolGroup>
+          <toolName>AssignMaterial03</toolName>
+          <type>Modeling</type>
+        </ShortcutItem>
+        <ShortcutItem>
+          <modifiers>Alt</modifiers>
+          <code>Alpha4</code>
+          <toolGroup>Surface</toolGroup>
+          <toolName>AssignMaterial04</toolName>
+          <type>Modeling</type>
+        </ShortcutItem>
+        <ShortcutItem>
+          <modifiers>Alt</modifiers>
+          <code>Alpha5</code>
+          <toolGroup>Surface</toolGroup>
+          <toolName>AssignMaterial05</toolName>
+          <type>Modeling</type>
+        </ShortcutItem>
+        <ShortcutItem>
+          <modifiers>Alt</modifiers>
+          <code>Alpha6</code>
+          <toolGroup>Surface</toolGroup>
+          <toolName>AssignMaterial06</toolName>
+          <type>Modeling</type>
+        </ShortcutItem>
+        <ShortcutItem>
+          <modifiers>Alt</modifiers>
+          <code>Alpha7</code>
+          <toolGroup>Surface</toolGroup>
+          <toolName>AssignMaterial07</toolName>
+          <type>Modeling</type>
+        </ShortcutItem>
+        <ShortcutItem>
+          <modifiers>Alt</modifiers>
+          <code>Alpha8</code>
+          <toolGroup>Surface</toolGroup>
+          <toolName>AssignMaterial08</toolName>
+          <type>Modeling</type>
+        </ShortcutItem>
+        <ShortcutItem>
+          <modifiers>Alt</modifiers>
+          <code>Alpha9</code>
+          <toolGroup>Surface</toolGroup>
+          <toolName>AssignMaterial09</toolName>
+          <type>Modeling</type>
+        </ShortcutItem>
+        <ShortcutItem>
+          <modifiers>Alt</modifiers>
+          <code>Alpha0</code>
+          <toolGroup>Surface</toolGroup>
+          <toolName>AssignMaterial10</toolName>
+          <type>Modeling</type>
+        </ShortcutItem>
+        <ShortcutItem>
+          <modifiers>Alt</modifiers>
+          <code>Z</code>
+          <toolGroup>Surface</toolGroup>
+          <toolName>HotspotApply</toolName>
+          <type>Modeling</type>
+        </ShortcutItem>
+        <ShortcutItem>
+          <modifiers>Shift</modifiers>
+          <code>Z</code>
+          <toolGroup>Surface</toolGroup>
+          <toolName>HotspotAuto</toolName>
+          <type>Modeling</type>
+        </ShortcutItem>
+        <ShortcutItem>
+          <modifiers>Shift Control</modifiers>
+          <code>T</code>
+          <toolGroup>Surface</toolGroup>
+          <toolName>HotspotGroup</toolName>
+          <type>Modeling</type>
+        </ShortcutItem>
+        <ShortcutItem>
+          <modifiers>Control</modifiers>
+          <code>G</code>
+          <toolGroup>Surface</toolGroup>
+          <toolName>HotspotSelectedApply</toolName>
+          <type>Modeling</type>
+        </ShortcutItem>
+        <ShortcutItem>
+          <modifiers>None</modifiers>
+          <code>H</code>
+          <toolGroup>Tweak</toolGroup>
+          <toolName>Flip</toolName>
+          <type>Modeling</type>
+        </ShortcutItem>
+        <ShortcutItem>
+          <modifiers>Shift Control</modifiers>
+          <code>DownArrow</code>
+          <toolGroup>UV_Misc</toolGroup>
+          <toolName>SelectNextSnapInUV</toolName>
+          <type>UVEditor</type>
+        </ShortcutItem>
+        <ShortcutItem>
+          <modifiers>Shift Control</modifiers>
+          <code>RightArrow</code>
+          <toolGroup>UV_Misc</toolGroup>
+          <toolName>SelectNextSnapTypeInUV</toolName>
+          <type>UVEditor</type>
+        </ShortcutItem>
+        <ShortcutItem>
+          <modifiers>Shift Control</modifiers>
+          <code>UpArrow</code>
+          <toolGroup>UV_Misc</toolGroup>
+          <toolName>SelectPreviousSnapInUV</toolName>
+          <type>UVEditor</type>
+        </ShortcutItem>
+        <ShortcutItem>
+          <modifiers>Shift Control</modifiers>
+          <code>LeftArrow</code>
+          <toolGroup>UV_Misc</toolGroup>
+          <toolName>SelectPreviousSnapTypeInUV</toolName>
+          <type>UVEditor</type>
+        </ShortcutItem>
+      </items>
+    </ShortcutItems>
+  </shortcutItems>
+  <preferenceSettings>
+    <detailedTooltip>true</detailedTooltip>
+    <displayPolyPreselection>true</displayPolyPreselection>
+    <lightmapByDefault>false</lightmapByDefault>
+    <colliderByDefault>true</colliderByDefault>
+    <keepSystemToolBarAlways>false</keepSystemToolBarAlways>
+    <createSmoothingGroupAsUModelerize>false</createSmoothingGroupAsUModelerize>
+    <byteStreamDataInUModeler>false</byteStreamDataInUModeler>
+    <disablePopupAboutWindowAsUpdate>false</disablePopupAboutWindowAsUpdate>
+    <objectModeOnSelected>true</objectModeOnSelected>
+    <globalGizmoRotatedByTM>false</globalGizmoRotatedByTM>
+    <toolbarPosition>TopCenter</toolbarPosition>
+    <extrudeEventModifier>Shift</extrudeEventModifier>
+    <defaultMaterial>Assets/Unity-UModeler/Materials/Basic/UModeler_RulerGrid_Gray.mat</defaultMaterial>
+    <defaultInvisibleMaterial>Assets/Unity-UModeler/Materials/Basic/UModeler_InvisibleGrid.mat</defaultInvisibleMaterial>
+    <colorSettings>
+      <ColorSettings>
+        <name />
+        <hideFlags>None</hideFlags>
+        <selectionColor>
+          <r>1</r>
+          <g>0.65</g>
+          <b>0</b>
+          <a>1</a>
+        </selectionColor>
+        <deselectionColor>
+          <r>0.25</r>
+          <g>0.25</g>
+          <b>0.7</b>
+          <a>1</a>
+        </deselectionColor>
+        <preselectionColor>
+          <r>1</r>
+          <g>1</g>
+          <b>1</b>
+          <a>1</a>
+        </preselectionColor>
+        <edgeColor>
+          <r>0</r>
+          <g>0</g>
+          <b>0</b>
+          <a>1</a>
+        </edgeColor>
+        <triangulationColor>
+          <r>0.25</r>
+          <g>0.25</g>
+          <b>0.7</b>
+          <a>1</a>
+        </triangulationColor>
+        <mirroredPartColor>
+          <r>0.5</r>
+          <g>0.5</g>
+          <b>0.5</b>
+          <a>1</a>
+        </mirroredPartColor>
+        <colorPalette>
+          <Color>
+            <r>1</r>
+            <g>1</g>
+            <b>1</b>
+            <a>1</a>
+          </Color>
+          <Color>
+            <r>0.5</r>
+            <g>0.5</g>
+            <b>0.5</b>
+            <a>1</a>
+          </Color>
+          <Color>
+            <r>0</r>
+            <g>0</g>
+            <b>0</b>
+            <a>1</a>
+          </Color>
+          <Color>
+            <r>1</r>
+            <g>0</g>
+            <b>0</b>
+            <a>1</a>
+          </Color>
+          <Color>
+            <r>0</r>
+            <g>1</g>
+            <b>0</b>
+            <a>1</a>
+          </Color>
+          <Color>
+            <r>0</r>
+            <g>0</g>
+            <b>1</b>
+            <a>1</a>
+          </Color>
+          <Color>
+            <r>0</r>
+            <g>1</g>
+            <b>1</b>
+            <a>1</a>
+          </Color>
+          <Color>
+            <r>1</r>
+            <g>0</g>
+            <b>1</b>
+            <a>1</a>
+          </Color>
+          <Color>
+            <r>1</r>
+            <g>0.65</g>
+            <b>0</b>
+            <a>1</a>
+          </Color>
+          <Color>
+            <r>1</r>
+            <g>1</g>
+            <b>1</b>
+            <a>1</a>
+          </Color>
+          <Color>
+            <r>1</r>
+            <g>1</g>
+            <b>1</b>
+            <a>1</a>
+          </Color>
+          <Color>
+            <r>1</r>
+            <g>1</g>
+            <b>1</b>
+            <a>1</a>
+          </Color>
+        </colorPalette>
+      </ColorSettings>
+    </colorSettings>
+    <unwrapParamForLightmap>
+      <UnwrapParamForLightmap>
+        <angleError>0.08</angleError>
+        <areaError>0.15</areaError>
+        <hardAngle>88</hardAngle>
+        <packMargin>3.90625</packMargin>
+      </UnwrapParamForLightmap>
+    </unwrapParamForLightmap>
+    <defaultUVParameterSettings>
+      <UVParameterSettings>
+        <name />
+        <hideFlags>None</hideFlags>
+        <DefaultUVParameter>
+          <shift>
+            <x>0</x>
+            <y>0</y>
+          </shift>
+          <scale>
+            <x>1</x>
+            <y>1</y>
+          </scale>
+          <rotation>0</rotation>
+        </DefaultUVParameter>
+      </UVParameterSettings>
+    </defaultUVParameterSettings>
+  </preferenceSettings>
+  <modelerSettings>
+    <UModelerSettings>
+      <name />
+      <hideFlags>None</hideFlags>
+      <seamlessEdit>Single</seamlessEdit>
+      <dockableWindow>false</dockableWindow>
+      <textBasedMenu>false</textBasedMenu>
+      <largeIconMenu>false</largeIconMenu>
+      <uvEditorTextBasedMenu>false</uvEditorTextBasedMenu>
+      <uvEditorLargeIconMenu>false</uvEditorLargeIconMenu>
+      <hideSelectionOverlay>false</hideSelectionOverlay>
+      <snapSettings_>
+        <name />
+        <hideFlags>None</hideFlags>
+        <snapType>None</snapType>
+        <xGrid>true</xGrid>
+        <yGrid>true</yGrid>
+        <zGrid>true</zGrid>
+      </snapSettings_>
+      <displaySettings_>
+        <name />
+        <hideFlags>None</hideFlags>
+        <triangulation>false</triangulation>
+        <status>false</status>
+        <CursorWindow>false</CursorWindow>
+        <commentary>true</commentary>
+        <globalOverlay>false</globalOverlay>
+        <localOverlay>true</localOverlay>
+        <positionOverlay>None</positionOverlay>
+      </displaySettings_>
+      <growSelectSettings_>
+        <name />
+        <hideFlags>None</hideFlags>
+        <restrictToAngle>false</restrictToAngle>
+        <maxAngle>15</maxAngle>
+        <iterative>true</iterative>
+      </growSelectSettings_>
+    </UModelerSettings>
+  </modelerSettings>
+  <uvEditorSettings>
+    <UVEditorSettings>
+      <name />
+      <hideFlags>None</hideFlags>
+      <snapSettings_>
+        <name />
+        <hideFlags>None</hideFlags>
+        <snapType>None</snapType>
+        <pixelType>Corner</pixelType>
+      </snapSettings_>
+      <displaySettings_>
+        <name />
+        <hideFlags>None</hideFlags>
+        <showIslandBoundary>false</showIslandBoundary>
+        <fillPolygons>true</fillPolygons>
+        <showAxes>true</showAxes>
+      </displaySettings_>
+      <gizmoSettings_>
+        <name />
+        <hideFlags>None</hideFlags>
+        <gizmoType>Translation</gizmoType>
+      </gizmoSettings_>
+      <uvCursorSettings_>
+        <name />
+        <hideFlags>None</hideFlags>
+        <useCrossCursor>false</useCrossCursor>
+        <pos>
+          <x>0.5</x>
+          <y>0.5</y>
+        </pos>
+      </uvCursorSettings_>
+      <pivotSettings_>
+        <name />
+        <hideFlags>None</hideFlags>
+        <pivotMode>Center</pivotMode>
+      </pivotSettings_>
+      <textureSettings_>
+        <name />
+        <hideFlags>None</hideFlags>
+        <showTexture>true</showTexture>
+        <enableAlphaChannel>false</enableAlphaChannel>
+        <showAllPolygons>false</showAllPolygons>
+        <TextureNumAlongXAxis>1</TextureNumAlongXAxis>
+        <TextureNumAlongYAxis>1</TextureNumAlongYAxis>
+        <selectedMaterialIdx>0</selectedMaterialIdx>
+      </textureSettings_>
+    </UVEditorSettings>
+  </uvEditorSettings>
+  <toolProperties>
+    <item tool="TPUModelerEditor.VertexTool" type="TPUModelerEditor.TransformToolProperties">
+      <distance>0</distance>
+      <snapToPolygon>false</snapToPolygon>
+      <insertVertex>true</insertVertex>
+      <rectSelectMode>Intersect</rectSelectMode>
+      <selectOnlyVisible>true</selectOnlyVisible>
+    </item>
+    <item tool="TPUModelerEditor.EdgeTool" type="TPUModelerEditor.TransformToolProperties">
+      <distance>0</distance>
+      <snapToPolygon>false</snapToPolygon>
+      <insertVertex>true</insertVertex>
+      <rectSelectMode>Intersect</rectSelectMode>
+      <selectOnlyVisible>true</selectOnlyVisible>
+    </item>
+    <item tool="TPUModelerEditor.PolygonTool" type="TPUModelerEditor.TransformToolProperties">
+      <distance>0</distance>
+      <snapToPolygon>false</snapToPolygon>
+      <insertVertex>true</insertVertex>
+      <rectSelectMode>Intersect</rectSelectMode>
+      <selectOnlyVisible>true</selectOnlyVisible>
+    </item>
+    <item tool="TPUModelerEditor.RectSelectModeToggleTool" type="TPUModelerEditor.RectSelectProperties">
+      <rectSelectMode>Intersect</rectSelectMode>
+      <selectOnlyVisible>true</selectOnlyVisible>
+    </item>
+    <item tool="TPUModelerEditor.LineTool" type="TPUModelerEditor.LineToolProperties">
+      <forceClosed>false</forceClosed>
+      <floorHeight>0</floorHeight>
+      <selectOnlyVisible>true</selectOnlyVisible>
+    </item>
+    <item tool="TPUModelerEditor.ArcTool" type="TPUModelerEditor.ArcToolProperties">
+      <segment>16</segment>
+      <forceClosed>false</forceClosed>
+      <floorHeight>0</floorHeight>
+      <selectOnlyVisible>true</selectOnlyVisible>
+    </item>
+    <item tool="TPUModelerEditor.RoundedRectangleTool" type="TPUModelerEditor.RoundedRectangleToolProperties">
+      <cornerLength>0</cornerLength>
+      <cornerSegment>8</cornerSegment>
+      <width>1</width>
+      <depth>1</depth>
+      <floorHeight>0</floorHeight>
+      <selectOnlyVisible>true</selectOnlyVisible>
+    </item>
+    <item tool="TPUModelerEditor.DiskTool" type="TPUModelerEditor.DiskToolProperties">
+      <segment>24</segment>
+      <radius>0.236535519</radius>
+      <floorHeight>0</floorHeight>
+      <selectOnlyVisible>true</selectOnlyVisible>
+    </item>
+    <item tool="TPUModelerEditor.SideStairTool" type="TPUModelerEditor.SideStairToolProperties">
+      <rise>0.33</rise>
+      <flip>false</flip>
+      <floorHeight>0</floorHeight>
+      <selectOnlyVisible>true</selectOnlyVisible>
+    </item>
+    <item tool="TPUModelerEditor.ParallelTool" type="TPUModelerEditor.ParallelToolProperties">
+      <distance>0</distance>
+      <selectOnlyVisible>true</selectOnlyVisible>
+    </item>
+    <item tool="TPUModelerEditor.ConnectTool" type="TPUModelerEditor.LineToolProperties">
+      <forceClosed>false</forceClosed>
+      <floorHeight>0</floorHeight>
+      <selectOnlyVisible>true</selectOnlyVisible>
+    </item>
+    <item tool="TPUModelerEditor.BoxTool" type="TPUModelerEditor.BoxToolProperties">
+      <height>0.7005608</height>
+      <width>0.387872934</width>
+      <depth>0.6027472</depth>
+      <floorHeight>0.15</floorHeight>
+      <selectOnlyVisible>false</selectOnlyVisible>
+    </item>
+    <item tool="TPUModelerEditor.RoomTool" type="TPUModelerEditor.RoomToolProperties">
+      <thickness>0.025</thickness>
+      <height>1</height>
+      <width>1</width>
+      <depth>1</depth>
+      <floorHeight>0</floorHeight>
+      <selectOnlyVisible>true</selectOnlyVisible>
+    </item>
+    <item tool="TPUModelerEditor.StairTool" type="TPUModelerEditor.StairToolProperties">
+      <rise>0.33</rise>
+      <height>1</height>
+      <width>1</width>
+      <depth>1</depth>
+      <floorHeight>0</floorHeight>
+      <selectOnlyVisible>true</selectOnlyVisible>
+    </item>
+    <item tool="TPUModelerEditor.CylinderTool" type="TPUModelerEditor.CylinderToolProperties">
+      <height>1</height>
+      <autoSmoothing>false</autoSmoothing>
+      <segment>24</segment>
+      <radius>1</radius>
+      <floorHeight>0</floorHeight>
+      <selectOnlyVisible>true</selectOnlyVisible>
+    </item>
+    <item tool="TPUModelerEditor.ConeTool" type="TPUModelerEditor.CylinderToolProperties">
+      <height>1</height>
+      <autoSmoothing>false</autoSmoothing>
+      <segment>24</segment>
+      <radius>1</radius>
+      <floorHeight>0</floorHeight>
+      <selectOnlyVisible>true</selectOnlyVisible>
+    </item>
+    <item tool="TPUModelerEditor.SpiralStairTool" type="TPUModelerEditor.SpiralStairToolProperties">
+      <width>1.95</width>
+      <height>2.74</height>
+      <radius>0.75</radius>
+      <rise>0.33</rise>
+      <curvature>270</curvature>
+      <mirror>false</mirror>
+      <floorHeight>0</floorHeight>
+      <selectOnlyVisible>true</selectOnlyVisible>
+    </item>
+    <item tool="TPUModelerEditor.SphereTool" type="TPUModelerEditor.SphereToolProperties">
+      <segment>12</segment>
+      <radius>1</radius>
+      <floorHeight>0</floorHeight>
+      <selectOnlyVisible>true</selectOnlyVisible>
+    </item>
+    <item tool="TPUModelerEditor.CapsuleTool" type="TPUModelerEditor.CylinderToolProperties">
+      <height>1</height>
+      <autoSmoothing>false</autoSmoothing>
+      <segment>24</segment>
+      <radius>1</radius>
+      <floorHeight>0</floorHeight>
+      <selectOnlyVisible>true</selectOnlyVisible>
+    </item>
+    <item tool="TPUModelerEditor.PushPullTool" type="TPUModelerEditor.PushPullToolProperties">
+      <height>0</height>
+      <selectOnlyVisible>true</selectOnlyVisible>
+    </item>
+    <item tool="TPUModelerEditor.MultiPushPullTool" type="TPUModelerEditor.PushPullMultipleToolProperties">
+      <distance>0</distance>
+      <selectOnlyVisible>true</selectOnlyVisible>
+    </item>
+    <item tool="TPUModelerEditor.InsetTool" type="TPUModelerEditor.InsetToolProperties">
+      <thickness>0</thickness>
+      <selectOnlyVisible>true</selectOnlyVisible>
+    </item>
+    <item tool="TPUModelerEditor.LoopSliceTool" type="TPUModelerEditor.LoopSliceToolProperties">
+      <splitNumber>1</splitNumber>
+      <pinch>0</pinch>
+      <offset>0</offset>
+    </item>
+    <item tool="TPUModelerEditor.MirrorTool" type="TPUModelerEditor.MirrorToolProperties">
+      <axis>X</axis>
+      <invert>false</invert>
+      <distance>0</distance>
+      <boundary>Remove</boundary>
+      <angleAlongYAxis>0</angleAlongYAxis>
+      <selectOnlyVisible>true</selectOnlyVisible>
+    </item>
+    <item tool="TPUModelerEditor.MirrorObjectTool" type="TPUModelerEditor.MirrorObjectToolProperties">
+      <axis>X</axis>
+      <invert>false</invert>
+      <distance>0</distance>
+      <angleAlongYAxis>0</angleAlongYAxis>
+      <suffix>_Mirror</suffix>
+    </item>
+    <item tool="TPUModelerEditor.BevelTool" type="TPUModelerEditor.BevelToolProperties">
+      <width>0</width>
+      <segments>1</segments>
+      <profile>0.625</profile>
+      <autoSmoothing>false</autoSmoothing>
+    </item>
+    <item tool="TPUModelerEditor.CloneTool" type="TPUModelerEditor.CloneToolProperties">
+      <number>1</number>
+      <distance>0</distance>
+      <arrangement>Divide</arrangement>
+      <selectOnlyVisible>true</selectOnlyVisible>
+    </item>
+    <item tool="TPUModelerEditor.EraserTool" type="TPUModelerEditor.SelectToolProperties">
+      <selectOnlyVisible>true</selectOnlyVisible>
+    </item>
+    <item tool="TPUModelerEditor.CombineTool" type="TPUModelerEditor.SelectToolProperties">
+      <selectOnlyVisible>true</selectOnlyVisible>
+    </item>
+    <item tool="TPUModelerEditor.CombineObjectsTool" type="TPUModelerEditor.SelectToolProperties">
+      <selectOnlyVisible>true</selectOnlyVisible>
+    </item>
+    <item tool="TPUModelerEditor.RemoveDoublesTool" type="TPUModelerEditor.RemoveDoublesToolProperties">
+      <distance>1</distance>
+      <selectOnlyVisible>true</selectOnlyVisible>
+    </item>
+    <item tool="TPUModelerEditor.AlignTool" type="TPUModelerEditor.AlignToolProperties">
+      <axis>X</axis>
+      <location>Min</location>
+      <selectOnlyVisible>true</selectOnlyVisible>
+    </item>
+    <item tool="TPUModelerEditor.AxisFlipTool" type="TPUModelerEditor.AxisFlipToolProperties">
+      <axis>X</axis>
+      <distance>0</distance>
+      <invert>false</invert>
+      <selectOnlyVisible>true</selectOnlyVisible>
+    </item>
+    <item tool="TPUModelerEditor.PivotTool" type="TPUModelerEditor.PivotToolProperties">
+      <candidateSet>BoundBox</candidateSet>
+    </item>
+    <item tool="TPUModelerEditor.MaterialTool" type="TPUModelerEditor.SelectToolProperties">
+      <selectOnlyVisible>true</selectOnlyVisible>
+    </item>
+    <item tool="TPUModelerEditor.UVTool" type="TPUModelerEditor.UVToolProperties">
+      <rotation>0</rotation>
+      <selectOnlyVisible>true</selectOnlyVisible>
+    </item>
+    <item tool="TPUModelerEditor.VertexColorTool" type="TPUModelerEditor.VertexColorToolProperties">
+      <brushRadius>7</brushRadius>
+      <selectOnlyVisible>true</selectOnlyVisible>
+    </item>
+    <item tool="TPUModelerEditor.PolygonColorTool" type="TPUModelerEditor.SelectToolProperties">
+      <selectOnlyVisible>true</selectOnlyVisible>
+    </item>
+    <item tool="TPUModelerEditor.SmoothingGroupTool" type="TPUModelerEditor.SelectToolProperties">
+      <selectOnlyVisible>true</selectOnlyVisible>
+    </item>
+    <item tool="TPUModelerEditor.HotspotLayoutTool" type="TPUModelerEditor.SelectToolProperties">
+      <selectOnlyVisible>true</selectOnlyVisible>
+    </item>
+    <item tool="TPUModelerEditor.PolygonGroupTool" type="TPUModelerEditor.SelectToolProperties">
+      <selectOnlyVisible>true</selectOnlyVisible>
+    </item>
+    <item tool="TPUModelerEditor.ExportTool" type="TPUModelerEditor.ExportToolProperties">
+      <createFolder>true</createFolder>
+      <exportMaterial>true</exportMaterial>
+      <exportVertexColors>false</exportVertexColors>
+      <optimizeUV>true</optimizeUV>
+      <exportUnit>Meter</exportUnit>
+      <exportFaceType>Triangles</exportFaceType>
+    </item>
+    <item tool="TPUModelerEditor.SelectOnlyVisibleToggleTool" type="TPUModelerEditor.SelectToolProperties">
+      <selectOnlyVisible>true</selectOnlyVisible>
+    </item>
+    <item tool="TPUVEditor.PlaneViewUnwrapTool" type="TPUModelerEditor.PlaneUnwrapToolProperties">
+      <axis>Normal</axis>
+      <separateAll>false</separateAll>
+      <keepSize>false</keepSize>
+      <margin>0</margin>
+      <spacing>0.005</spacing>
+    </item>
+    <item tool="TPUVEditor.CubeUnwrapTool" type="TPUModelerEditor.CubeUnwrapToolProperties">
+      <separateAll>false</separateAll>
+      <keepSize>false</keepSize>
+      <margin>0</margin>
+      <spacing>0.005</spacing>
+    </item>
+    <item tool="TPUVEditor.SeamUnwrapTool" type="TPUModelerEditor.SeamUnwrapToolProperties">
+      <times>100</times>
+      <margin>0</margin>
+      <spacing>0.005</spacing>
+    </item>
+    <item tool="TPUVEditor.PackingTool" type="TPUModelerEditor.PackingToolProperties">
+      <margin>0</margin>
+      <spacing>0.005</spacing>
+    </item>
+    <item tool="TPUVEditor.ExportTool" type="TPUVEditor.ExportToolProperties">
+      <transparentBackground>false</transparentBackground>
+    </item>
+  </toolProperties>
+</SettingsGroup>
