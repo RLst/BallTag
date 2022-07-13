@@ -16,11 +16,13 @@ namespace LeMinhHuy
 		[Space]
 		[SerializeField] TextMeshProUGUI timeLeft = null;
 		[Header("Team One")]
+		[SerializeField] GameObject teamOneUI = null;
 		[SerializeField] TextMeshProUGUI teamOneDetails = null;
 		[SerializeField] Slider teamOneEnergyBarInt = null;
 		[SerializeField] Slider teamOneEnergyBarFloat = null;
 
 		[Header("Team Two")]
+		[SerializeField] GameObject teamTwoUI = null;
 		[SerializeField] TextMeshProUGUI teamTwoDetails = null;
 		[SerializeField] Slider teamTwoEnergyBarInt = null;
 		[SerializeField] Slider teamTwoEnergyBarFloat = null;
@@ -61,6 +63,7 @@ namespace LeMinhHuy
 			game.onBeginRound.AddListener(BeginRoundUI);
 			game.onEndRound.AddListener(HandleEndRound);
 			game.onEndMatch.AddListener(HandleEndMatch);
+			game.onBeginPenaltyRound.AddListener(HandleBeginPenaltyRound);
 		}
 
 		//Set up the UI, titles, names, colors etc
@@ -68,6 +71,8 @@ namespace LeMinhHuy
 		{
 			c.enabled = true;
 			endRoundUI.SetActive(false);    //Turn off due to AI demo
+			teamOneUI.SetActive(true);
+			teamTwoUI.SetActive(true);
 
 			//Title
 			teamOneDetails.text = $"{game.teamOne.name}: {game.teamOne.strategy.stance.ToString()}";
@@ -171,6 +176,13 @@ namespace LeMinhHuy
 					$"<color=#{t1c}>{t1.passes}</color> Passes <color=#{t2c}>{t2.passes}</color>\n" +
 					$"<color=#{t1c}>{t1.despawns}</color> Despawns <color=#{t2c}>{t2.despawns}</color>";
 			}
+		}
+
+		void HandleBeginPenaltyRound()
+		{
+			//Turn off
+			teamOneUI.SetActive(false);
+			teamTwoUI.SetActive(false);
 		}
 
 		void Update()

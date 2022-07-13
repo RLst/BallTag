@@ -98,7 +98,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 1
+  m_UseShadowmask: 0
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -221,7 +221,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-81394
+  m_Name: pb_Mesh-137000
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -384,7 +384,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-81318
+  m_Name: pb_Mesh-136986
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -547,7 +547,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-81316
+  m_Name: pb_Mesh-136984
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -883,7 +883,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-81382
+  m_Name: pb_Mesh-136996
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -1046,7 +1046,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-81398
+  m_Name: pb_Mesh-136940
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -1454,7 +1454,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 527712444}
-  m_LocalRotation: {x: 0.65046716, y: -0.000000019075042, z: 0.000000016335914, w: 0.7595344}
+  m_LocalRotation: {x: 0.65046716, y: 0.00000008547566, z: -0.00000007320157, w: 0.7595344}
   m_LocalPosition: {x: -0.0000008742278, y: 55, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -1602,7 +1602,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-81380
+  m_Name: pb_Mesh-136992
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -1986,7 +1986,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1311559900}
-  m_LocalRotation: {x: 0.18469241, y: -0.35430762, z: 0.07160233, w: 0.91390806}
+  m_LocalRotation: {x: 0.19240814, y: -0.23300456, z: 0.0470881, w: 0.9520876}
   m_LocalPosition: {x: 30.446941, y: 32.25248, z: -70.22146}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -2381,7 +2381,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-81314
+  m_Name: pb_Mesh-136924
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -2544,7 +2544,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-81396
+  m_Name: pb_Mesh-137002
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -2760,7 +2760,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1793673514}
-  m_LocalRotation: {x: 0.65046716, y: -0.000000019075042, z: 0.000000016335914, w: 0.7595344}
+  m_LocalRotation: {x: 0.65046716, y: 0.00000008547566, z: -0.00000007320157, w: 0.7595344}
   m_LocalPosition: {x: -0.0000008742278, y: 55, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -3158,6 +3158,11 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 300124254}
+    - target: {fileID: 909437702669459908, guid: b52baea6cf5b54837b01289b63328dec,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 909437702705862701, guid: b52baea6cf5b54837b01289b63328dec,
         type: 3}
       propertyPath: m_AnchorMin.x
@@ -3408,6 +3413,11 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 1647296715}
+    - target: {fileID: 5056292408924098923, guid: b52baea6cf5b54837b01289b63328dec,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5223415361096992190, guid: b52baea6cf5b54837b01289b63328dec,
         type: 3}
       propertyPath: mainRenderableMesh
@@ -3418,6 +3428,36 @@ PrefabInstance:
       propertyPath: mainRenderableMesh
       value: 
       objectReference: {fileID: 1325870071}
+    - target: {fileID: 6068050947691257424, guid: b52baea6cf5b54837b01289b63328dec,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6068050947691257424, guid: b52baea6cf5b54837b01289b63328dec,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6068050947691257424, guid: b52baea6cf5b54837b01289b63328dec,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6068050947691257424, guid: b52baea6cf5b54837b01289b63328dec,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 701153447}
+    - target: {fileID: 6068050947691257424, guid: b52baea6cf5b54837b01289b63328dec,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: BeginPenaltyRound
+      objectReference: {fileID: 0}
+    - target: {fileID: 6068050947691257424, guid: b52baea6cf5b54837b01289b63328dec,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 6314022036797702323, guid: b52baea6cf5b54837b01289b63328dec,
         type: 3}
       propertyPath: mainRenderableMesh

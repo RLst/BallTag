@@ -2506,9 +2506,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   game: {fileID: 0}
   timeLeft: {fileID: 2047907602466052928}
+  teamOneUI: {fileID: 2047907601609337472}
   teamOneDetails: {fileID: 2047907602632666203}
   teamOneEnergyBarInt: {fileID: 2047907602121284425}
   teamOneEnergyBarFloat: {fileID: 2047907602165033572}
+  teamTwoUI: {fileID: 2047907602071892289}
   teamTwoDetails: {fileID: 2047907602860457298}
   teamTwoEnergyBarInt: {fileID: 2047907603356688068}
   teamTwoEnergyBarFloat: {fileID: 2047907602724685257}
@@ -3228,20 +3230,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2047907602621994487}
+      - m_Target: {fileID: 6259676862625228120}
         m_MethodName: SetActive
         m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_MethodName: BeginRound
-        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine

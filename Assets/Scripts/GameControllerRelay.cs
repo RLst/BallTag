@@ -14,8 +14,12 @@ namespace LeMinhHuy
 		// GameController game => GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();  //Do not use this too often
 		GameController game => FindObjectOfType<GameController>();
 
+		[Tooltip("If the match ends in a draw, then don't invoke OnEndMatch event")]
+		[SerializeField] bool ignoreDrawsOnEndMatch = true;
+
 		public UnityEvent onBeginMatch;     //ie. Change game music
 		public UnityEvent onEndMatch;       //ie. Revert game music
+		public UnityEvent onPenaltyMatch;
 
 		// void Start()
 		// {
@@ -35,9 +39,10 @@ namespace LeMinhHuy
 		/// </summary>
 		public void RegisterEvents()
 		{
-			print("gamecontrollerrelay.registerevents");
+			// print("gamecontrollerrelay.registerevents");
 			game.onBeginMatch.AddListener(OnBeginMatch);
-			game.onEndMatch.AddListener(_ => OnEndMatch());
+			game.onEndMatch.AddListener(OnEndMatch);
+			game.onBeginPenaltyRound.AddListener(OnBeginPenaltyRound);
 		}
 
 		void OnBeginMatch()
@@ -45,9 +50,18 @@ namespace LeMinhHuy
 			onBeginMatch.Invoke();
 		}
 
-		void OnEndMatch()
+		void OnEndMatch((Team, Result results) TeamResults)
 		{
+			//TODO: BAD: This basically prevents menu music from resuming in case there's a penalty round
+			if (ignoreDrawsOnEndMatch && TeamResults.results == Result.Draw)
+				return;
+
 			onEndMatch.Invoke();
+		}
+
+		void OnBeginPenaltyRound()
+		{
+			onPenaltyMatch.Invoke();
 		}
 	}
 }

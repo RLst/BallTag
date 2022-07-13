@@ -27,7 +27,7 @@ namespace LeMinhHuy
 			isPlaying = true;
 			isPenaltyRound = true;
 			Time.timeScale = 1f;
-			currentRoundRemainingTime = settings.startingRoundRemainingTime;
+			currentRoundRemainingTime = settings.penaltyRoundRemainingTime;
 
 			//Spawn unit in front of goal
 			teamOne.energy = int.MaxValue;
@@ -38,6 +38,8 @@ namespace LeMinhHuy
 			ball.ResetParentToStadium();
 			LaunchBallAtRandomLocationOnField(null, 20f);
 			ball.Show();
+
+			onBeginPenaltyRound.Invoke();
 		}
 
 	}
