@@ -344,6 +344,7 @@ namespace LeMinhHuy
 			teamOne.strategy = teamTwo.strategy;
 			teamTwo.strategy = temp;
 
+			//TODO: need to pass in the result only for team one
 			onEndRound.Invoke(teamResult);
 		}
 
