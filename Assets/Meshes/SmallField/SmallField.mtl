@@ -1,0 +1,80 @@
+newmtl Stadium_Fence
+Ka  1.0 1.0 1.0
+Kd 1 1 1
+Ks  1.0 1.0 1.0
+d 1
+Ns  0.0
+illum 2
+
+newmtl Stadium_Green
+Ka  1.0 1.0 1.0
+Kd 1 1 1
+Ks  1.0 1.0 1.0
+d 1
+Ns  0.0
+illum 2
+
+newmtl Stadium_Gray
+Ka  1.0 1.0 1.0
+Kd 1 1 1
+Ks  1.0 1.0 1.0
+d 1
+Ns  0.0
+illum 2
+
+newmtl Stadium_Black
+Ka  1.0 1.0 1.0
+Kd 1 1 1
+Ks  1.0 1.0 1.0
+d 1
+Ns  0.0
+illum 2
+
+newmtl Stadium_Gray
+Ka  1.0 1.0 1.0
+Kd 1 1 1
+Ks  1.0 1.0 1.0
+d 1
+Ns  0.0
+illum 2
+
+newmtl Stadium_Black
+Ka  1.0 1.0 1.0
+Kd 1 1 1
+Ks  1.0 1.0 1.0
+d 1
+Ns  0.0
+illum 2
+
+newmtl Stadium_Gray
+Ka  1.0 1.0 1.0
+Kd 1 1 1
+Ks  1.0 1.0 1.0
+d 1
+Ns  0.0
+illum 2
+
+newmtl Stadium_Black
+Ka  1.0 1.0 1.0
+Kd 1 1 1
+Ks  1.0 1.0 1.0
+d 1
+Ns  0.0
+illum 2
+
+newmtl Stadium_Gray
+Ka  1.0 1.0 1.0
+Kd 1 1 1
+Ks  1.0 1.0 1.0
+d 1
+Ns  0.0
+illum 2
+
+newmtl Stadium_Black
+Ka  1.0 1.0 1.0
+Kd 1 1 1
+Ks  1.0 1.0 1.0
+d 1
+Ns  0.0
+illum 2
+

@@ -13059,7 +13059,7 @@ GameObject:
   - component: {fileID: 4399591090216762881}
   - component: {fileID: 5087531908699034229}
   m_Layer: 0
-  m_Name: LocalField
+  m_Name: SmallField
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
