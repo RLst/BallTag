@@ -74,10 +74,6 @@ namespace LeMinhHuy
 			teamOneUI.SetActive(true);
 			teamTwoUI.SetActive(true);
 
-			//Title
-			teamOneDetails.text = $"{game.teamOne.name}: {game.teamOne.strategy.stance.ToString()}";
-			teamTwoDetails.text = $"{game.teamTwo.name}: {game.teamTwo.strategy.stance.ToString()}";
-
 			//Energy bars; set color, max values
 			//Team 1
 			ColorBlock temp = teamOneEnergyBarFloat.colors;
@@ -105,6 +101,10 @@ namespace LeMinhHuy
 		public void BeginRoundUI()
 		{
 			endRoundUI.SetActive(false);
+
+			//Correctly update each team's offensive status
+			teamOneDetails.text = $"{game.teamOne.name}: <b>{game.teamOne.strategy.stance.ToString()}</b>";
+			teamTwoDetails.text = $"{game.teamTwo.name}: <b>{game.teamTwo.strategy.stance.ToString()}</b>";
 		}
 
 		public void HandleEndRound((Team team, Result result) teamResults)
