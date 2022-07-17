@@ -17,6 +17,10 @@ namespace LeMinhHuy
 		[SerializeField] string mainSceneName = "Main";
 		[SerializeField] string ARSceneName = "AR";
 
+		[Header("Panels")]
+		[SerializeField] GameObject mainMenuUI;
+		[SerializeField] GameObject settingsUI;
+
 		[Space]
 		[SerializeField] TextMeshProUGUI arToggleButtonText;
 		[SerializeField] GameObject titles;     //The gameobject that holds all of the titls and prompts etc
@@ -44,6 +48,13 @@ namespace LeMinhHuy
 		{
 			DontDestroyOnLoad(this);
 			canvas = GetComponent<Canvas>();
+			ResetMenu();
+		}
+
+		void ResetMenu()
+		{
+			mainMenuUI.SetActive(true);
+			settingsUI.SetActive(false);
 			Show();
 		}
 

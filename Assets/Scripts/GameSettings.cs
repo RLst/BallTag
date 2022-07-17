@@ -26,5 +26,14 @@ namespace LeMinhHuy
 		//This might allow for a cutscene to play in the background CPU vs CPU
 		public TeamSettings teamOneSettings;
 		public TeamSettings teamTwoSettings;
+
+		public void SetTeamOneName(string name)
+		{
+			teamOneSettings.name = name;
+		}
+		public void SetTeamTwoName(string name)
+		{
+			teamTwoSettings.name = name;
+		}
 	}
 }

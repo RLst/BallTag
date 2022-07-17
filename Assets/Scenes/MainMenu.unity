@@ -99,7 +99,7 @@ LightmapSettings:
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 112000000, guid: 2fb0bd223ae12430d96506c4ee6d2e02,
     type: 2}
-  m_UseShadowmask: 0
+  m_UseShadowmask: 1
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -129,11 +129,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1761318938773797423, guid: 7d8ec7e04a7793b4ea31a5ce243de0a1,
-        type: 3}
-      propertyPath: enableARSwitching
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 8625095068277956326, guid: 7d8ec7e04a7793b4ea31a5ce243de0a1,
         type: 3}
       propertyPath: m_Name

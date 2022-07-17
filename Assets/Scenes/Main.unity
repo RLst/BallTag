@@ -221,7 +221,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-47314
+  m_Name: pb_Mesh-124580
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -384,7 +384,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-47300
+  m_Name: pb_Mesh-124566
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -547,7 +547,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-47298
+  m_Name: pb_Mesh-124564
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -883,7 +883,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-47310
+  m_Name: pb_Mesh-124576
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -1046,7 +1046,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-47254
+  m_Name: pb_Mesh-124520
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -1602,7 +1602,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-47306
+  m_Name: pb_Mesh-124572
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -2381,7 +2381,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-47238
+  m_Name: pb_Mesh-124504
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -2544,7 +2544,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-47316
+  m_Name: pb_Mesh-124582
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -3413,11 +3413,6 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 1647296715}
-    - target: {fileID: 5056292408924098923, guid: b52baea6cf5b54837b01289b63328dec,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 5223415361096992190, guid: b52baea6cf5b54837b01289b63328dec,
         type: 3}
       propertyPath: mainRenderableMesh
@@ -3428,36 +3423,6 @@ PrefabInstance:
       propertyPath: mainRenderableMesh
       value: 
       objectReference: {fileID: 1325870071}
-    - target: {fileID: 6068050947691257424, guid: b52baea6cf5b54837b01289b63328dec,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 6068050947691257424, guid: b52baea6cf5b54837b01289b63328dec,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6068050947691257424, guid: b52baea6cf5b54837b01289b63328dec,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 6068050947691257424, guid: b52baea6cf5b54837b01289b63328dec,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
-      value: 
-      objectReference: {fileID: 701153447}
-    - target: {fileID: 6068050947691257424, guid: b52baea6cf5b54837b01289b63328dec,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
-      value: BeginPenaltyRound
-      objectReference: {fileID: 0}
-    - target: {fileID: 6068050947691257424, guid: b52baea6cf5b54837b01289b63328dec,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: UnityEngine.Object, UnityEngine
-      objectReference: {fileID: 0}
     - target: {fileID: 6314022036797702323, guid: b52baea6cf5b54837b01289b63328dec,
         type: 3}
       propertyPath: mainRenderableMesh

@@ -16,6 +16,7 @@ MonoBehaviour:
   fieldLength: 40
   roundsPerMatch: 5
   startingRoundRemainingTime: 140
+  penaltyRoundRemainingTime: 40
   endOfRoundTimescale: 0.4
   maxEnergy: 6
   offensiveStrategy:
@@ -47,12 +48,12 @@ MonoBehaviour:
     detectionRange: 0.35
     minSpawnDistanceFromOwnGoal: 2
   teamOneSettings:
-    name: Saigon
-    color: {r: 1, g: 0.682302, b: 0.2216981, a: 1}
+    name: "C\u1EA7n Th\u01A1"
+    color: {r: 0.2235294, g: 0.6053423, b: 1, a: 1}
     userType: 0
     stance: 1
   teamTwoSettings:
-    name: Hanoi
+    name: "B\u1EAFc Giang"
     color: {r: 1, g: 0.27269888, b: 0.1372549, a: 1}
     userType: 1
     stance: 0
